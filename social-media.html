@@ -6,17 +6,20 @@
   <title>社交媒体运营 — 兴程网络</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    body::before, body::after { z-index: -1 !important; }
+    body { position: relative; }
     .redirect-page {
-      display: flex;
-      flex-direction: column;
       min-height: 100vh;
       background: #0b0f2e;
+      position: relative;
+      z-index: 10;
+      padding-top: 64px;
     }
     .redirect-main {
-      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: calc(100vh - 64px);
       padding: 40px 24px;
     }
     .redirect-card {
@@ -72,7 +75,6 @@
 </head>
 <body class="redirect-page">
 
-  <!-- 导航 -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a class="nav-logo" href="index.html">兴程网络</a>
@@ -90,7 +92,6 @@
     </div>
   </nav>
 
-  <!-- 主内容 -->
   <div class="redirect-main">
     <div class="redirect-card">
       <div class="redirect-icon">📱</div>
