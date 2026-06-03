@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>社交媒体运营 — 兴程网络</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* iframe 页面专用样式 */
+    .iframe-page {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: #0b0f2e;
+    }
+    .iframe-page .nav {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .iframe-wrap {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .iframe-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    /* 加载提示 */
+    .iframe-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #8a96c0;
+      font-size: 14px;
+      text-align: center;
+      pointer-events: none;
+    }
+    .iframe-loading::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 32px;
+      border: 2px solid rgba(0,206,201,0.2);
+      border-top-color: #00cec9;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="iframe-page">
+
+  <!-- 导航（与首页一致） -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">兴程网络</a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html">首页</a></li>
+        <li><a href="design/index.html">广告设计</a></li>
+        <li><a href="miniprogram/index.html">小程序开发</a></li>
+        <li><a href="social-media.html" class="active">社交媒体运营</a></li>
+        <li><a href="pdd-assist.html">拼多多助力</a></li>
+      </ul>
+      <a href="index.html#contact" class="nav-cta">免费咨询</a>
+      <button class="nav-ham" id="navHam" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- iframe 内容区 -->
+  <div class="iframe-wrap">
+    <div class="iframe-loading" id="loading">正在加载...</div>
+    <div class="iframe-fallback" id="fallback" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+      <p style="color:#8a96c0;margin-bottom:20px;">页面加载失败，请直接访问</p>
+      <a href="https://xc6.ccuse.cn/" target="_blank" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#6c5ce7,#fd79a8);color:#fff;border-radius:50px;text-decoration:none;font-weight:600;">立即访问 →</a>
+    </div>
+    <iframe src="https://xc6.ccuse.cn/" id="contentFrame" onload="document.getElementById('loading').style.display='none'" onerror="document.getElementById('loading').style.display='none';document.getElementById('fallback').style.display='block';"></iframe>
+  </div>
+  <script>
+    // 5秒后如果还在加载，显示备用按钮
+    setTimeout(function() {
+      var loading = document.getElementById('loading');
+      if (loading && loading.style.display !== 'none') {
+        loading.style.display = 'none';
+        document.getElementById('fallback').style.display = 'block';
+      }
+    }, 5000);
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

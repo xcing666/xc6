@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>微信小程序开发 — 兴程网络</title>
+  <link rel="stylesheet" href="../style.css?v=20260602" />
+</head>
+<body>
+
+  <!-- 导航 -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="index.html" class="active">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="sub-hero" id="subHero">
+    <div class="sub-hero-bg">
+      <div class="sub-hero-orb o1"></div>
+      <div class="sub-hero-orb o2"></div>
+    </div>
+    <div class="sub-hero-inner">
+      <p class="sub-hero-tag">MINI PROGRAM</p>
+      <h1 class="sub-hero-title">微信<span>小程序开发</span></h1>
+      <p class="sub-hero-desc">无需下载 · 即用即走 · 10 亿微信用户触手可及</p>
+      <div class="sub-hero-actions">
+        <a href="../index.html#contact" class="hero-btn">免费咨询</a>
+        <a href="#benefits" class="hero-btn-outline">了解优势 ↓</a>
+      </div>
+    </div>
+    <div class="phone-mockup">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-app a1">🛒</div>
+          <div class="phone-app a2">📋</div>
+          <div class="phone-app a3">💳</div>
+          <div class="phone-app a4">📊</div>
+          <div class="phone-app a5">🔔</div>
+          <div class="phone-app a6">⚙️</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 开通小程序的好处 -->
+  <section id="benefits" style="position:relative;z-index:1;padding:100px 0;background:#131736;">
+
+    <!-- 标题区 -->
+    <div style="text-align:center;margin-bottom:80px;padding:0 24px;">
+      <p style="display:inline-block;font-size:11px;letter-spacing:5px;color:#00cec9;margin-bottom:14px;font-weight:700;text-transform:uppercase;opacity:0.85;">WHY MINI PROGRAM</p>
+      <h2 style="font-size:36px;font-weight:800;color:#f0f2ff;margin-bottom:14px;">为什么您的生意需要<span style="background:linear-gradient(135deg,#6c5ce7,#fd79a8,#00cec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">小程序</span>？</h2>
+      <p style="color:#8a96c0;font-size:15px;">六大核心优势，助力门店数字化升级</p>
+    </div>
+
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+
+      <!-- 好处1：左图右文 -->
+      <div style="display:flex;align-items:center;gap:60px;margin-bottom:90px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:280px;height:300px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(108,92,231,0.15),rgba(0,206,201,0.08));border:1px solid rgba(255,255,255,0.1);overflow:hidden;">
+          <img src="img_benefit1.png" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div style="flex:1;min-width:280px;">
+          <h3 style="font-size:26px;font-weight:800;margin-bottom:16px;color:#f0f2ff;">流量巨大，<span style="background:linear-gradient(135deg,#6c5ce7,#00cec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">触达 10 亿用户</span></h3>
+          <p style="color:#8a96c0;font-size:15px;line-height:1.9;margin-bottom:20px;">微信月活跃用户超 10 亿，小程序无需下载安装，用户扫一扫或搜一搜就能直接使用。依托微信生态，您的店铺天然拥有海量潜在客群，获客门槛大幅降低。</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">10 亿月活</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">零下载门槛</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">微信生态</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 好处2：左文右图 -->
+      <div style="display:flex;align-items:center;gap:60px;margin-bottom:90px;flex-wrap:wrap;flex-direction:row-reverse;">
+        <div style="flex:1;min-width:280px;height:300px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(253,121,168,0.15),rgba(108,92,231,0.08));border:1px solid rgba(255,255,255,0.1);overflow:hidden;">
+          <img src="img_benefit2.png" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div style="flex:1;min-width:280px;">
+          <h3 style="font-size:26px;font-weight:800;margin-bottom:16px;color:#f0f2ff;">即用即走，<span style="background:linear-gradient(135deg,#6c5ce7,#00cec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">体验流畅</span></h3>
+          <p style="color:#8a96c0;font-size:15px;line-height:1.9;margin-bottom:20px;">不占用手机内存，无需繁琐安装流程，加载速度媲美原生 App。用户用完即走，下次需要时随时召回，极大降低使用门槛，提升转化率。</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">不占内存</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">秒开体验</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">随用随走</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 好处3：左图右文 -->
+      <div style="display:flex;align-items:center;gap:60px;margin-bottom:90px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:280px;height:300px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,206,201,0.15),rgba(85,239,196,0.08));border:1px solid rgba(255,255,255,0.1);overflow:hidden;">
+          <img src="img_benefit3.png" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div style="flex:1;min-width:280px;">
+          <h3 style="font-size:26px;font-weight:800;margin-bottom:16px;color:#f0f2ff;">低成本获客，<span style="background:linear-gradient(135deg,#6c5ce7,#00cec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">高效转化</span></h3>
+          <p style="color:#8a96c0;font-size:15px;line-height:1.9;margin-bottom:20px;">相比开发原生 App，小程序开发成本降低 70% 以上。借助微信社交裂变（分享、拼团、砍价），老客带新客，获客成本远低于传统广告投放。</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">成本降低 70%</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">社交裂变</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">高转化率</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 好处4：左文右图 -->
+      <div style="display:flex;align-items:center;gap:60px;margin-bottom:90px;flex-wrap:wrap;flex-direction:row-reverse;">
+        <div style="flex:1;min-width:280px;height:300px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(116,185,255,0.15),rgba(0,206,201,0.08));border:1px solid rgba(255,255,255,0.1);overflow:hidden;">
+          <img src="img_benefit4.png" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div style="flex:1;min-width:280px;">
+          <h3 style="font-size:26px;font-weight:800;margin-bottom:16px;color:#f0f2ff;">线上线下打通，<span style="background:linear-gradient(135deg,#6c5ce7,#00cec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">提升经营</span></h3>
+          <p style="color:#8a96c0;font-size:15px;line-height:1.9;margin-bottom:20px;">扫码点餐、在线预约、门店导航、会员积分……小程序将线下门店与线上服务无缝连接，一个平台解决经营全流程，显著提升运营效率。</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">扫码点餐</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">在线预约</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">会员管理</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 好处5：左图右文 -->
+      <div style="display:flex;align-items:center;gap:60px;margin-bottom:90px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:280px;height:300px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(255,234,167,0.15),rgba(253,121,168,0.08));border:1px solid rgba(255,255,255,0.1);overflow:hidden;">
+          <img src="img_benefit5.png" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div style="flex:1;min-width:280px;">
+          <h3 style="font-size:26px;font-weight:800;margin-bottom:16px;color:#f0f2ff;">丰富营销工具，<span style="background:linear-gradient(135deg,#6c5ce7,#00cec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">促进复购</span></h3>
+          <p style="color:#8a96c0;font-size:15px;line-height:1.9;margin-bottom:20px;">拼团、秒杀、优惠券、会员卡、积分商城……小程序内置多种成熟营销插件，帮助您轻松策划促销活动，唤醒沉睡客户，持续提升复购率。</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">拼团秒杀</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">优惠券</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">积分商城</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 好处6：左文右图 -->
+      <div style="display:flex;align-items:center;gap:60px;margin-bottom:0;flex-wrap:wrap;flex-direction:row-reverse;">
+        <div style="flex:1;min-width:280px;height:300px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(85,239,196,0.15),rgba(116,185,255,0.08));border:1px solid rgba(255,255,255,0.1);overflow:hidden;">
+          <img src="img_benefit6.png" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+        </div>
+        <div style="flex:1;min-width:280px;">
+          <h3 style="font-size:26px;font-weight:800;margin-bottom:16px;color:#f0f2ff;">数据可视化，<span style="background:linear-gradient(135deg,#6c5ce7,#00cec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">精准运营</span></h3>
+          <p style="color:#8a96c0;font-size:15px;line-height:1.9;margin-bottom:20px;">实时查看访问量、转化率、用户画像、交易数据。通过数据漏斗分析用户行为，精准调整运营策略，让每一次决策都有据可依。</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">实时数据</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">用户画像</span>
+            <span style="padding:6px 16px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:#00cec9;font-weight:600;">经营分析</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div style="text-align:center;">
+      <h2 style="font-size:30px;font-weight:800;margin-bottom:16px;color:#f0f2ff;">准备好拥有自己的<span style="background:linear-gradient(135deg,#00cec9,#74b9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">小程序</span>了吗？</h2>
+      <p style="color:#8a96c0;margin-bottom:36px;">立即联系我们，获取免费需求评估和开发报价</p>
+      <a href="../index.html#contact" class="cta-btn">免费咨询 →</a>
+    </div>
+  </section>
+
+  <!-- 底部 -->
+  <footer class="footer">
+    <div class="footer-glow g1"></div>
+    <div class="footer-glow g2"></div>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>兴程<span>网络</span></h3>
+          <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+        </div>
+        <div class="footer-info">
+          <h4>联系方式</h4>
+          <ul>
+            <li>QQ：738874448</li>
+            <li>微信：xcing888</li>
+            <li>邮箱：738874448@qq.com</li>
+          </ul>
+        </div>
+        <div class="footer-info">
+          <h4>服务项目</h4>
+          <ul>
+            <li>广告平面图设计</li>
+            <li>微信小程序开发</li>
+            <li>社交媒体运营</li>
+            <li>拼多多助力</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 <span>兴程网络</span> · 保留所有权利</p>
+        <p style="margin-top:8px;"><a href="../index.html" style="color:#00cec9;">← 返回首页</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script.js?v=20260602"></script>
+</body>
+</html>
