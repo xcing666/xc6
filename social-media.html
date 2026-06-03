@@ -6,58 +6,73 @@
   <title>社交媒体运营 — 兴程网络</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* iframe 页面专用样式 */
-    .iframe-page {
+    .redirect-page {
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
       background: #0b0f2e;
     }
-    .iframe-page .nav {
-      position: relative;
-      flex-shrink: 0;
-    }
-    .iframe-wrap {
+    .redirect-main {
       flex: 1;
-      position: relative;
-      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
     }
-    .iframe-wrap iframe {
+    .redirect-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 480px;
       width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
+      text-align: center;
     }
-    /* 加载提示 */
-    .iframe-loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    .redirect-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+    }
+    .redirect-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #f0f2ff;
+      margin-bottom: 12px;
+    }
+    .redirect-desc {
       color: #8a96c0;
       font-size: 14px;
-      text-align: center;
-      pointer-events: none;
+      line-height: 1.8;
+      margin-bottom: 32px;
     }
-    .iframe-loading::before {
-      content: '';
-      display: block;
-      width: 32px;
-      height: 32px;
-      border: 2px solid rgba(0,206,201,0.2);
-      border-top-color: #00cec9;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 12px;
+    .redirect-btn {
+      display: inline-block;
+      padding: 14px 48px;
+      background: linear-gradient(135deg, #6c5ce7, #fd79a8);
+      color: #fff;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 16px;
+      transition: all 0.3s;
+      margin-bottom: 24px;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .redirect-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(108,92,231,0.4);
+    }
+    .redirect-note {
+      color: #5a6490;
+      font-size: 12px;
+      line-height: 1.8;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 20px;
+      margin-top: 8px;
     }
   </style>
 </head>
-<body class="iframe-page">
+<body class="redirect-page">
 
-  <!-- 导航（与首页一致） -->
+  <!-- 导航 -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a class="nav-logo" href="index.html">兴程网络</a>
@@ -75,25 +90,24 @@
     </div>
   </nav>
 
-  <!-- iframe 内容区 -->
-  <div class="iframe-wrap">
-    <div class="iframe-loading" id="loading">正在加载...</div>
-    <div class="iframe-fallback" id="fallback" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
-      <p style="color:#8a96c0;margin-bottom:20px;">页面加载失败，请直接访问</p>
-      <a href="https://xc6.ccuse.cn/" target="_blank" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#6c5ce7,#fd79a8);color:#fff;border-radius:50px;text-decoration:none;font-weight:600;">立即访问 →</a>
+  <!-- 主内容 -->
+  <div class="redirect-main">
+    <div class="redirect-card">
+      <div class="redirect-icon">📱</div>
+      <h2 class="redirect-title">社交媒体运营</h2>
+      <p class="redirect-desc">
+        代刷会员 · 短视频粉丝 · 影视会员 · QQ业务等<br>
+        点击下方按钮，跳转至服务页面
+      </p>
+      <a href="https://xc6.ccuse.cn/" target="_blank" class="redirect-btn" id="openBtn">立即访问 →</a>
+      <div class="redirect-note">
+        ⚠️ 温馨提示<br>
+        本链接为正规业务合作渠道，非恶意链接<br>
+        将在浏览器新标签页中打开，请放心访问<br>
+        如有疑问请联系客服微信：xcing888
+      </div>
     </div>
-    <iframe src="https://xc6.ccuse.cn/" id="contentFrame" onload="document.getElementById('loading').style.display='none'" onerror="document.getElementById('loading').style.display='none';document.getElementById('fallback').style.display='block';"></iframe>
   </div>
-  <script>
-    // 5秒后如果还在加载，显示备用按钮
-    setTimeout(function() {
-      var loading = document.getElementById('loading');
-      if (loading && loading.style.display !== 'none') {
-        loading.style.display = 'none';
-        document.getElementById('fallback').style.display = 'block';
-      }
-    }, 5000);
-  </script>
 
   <script src="script.js"></script>
 </body>
