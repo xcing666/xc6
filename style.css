@@ -915,8 +915,58 @@ body::after {
   overflow:hidden;
   background:var(--bg-deep);
 }
+/* 子页面额外光晕层 */
+.sub-hero::before {
+  content:""; position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse 500px 400px at 25% 35%, rgba(108,92,231,.12) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 75% 65%, rgba(0,206,201,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 50% 50%, rgba(253,121,168,.06) 0%, transparent 70%);
+  animation:hero-glow-drift 4s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+/* 子页面星点层 */
+.sub-hero::after {
+  content:""; position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(1px 1px at 12% 22%, rgba(108,92,231,.7) 50%, transparent 50%),
+    radial-gradient(1.2px 1.2px at 28% 78%, rgba(0,206,201,.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 48% 12%, rgba(253,121,168,.6) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 68% 58%, rgba(116,185,255,.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 88% 82%, rgba(85,239,196,.4) 50%, transparent 50%),
+    radial-gradient(1.2px 1.2px at 22% 92%, rgba(255,234,167,.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 82% 32%, rgba(108,92,231,.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 42% 48%, rgba(0,206,201,.4) 50%, transparent 50%);
+  animation:hero-dots-twinkle 1s ease-in-out infinite alternate;
+  pointer-events:none;
+}
 .sub-hero-bg {
   position:absolute; inset:0; z-index:0;
+}
+/* 子页面背景网格线 */
+.sub-hero-bg::before {
+  content:""; position:absolute; inset:0; z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
+/* 子页面浮动几何装饰（菱形） */
+.sub-hero-bg::after {
+  content:""; position:absolute; z-index:0;
+  width:10px; height:10px;
+  background:rgba(253,121,168,.25);
+  transform:rotate(45deg);
+  top:30%; right:12%;
+  animation:hero-diamond-float 2.5s ease-in-out infinite alternate;
+  box-shadow:
+    -120px 80px 0 rgba(0,206,201,.2),
+    -220px -60px 0 rgba(116,185,255,.15),
+    100px 140px 0 rgba(255,234,167,.15),
+    -60px 180px 0 rgba(108,92,231,.18),
+    180px -40px 0 rgba(85,239,196,.15);
+  pointer-events:none;
 }
 .sub-hero-orb {
   position:absolute; border-radius:50%;
