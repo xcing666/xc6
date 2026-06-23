@@ -151,13 +151,13 @@ function initTyping() {
     if (!deleting) {
       ci++;
       el.textContent = full.slice(0, ci);
-      if (ci >= full.length) { deleting = true; setTimeout(tick, 2000); return; }
-      setTimeout(tick, 90 + Math.random() * 50);
+      if (ci >= full.length) { deleting = true; setTimeout(tick, 1600); return; }
+      setTimeout(tick, 80);
     } else {
       ci--;
       el.textContent = full.slice(0, ci);
-      if (ci <= 0) { deleting = false; ti = (ti + 1) % texts.length; setTimeout(tick, 350); return; }
-      setTimeout(tick, 40);
+      if (ci <= 0) { deleting = false; ti = (ti + 1) % texts.length; setTimeout(tick, 300); return; }
+      setTimeout(tick, 35);
     }
   }
   tick();
@@ -209,3 +209,65 @@ function initBackToTop() {
   });
 }
 initBackToTop();
+
+/* =========== 实时订单动态（广告设计页 · 彩色跳动版） =========== */
+function initFakeComments() {
+  const el = document.getElementById('fakeComments');
+  if (!el) return;
+
+  const msgs = [
+    { name: '张*',   action: '下单了', item: '海报设计', time: '3 分钟前' },
+    { name: '李*',   action: '已付款', item: 'Logo 设计', time: '5 分钟前' },
+    { name: '王*',   action: '下单了', item: '包装设计', time: '8 分钟前' },
+    { name: '陈*',   action: '已付款', item: 'VI 全套',   time: '12 分钟前' },
+    { name: '刘*',   action: '下单了', item: '宣传单',   time: '15 分钟前' },
+    { name: '赵*',   action: '已付款', item: '画册设计', time: '18 分钟前' },
+    { name: '孙*',   action: '下单了', item: '电商详情', time: '22 分钟前' },
+    { name: '周*',   action: '已付款', item: '菜单设计', time: '25 分钟前' },
+    { name: '吴*',   action: '下单了', item: '展架设计', time: '28 分钟前' },
+    { name: '郑*',   action: '已付款', item: 'Logo 改版', time: '32 分钟前' },
+  ];
+
+  let idx = 0;
+
+  function getRandomPos() {
+    const rect = el.getBoundingClientRect();
+    const w = rect.width || 900;
+    const h = rect.height || 260;
+    // 随机位置，确保在容器内
+    const left = 20 + Math.random() * (w - 180);
+    const top  = 40 + Math.random() * (h - 60);
+    return { left: left + 'px', top: top + 'px' };
+  }
+
+  function showNext() {
+    const m = msgs[idx % msgs.length];
+    const pos = getRandomPos();
+    const delay = 3500 + Math.random() * 4000; // 3.5~7.5 秒随机间隔
+    const floatIdx = (idx % 5) + 1; // 1~5，对应 CSS 的 fc-float-1 ~ fc-float-5
+
+    const div = document.createElement('div');
+    div.className = 'fake-comment-item';
+    div.style.cssText = `
+      left: ${pos.left};
+      top:  ${pos.top};
+      --rot-start: ${(Math.random() * 20 - 10).toFixed(1)}deg;
+      --rot-end:   ${(Math.random() * 12 - 6).toFixed(1)}deg;
+      --scale:      ${ (0.85 + Math.random() * 0.3).toFixed(2) };
+      --float-dur:  ${ (4 + Math.random() * 3).toFixed(1) }s;
+      --float-delay: ${ (Math.random() * 1).toFixed(2) }s;
+      animation: fc-pop-in 0.7s cubic-bezier(.34,1.56,.64,1) both,
+                 fc-float-${floatIdx} var(--float-dur) var(--float-delay) ease-in-out infinite;
+    `;
+    div.innerHTML = `<span class="fc-name">${m.name}</span><span class="fc-action">${m.action}</span><span class="fc-item-name">${m.item}</span><span class="fc-time">${m.time}</span>`;
+    el.appendChild(div);
+
+    // 只保留最近 6 条
+    while (el.children.length > 6) el.removeChild(el.firstChild);
+
+    idx++;
+    setTimeout(showNext, delay);
+  }
+  showNext();
+}
+initFakeComments();
