@@ -243,7 +243,7 @@ async function checkAPI() {
   try {
     const resp = await fetch(API_HEALTH, { method: 'GET', signal: AbortSignal.timeout(5000) });
     const data = await resp.json();
-    if (resp.ok && data.status === 'online') {
+    if (resp.ok && (data.status === 'online' || data.status === 'ok')) {
       apiOnline = true;
       statusEl.className = 'api-status online';
       const aiTag = data.ai_powered
