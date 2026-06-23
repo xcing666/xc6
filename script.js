@@ -216,35 +216,65 @@ function initFakeComments() {
   if (!el) return;
 
   const msgs = [
-    { name: '张*',   action: '下单了', item: '海报设计', time: '3 分钟前' },
-    { name: '李*',   action: '已付款', item: 'Logo 设计', time: '5 分钟前' },
-    { name: '王*',   action: '下单了', item: '包装设计', time: '8 分钟前' },
-    { name: '陈*',   action: '已付款', item: 'VI 全套',   time: '12 分钟前' },
-    { name: '刘*',   action: '下单了', item: '宣传单',   time: '15 分钟前' },
-    { name: '赵*',   action: '已付款', item: '画册设计', time: '18 分钟前' },
-    { name: '孙*',   action: '下单了', item: '电商详情', time: '22 分钟前' },
-    { name: '周*',   action: '已付款', item: '菜单设计', time: '25 分钟前' },
-    { name: '吴*',   action: '下单了', item: '展架设计', time: '28 分钟前' },
-    { name: '郑*',   action: '已付款', item: 'Logo 改版', time: '32 分钟前' },
+    // ===== 真实历史订单（固定在屏幕上）=====
+    { name: '张*',   action: '下单了', item: '海报设计',   time: '6月22号' },
+    { name: '李*',   action: '已付款', item: 'Logo 设计',  time: '6月20号' },
+    { name: '王*',   action: '下单了', item: '包装设计',   time: '6月18号' },
+    { name: '陈*',   action: '已付款', item: 'VI 全套',    time: '6月15号' },
+    { name: '刘*',   action: '下单了', item: '宣传单',     time: '6月12号' },
+    { name: '赵*',   action: '已付款', item: '画册设计',   time: '6月10号' },
+    { name: '孙*',   action: '下单了', item: '电商详情',   time: '6月8号' },
+    { name: '周*',   action: '已付款', item: '菜单设计',   time: '6月5号' },
+    { name: '吴*',   action: '下单了', item: '展架设计',   time: '6月3号' },
+    { name: '郑*',   action: '已付款', item: 'Logo 改版',  time: '6月1号' },
+    { name: '何*',   action: '下单了', item: '名片设计',   time: '5月28号' },
+    { name: '黄*',   action: '已付款', item: '易拉宝',     time: '5月25号' },
+    { name: '林*',   action: '下单了', item: '淘宝主图',   time: '5月22号' },
+    { name: '徐*',   action: '已付款', item: '产品拍摄',   time: '5月18号' },
+    { name: '马*',   action: '下单了', item: '横幅设计',   time: '5月15号' },
+    { name: '朱*',   action: '已付款', item: '门头设计',   time: '5月12号' },
+
+    // ===== 近期订单 =====
+    { name: '胡*',   action: '下单了', item: '折页设计',   time: '昨天' },
+    { name: '高*',   action: '已付款', item: 'H5 页面',    time: '昨天' },
+    { name: '罗*',   action: '下单了', item: '公众号首图', time: '今天' },
+    { name: '梁*',   action: '已付款', item: '抖音封面',   time: '今天' },
+    { name: '谢*',   action: '下单了', item: '企业画册',   time: '今天' },
+    { name: '宋*',   action: '已付款', item: '包装盒',     time: '今天' },
+
+    // ===== 刚刚 / 最近 =====
+    { name: '韩*',   action: '下单了', item: '奖杯设计',   time: '1 小时前' },
+    { name: '唐*',   action: '已付款', item: '三折页',     time: '2 小时前' },
+    { name: '许*',   action: '下单了', item: '工作证',     time: '3 小时前' },
+    { name: '邓*',   action: '已付款', item: '抽奖券',     time: '刚刚' },
+    { name: '曹*',   action: '下单了', item: '吊旗设计',   time: '刚刚' },
   ];
 
   let idx = 0;
+  const BURST_COUNT = 20;  // 初始爆发条数（快速填满屏幕）
+  const MAX_ON_SCREEN = 40; // 屏幕上最多保留条数
 
   function getRandomPos() {
     const rect = el.getBoundingClientRect();
     const w = rect.width || 900;
-    const h = rect.height || 260;
-    // 随机位置，确保在容器内
-    const left = 20 + Math.random() * (w - 180);
-    const top  = 40 + Math.random() * (h - 60);
+    const h = rect.height || 155;
+    // 高度集中：只在中间区域随机，上下留空少，看起来更密
+    const leftMin = w * 0.08;
+    const leftMax = w * 0.90;
+    const topMin  = h * 0.32;
+    const topMax  = h * 0.82;
+    const left = leftMin + Math.random() * (leftMax - leftMin);
+    const top  = topMin  + Math.random() * (topMax - topMin);
     return { left: left + 'px', top: top + 'px' };
   }
 
   function showNext() {
     const m = msgs[idx % msgs.length];
     const pos = getRandomPos();
-    const delay = 3500 + Math.random() * 4000; // 3.5~7.5 秒随机间隔
-    const floatIdx = (idx % 5) + 1; // 1~5，对应 CSS 的 fc-float-1 ~ fc-float-5
+    // 前 BURST_COUNT 条快速弹出，之后恢复正常速度
+    const isBurst = idx < BURST_COUNT;
+    const delay = isBurst ? 300 : (6000 + Math.random() * 6000);
+    const floatIdx = (idx % 5) + 1;
 
     const div = document.createElement('div');
     div.className = 'fake-comment-item';
@@ -254,16 +284,16 @@ function initFakeComments() {
       --rot-start: ${(Math.random() * 20 - 10).toFixed(1)}deg;
       --rot-end:   ${(Math.random() * 12 - 6).toFixed(1)}deg;
       --scale:      ${ (0.85 + Math.random() * 0.3).toFixed(2) };
-      --float-dur:  ${ (4 + Math.random() * 3).toFixed(1) }s;
-      --float-delay: ${ (Math.random() * 1).toFixed(2) }s;
-      animation: fc-pop-in 0.7s cubic-bezier(.34,1.56,.64,1) both,
+      --float-dur:  ${ (5 + Math.random() * 4).toFixed(1) }s;
+      --float-delay: ${ (Math.random() * 1.5).toFixed(2) }s;
+      animation: fc-pop-in 0.6s cubic-bezier(.34,1.56,.64,1) both,
                  fc-float-${floatIdx} var(--float-dur) var(--float-delay) ease-in-out infinite;
     `;
     div.innerHTML = `<span class="fc-name">${m.name}</span><span class="fc-action">${m.action}</span><span class="fc-item-name">${m.item}</span><span class="fc-time">${m.time}</span>`;
     el.appendChild(div);
 
-    // 只保留最近 6 条
-    while (el.children.length > 6) el.removeChild(el.firstChild);
+    // 最多保留 MAX_ON_SCREEN 条，避免无限累积
+    while (el.children.length > MAX_ON_SCREEN) el.removeChild(el.firstChild);
 
     idx++;
     setTimeout(showNext, delay);

@@ -1929,18 +1929,21 @@ body.js-loaded .reveal.visible { opacity:1; transform:translateY(0); }
 /* ========== 实时订单动态（灵动迷你气泡）============ */
 .fake-comments {
   position: relative;
-  min-height: 260px;
+  min-height: 155px;
   overflow: hidden;
-  padding: 20px 0 30px;
+  padding: 8px 0 12px;
   z-index: 1;
 }
 
-/* 区标题 */
+/* 区标题（不被气泡遮盖） */
 .fake-comments-header {
   text-align: center;
   margin-bottom: 18px;
   position: relative;
-  z-index: 5;
+  z-index: 20;
+  background: rgba(19,23,54,.85);
+  padding: 8px 0 12px;
+  border-radius: 12px;
 }
 .fc-pulse-dot {
   display: inline-block;
