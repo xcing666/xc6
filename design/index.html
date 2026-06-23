@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>广告平面图设计 — 兴程网络</title>
-  <link rel="stylesheet" href="../style.css?v=20260603" />
+  <link rel="stylesheet" href="../style.css?v=20260622q" />
 </head>
 <body>
 
@@ -34,18 +34,218 @@
       <h1 class="sub-hero-title">广告<span>平面图设计</span></h1>
       <p class="sub-hero-desc">用视觉语言讲述品牌故事 · 让每一张图都为转化负责</p>
       <div class="sub-hero-actions">
-        <a href="../index.html#contact" class="hero-btn">免费咨询</a>
+        <a href="#contact-bottom" class="hero-btn">免费咨询</a>
         <a href="../index.html" class="hero-btn-outline">返回首页</a>
       </div>
     </div>
-    <!-- 右侧装饰卡片 -->
+    <!-- 右侧装饰卡片 + 浮动设计元素 -->
     <div class="sub-hero-mockup">
       <div class="mockup-card mc1">🎨 品牌 VI</div>
       <div class="mockup-card mc2">🖼️ 海报设计</div>
       <div class="mockup-card mc3">📦 包装设计</div>
       <div class="mockup-card mc4">📱 社媒配图</div>
+      <!-- 浮动设计装饰 -->
+      <div class="design-deco">
+        <div class="deco-ruler-h"></div>
+        <div class="deco-ruler-v"></div>
+        <div class="deco-pen-stroke"></div>
+        <div class="deco-palette"><span class="dp1"></span><span class="dp2"></span><span class="dp3"></span><span class="dp4"></span><span class="dp5"></span><span class="dp6"></span></div>
+        <div class="deco-tri-d"></div>
+        <div class="deco-diamond-d"></div>
+      </div>
     </div>
   </header>
+
+  <!-- ======== 明码标价价格表 ======== -->
+  <section class="price-section" id="pricing">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag">PRICING</span>
+        <h2>明码标价 · 透明消费</h2>
+        <p>所有服务价格公开透明，无隐形消费，满意再付款</p>
+      </div>
+      <div class="price-grid">
+        <div class="price-card">
+          <div class="price-icon">🎨</div>
+          <h3>海报/宣传单设计</h3>
+          <div class="price-amount">¥<span>100</span><small>/张</small></div>
+          <ul class="price-features">
+            <li>✅ 高清源文件交付</li>
+            <li>✅ 2 次免费修改</li>
+            <li>✅ 支持 AI / PSD / PNG</li>
+            <li>✅ 24小时内交付</li>
+          </ul>
+          <a href="#contact-bottom" class="price-btn">立即下单</a>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">人气推荐</div>
+          <div class="price-icon">🏷️</div>
+          <h3>Logo 品牌设计</h3>
+          <div class="price-amount">¥<span>300</span><small>起</small></div>
+          <ul class="price-features">
+            <li>✅ 3 款初稿方案</li>
+            <li>✅ 无限次修改至满意</li>
+            <li>✅ 全套 VI 源文件</li>
+            <li>✅ 商业授权书</li>
+          </ul>
+          <a href="#contact-bottom" class="price-btn">立即下单</a>
+        </div>
+        <div class="price-card">
+          <div class="price-icon">📦</div>
+          <h3>包装/印刷设计</h3>
+          <div class="price-amount">¥<span>500</span><small>起</small></div>
+          <ul class="price-features">
+            <li>✅ 包装展开图 + 3D 效果图</li>
+            <li>✅ 印刷厂对接服务</li>
+            <li>✅ 免费打样指导</li>
+            <li>✅ 源文件完整交付</li>
+          </ul>
+          <a href="#contact-bottom" class="price-btn">立即下单</a>
+        </div>
+        <div class="price-card">
+          <div class="price-icon">🎬</div>
+          <h3>VI 全套设计</h3>
+          <div class="price-amount">¥<span>2000</span><small>起</small></div>
+          <ul class="price-features">
+            <li>✅ Logo + 名片 + 信封 + 文件夹</li>
+            <li>✅ 品牌规范手册</li>
+            <li>✅ 社交媒体全套配图</li>
+            <li>✅ 终身免费咨询</li>
+          </ul>
+          <a href="#contact-bottom" class="price-btn">立即下单</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 实时订单动态（灵动浮动）======== -->
+  <section class="fake-comments" id="fakeComments">
+    <div class="fake-comments-header">
+      <span class="fc-pulse-dot"></span>
+      <h3 class="fc-title">实时订单动态</h3>
+      <span class="fc-subtitle">—— 客户正在下单 ——</span>
+    </div>
+  </section>
+
+  <!-- ======== 客户案例折叠区 ======== -->
+  <section class="cases-section" id="cases">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag">CASE STUDY</span>
+        <h2>客户案例展示</h2>
+        <p>点击查看客户真实案例，了解我们的设计流程和交付质量</p>
+      </div>
+      <div class="cases-accordion">
+        <div class="case-acc-item">
+          <button class="case-acc-header">📱 餐饮品牌 · 全套 VI 设计 <span class="case-acc-toggle">+</span></button>
+          <div class="case-acc-body">
+            <div class="case-acc-content">
+              <p class="case-acc-desc">某连锁餐饮品牌，需要全新视觉形象升级。我们提供了从 Logo  redesign 到全套 VI 应用的设计服务，涵盖菜单、包装袋、员工制服等。</p>
+              <div class="case-acc-images">
+                <div class="case-img-placeholder">📸 案例截图 1（待上传）</div>
+                <div class="case-img-placeholder">📸 案例截图 2（待上传）</div>
+                <div class="case-img-placeholder">📸 案例截图 3（待上传）</div>
+              </div>
+              <div class="case-acc-tags">
+                <span class="case-tag">VI设计</span>
+                <span class="case-tag">品牌升级</span>
+                <span class="case-tag">餐饮行业</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="case-acc-item">
+          <button class="case-acc-header">🛍️ 电商海报 · 活动宣传图 <span class="case-acc-toggle">+</span></button>
+          <div class="case-acc-body">
+            <div class="case-acc-content">
+              <p class="case-acc-desc">某电商平台大促活动，需要系列主题海报。我们在一周内交付了 20+ 张高质量活动海报，助力店铺转化率提升 35%。</p>
+              <div class="case-acc-images">
+                <div class="case-img-placeholder">📸 案例截图 1（待上传）</div>
+                <div class="case-img-placeholder">📸 案例截图 2（待上传）</div>
+              </div>
+              <div class="case-acc-tags">
+                <span class="case-tag">海报设计</span>
+                <span class="case-tag">电商行业</span>
+                <span class="case-tag">活动策划</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="case-acc-item">
+          <button class="case-acc-header">🏢 企业形象 · 名片画册设计 <span class="case-acc-toggle">+</span></button>
+          <div class="case-acc-body">
+            <div class="case-acc-content">
+              <p class="case-acc-desc">某科技公司需要全新的企业形象设计，包括员工名片、公司画册、PPT 模板等。设计风格科技感十足，获得客户高度认可。</p>
+              <div class="case-acc-images">
+                <div class="case-img-placeholder">📸 案例截图 1（待上传）</div>
+                <div class="case-img-placeholder">📸 案例截图 2（待上传）</div>
+                <div class="case-img-placeholder">📸 案例截图 3（待上传）</div>
+              </div>
+              <div class="case-acc-tags">
+                <span class="case-tag">名片设计</span>
+                <span class="case-tag">画册设计</span>
+                <span class="case-tag">科技企业</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="case-acc-item">
+          <button class="case-acc-header">🎪 活动物料 · 展会全套设计 <span class="case-acc-toggle">+</span></button>
+          <div class="case-acc-body">
+            <div class="case-acc-content">
+              <p class="case-acc-desc">某大型展会参展商，需要整套展会物料设计。包括展位背景墙、宣传折页、礼品袋、工作证等，一站式搞定。</p>
+              <div class="case-acc-images">
+                <div class="case-img-placeholder">📸 案例截图 1（待上传）</div>
+                <div class="case-img-placeholder">📸 案例截图 2（待上传）</div>
+              </div>
+              <div class="case-acc-tags">
+                <span class="case-tag">展会设计</span>
+                <span class="case-tag">物料制作</span>
+                <span class="case-tag">活动策划</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 为什么选择我们 ======== -->
+  <section class="why-choose-us">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag">WHY US</span>
+        <h2>为什么选择兴程网络</h2>
+        <p>我们用心做好每一个设计，让您省心、放心、安心</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-item">
+          <div class="why-icon">🚀</div>
+          <h3>快速交付</h3>
+          <p>普通设计24小时内交付，加急订单最快2小时完成</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🔄</div>
+          <h3>免费修改</h3>
+          <p>不满意免费修改，直到您满意为止，不限次数</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">💰</div>
+          <h3>明码标价</h3>
+          <p>价格透明公开，无隐形消费，性价比超高</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🛡️</div>
+          <h3>售后保障</h3>
+          <p>交付后30天内免费调整，让您无后顾之忧</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+<!-- ======== 底部联系方式锚点 ======== -->
+  <div class="contact-anchor" id="contact-bottom"></div>
 
   <!-- ======== 底部 ======== -->
   <footer class="footer">
@@ -82,6 +282,8 @@
     </div>
   </footer>
 
-  <script src="../script.js?v=20260603"></script>
+  <script src="../script.js?v=20260622q"></script>
+  <!-- 兜底：确保虚假评论一定渲染 -->
+  <script>window.addEventListener('load', () => { setTimeout(() => { if (typeof initFakeComments === 'function') initFakeComments(); }, 200); });</script>
 </body>
 </html>
