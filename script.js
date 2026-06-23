@@ -257,14 +257,14 @@ function initFakeComments() {
   function getRandomPos() {
     const rect = el.getBoundingClientRect();
     const w = rect.width || 900;
-    const h = rect.height || 155;
+    const h = rect.height || 210;
     // 移动端更紧凑，防止溢出
     const isMobile = w < 500;
     const leftMin = isMobile ? w * 0.02 : w * 0.06;
     const leftMax = isMobile ? w * 0.82 : w * 0.88;
-    // 气泡从标题下方开始分布
-    const topMin  = isMobile ? h * 0.50 : h * 0.32;
-    const topMax  = isMobile ? h * 0.92 : h * 0.85;
+    // 气泡分布范围：留足上下边距，防止被截断
+    const topMin  = isMobile ? h * 0.08 : h * 0.08;
+    const topMax  = isMobile ? h * 0.82 : h * 0.78;
     const left = leftMin + Math.random() * (leftMax - leftMin);
     const top  = topMin  + Math.random() * (topMax - topMin);
     return { left: left + 'px', top: top + 'px' };
