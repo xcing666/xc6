@@ -302,4 +302,37 @@ function initFakeComments() {
   }
   showNext();
 }
+
+/* =========== 案例灯箱 =========== */
+const CASE_LABELS = [
+  'VI设计', 'Logo设计', '海报设计', '包装设计', '名片设计',
+  '画册设计', '展板设计', '菜单设计', '横幅设计', '折页设计',
+  '台历设计', '吊牌设计', '不干胶', '手提袋', '工牌设计',
+  'PPT设计', 'H5页面', '公众号首图', '电商主图', '详情页设计',
+];
+function openCaseLightbox() {
+  const lb = document.getElementById('casesLightbox');
+  const grid = document.getElementById('casesLbGrid');
+  if (!lb || !grid) return;
+  // 动态生成 20 张案例卡片
+  if (!grid.children.length) {
+    for (let i = 0; i < 20; i++) {
+      const card = document.createElement('div');
+      card.className = 'case-img-card';
+      card.innerHTML = `<span class="case-num">${String(i+1).padStart(2,'0')}</span><span class="case-label">${CASE_LABELS[i] || '案例 '+(i+1)}</span><span style="font-size:32px;opacity:.5">🖼️</span>`;
+      grid.appendChild(card);
+    }
+  }
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCaseLightbox() {
+  const lb = document.getElementById('casesLightbox');
+  if (lb) lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+// ESC 关闭灯箱
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeCaseLightbox();
+});
 initFakeComments();
