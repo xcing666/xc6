@@ -137,7 +137,7 @@ body::after {
   background:linear-gradient(135deg, var(--c1), var(--c3)) !important;
 }
 
-.nav-ham { display:none; background:none; border:none; cursor:pointer; padding:6px; }
+.nav-ham { display:none; background:none; border:none; cursor:pointer; padding:8px 10px; position:relative; z-index:1001; }
 .nav-ham span { display:block; width:22px; height:2px; margin:5px 0; background:var(--text); transition:.3s; }
 
 /* ========== Hero ========== */

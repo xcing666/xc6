@@ -4,12 +4,12 @@
 /* 标记 JS 已加载，触发 CSS 滚动揭示动画 */
 document.body.classList.add('js-loaded');
 
-/* ============ 粒子画布系统 ============ */
+/* ============ 粒子画布系统（仅首页） ============ */
 const canvas = document.getElementById('particle-canvas');
-const ctx    = canvas.getContext('2d');
-
-let W, H, particles = [], animId;
-const DPR = Math.min(window.devicePixelRatio || 1, 2);
+let ctx, W, H, particles = [], animId;
+if (canvas) {
+  ctx = canvas.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
 /* 各服务对应的粒子图标 */
 const SERVICE_ICONS = {
@@ -18,6 +18,8 @@ const SERVICE_ICONS = {
   social:      ['📈','⭐','💬','📊','📹️','🔥','💡'],
   pdd:         ['💰','🎁','✅','🤝','🏷️','🧧','🎯'],
 };
+
+if (canvas) {
 
 class Particle {
   constructor(x, y, icons) {
@@ -102,6 +104,7 @@ document.querySelectorAll('.service-card').forEach(card => {
     ensureLoop();
   });
 });
+} /* end: particle-canvas guard */
 
 /* ============ 导航滚动效果 ============ */
 const nav = document.getElementById('nav');
