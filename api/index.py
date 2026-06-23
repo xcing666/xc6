@@ -39,7 +39,6 @@ def analyze_image_local(image_bytes):
         try:
             lap_var = convolve(sharp_arr.astype(float), lap).var()
         except ImportError:
-            # Fallback: use simple edge detection
             sharp_filtered = gray.filter(ImageFilter.FIND_EDGES)
             sharp_arr2 = np.array(sharp_filtered)
             lap_var = np.var(sharp_arr2)
@@ -80,7 +79,6 @@ def analyze_image_local(image_bytes):
             comp_ratio = 0.5
         composition_score = int(comp_ratio * 70 + 30)
 
-        # Overall score
         overall = int(sharpness_score * 0.4 + exposure_score * 0.3 + composition_score * 0.3)
 
         return {
@@ -174,7 +172,6 @@ def handler(request=None):
 
     method = getattr(request, "method", "GET") or "GET"
 
-    # Health check endpoint
     if method == "GET":
         hf_token = os.environ.get("HUGGINGFACE_TOKEN", "")
         return {
@@ -187,7 +184,6 @@ def handler(request=None):
             })
         }
 
-    # Analyze endpoint (POST)
     if method != "POST":
         return {
             "statusCode": 405,
@@ -212,20 +208,16 @@ def handler(request=None):
                 "body": json.dumps({"error": "缺少图片数据"})
             }
 
-        # Decode base64
         if "," in image_b64:
             image_b64 = image_b64.split(",", 1)[1]
         image_bytes = base64.b64decode(image_b64)
 
-        # Local analysis (always runs)
         local_result = analyze_image_local(image_bytes)
 
-        # Try AI analysis via Hugging Face
         hf_token = os.environ.get("HUGGINGFACE_TOKEN", "")
         if hf_token:
             ai_result = call_hf_clip_api(data.get("image", ""), hf_token)
             if ai_result.get("ai_enabled"):
-                # Combine AI score with local analysis
                 ai_score = ai_result.get("ai_aesthetic_score", 50)
                 local_overall = local_result.get("overall", {}).get("score", 50)
                 blended_score = int(ai_score * 0.6 + local_overall * 0.4)
@@ -269,7 +261,5 @@ def handler(request=None):
         }
 
 
-# Vercel entry point
 if __name__ == "__main__":
-    # For local testing: python api/index.py
     print(json.dumps(handler(Request()), ensure_ascii=False, indent=2))
