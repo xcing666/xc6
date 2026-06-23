@@ -245,10 +245,9 @@ def handler(request=None):
             local_result["ai"] = {"ai_enabled": False, "reason": "no_token"}
 
         local_result["filename"] = filename
-        local_result["dimensions": "{}x{}".format(
-            Image.open(BytesIO(image_bytes)).size[0],
-            Image.open(BytesIO(image_bytes)).size[1]
-        )] if True else ""
+        img_for_dims = Image.open(BytesIO(image_bytes))
+        local_result["dimensions"] = f"{img_for_dims.size[0]}x{img_for_dims.size[1]}"
+        img_for_dims.close()
 
         return {
             "statusCode": 200,
