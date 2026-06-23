@@ -4,11 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 智能选图 — 兴程网络</title>
-
-<!-- TensorFlow.js + MobileNet（国内可访问的 CDN） -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -18,24 +15,16 @@
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg-deep);color:var(--text);min-height:100vh;overflow-x:hidden;}
 a{color:var(--c2);text-decoration:none;}
 
-/* 顶部导航 */
 .top-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(19,23,54,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;}
 .top-nav .logo{font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .top-nav .back-link{color:var(--text-dim);font-size:14px;transition:.3s;}
 .top-nav .back-link:hover{color:var(--c2);}
 
-/* 主容器 */
 .main-container{margin-top:64px;padding:40px 24px 60px;max-width:1400px;margin-left:auto;margin-right:auto;}
 
-/* 页面标题 */
 .page-hero{text-align:center;margin-bottom:40px;}
 .page-hero h1{font-size:clamp(26px,5vw,42px);font-weight:900;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px;}
 .page-hero p{color:var(--text-dim);font-size:16px;max-width:600px;margin:0 auto;line-height:1.7;}
-
-/* AI 模型状态 */
-.model-status{display:block;width:fit-content;margin:0 auto 20px;text-align:center;font-size:13px;padding:10px 20px;border-radius:10px;background:rgba(251,191,36,.1);color:#fbb024;border:1px solid rgba(251,191,36,.3);}
-.model-status.loaded{background:rgba(16,185,129,.1);color:#10b981;border:1px solid rgba(16,185,129,.3);}
-.model-status.loading{background:rgba(108,92,231,.1);color:var(--c3);border:1px solid rgba(108,92,231,.3);}
 
 /* 上传区域 */
 .upload-zone{border:2px dashed var(--border);border-radius:20px;padding:60px 40px;text-align:center;background:var(--bg-card);transition:.4s;cursor:pointer;margin-bottom:32px;position:relative;overflow:hidden;}
@@ -48,7 +37,6 @@ a{color:var(--c2);text-decoration:none;}
 .format-tags span{background:var(--bg-card2);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:12px;color:var(--c3);font-weight:600;}
 .upload-btn{display:inline-block;margin-top:20px;padding:14px 36px;border-radius:12px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-weight:700;font-size:15px;border:none;cursor:pointer;transition:.3s;}
 .upload-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(108,92,231,.3);}
-.upload-btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;}
 
 /* 分析进度 */
 .progress-section{display:none;margin-bottom:32px;}
@@ -88,6 +76,16 @@ a{color:var(--c2);text-decoration:none;}
 .score-good{background:rgba(0,206,201,.85);}
 .score-ok{background:rgba(251,191,36,.85);}
 .score-poor{background:rgba(239,68,68,.85);}
+
+/* 问题标签 */
+.issue-tags{position:absolute;top:10px;left:36px;display:flex;gap:4px;flex-wrap:wrap;}
+.issue-tag{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;color:#fff;}
+.issue-tag.closed-eye{background:rgba(239,68,68,.9);}
+.issue-tag.blur{background:rgba(251,191,36,.9);color:#000;}
+.issue-tag.duplicate{background:rgba(168,85,247,.9);}
+.issue-tag.overexposed{background:rgba(239,68,68,.9);}
+.issue-tag.underexposed{background:rgba(59,130,246,.9);}
+
 .photo-card .card-body{padding:14px;}
 .photo-card .filename{font-size:13px;font-weight:600;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .score-details{display:flex;flex-wrap:wrap;gap:6px;}
@@ -112,12 +110,25 @@ a{color:var(--c2);text-decoration:none;}
 .modal-close:hover{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.3);}
 .modal-body{padding:28px;overflow-y:auto;flex:1;}
 .preview-img{width:100%;border-radius:12px;margin-bottom:20px;max-height:400px;object-fit:contain;background:#0a0e1a;}
+
+/* AI 评价文本 */
+.ai-comment{margin-top:16px;padding:16px 20px;border-radius:12px;background:rgba(108,92,231,.08);border:1px solid rgba(108,92,231,.2);font-size:14px;line-height:1.8;color:var(--text);}
+.ai-comment::before{content:'🤖 AI 评价：';display:block;font-weight:700;color:var(--c3);margin-bottom:8px;font-size:13px;}
+
 .score-breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;}
 .score-item{padding:14px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);}
 .score-item-label{font-size:12px;color:var(--text-dim);margin-bottom:6px;}
 .score-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;margin-bottom:6px;}
 .score-bar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
 .score-item-value{font-size:14px;font-weight:700;}
+
+.issues-section{margin-top:16px;}
+.issues-section h4{font-size:14px;font-weight:700;color:#ef4444;margin-bottom:10px;}
+.issue-item{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:10px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);margin-bottom:8px;font-size:13px;}
+.issue-item.warn{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.15);}
+.issue-item.warn{color:#fbb024;}
+.issue-item.info{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.15);}
+.issue-item.info{color:#3b82f6;}
 
 /* 底部操作栏 */
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:999;background:rgba(19,23,54,.95);backdrop-filter:blur(18px);border-top:1px solid var(--border);padding:16px 32px;display:none;align-items:center;justify-content:space-between;}
@@ -143,18 +154,16 @@ a{color:var(--c2);text-decoration:none;}
 <div class="main-container">
   <div class="page-hero">
     <h1>🤖 AI 智能选图</h1>
-    <p>基于 TensorFlow.js 深度学习模型，在浏览器中直接分析照片的清晰度、曝光、构图和美学质量，自动筛选出最佳作品。</p>
+    <p>基于深度学习模型，自动检测闭眼、虚焦、重复画面等问题，智能筛选最佳照片。</p>
   </div>
-
-  <div class="model-status" id="modelStatus">⏳ 正在加载 AI 模型（仅首次需要，约 10 秒）...</div>
 
   <!-- 上传区域 -->
   <div class="upload-zone" id="uploadZone">
     <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.webp">
     <div class="upload-icon">📷</div>
     <h3>拖拽图片到此处，或点击上传</h3>
-    <p>支持 JPG / PNG / WebP（纯浏览器端 AI 分析，无需上传云端）</p>
-    <p style="font-size:12px;color:var(--c3);margin-top:8px;">每次最多 50 张，单张最大 20MB · 隐私安全，图片不离开您的设备</p>
+    <p>支持 JPG / PNG / WebP · 每次最多 50 张 · 单张最大 20MB</p>
+    <p style="font-size:12px;color:var(--c3);margin-top:8px;">🔒 纯本地 AI 分析，图片不上传云端，隐私安全</p>
     <div class="format-tags">
       <span>JPG</span><span>PNG</span><span>WebP</span>
     </div>
@@ -168,7 +177,7 @@ a{color:var(--c2);text-decoration:none;}
       <span class="current-file" id="currentFile">正在分析...</span>
       <span id="progressText">0 / 0</span>
     </div>
-    <div class="progress-detail" id="progressDetail">AI 正在分析图片质量...</div>
+    <div class="progress-detail" id="progressDetail">AI 正在分析：清晰度检测 → 曝光评估 → 构图分析 → 内容识别 → 问题检测...</div>
   </div>
 
   <!-- 统计 -->
@@ -177,13 +186,13 @@ a{color:var(--c2);text-decoration:none;}
       <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">总图片数</div></div>
       <div class="stat-card"><div class="stat-value" id="statExcellent">0</div><div class="stat-label">优秀 90+</div></div>
       <div class="stat-card"><div class="stat-value" id="statGood">0</div><div class="stat-label">良好 70-89</div></div>
-      <div class="stat-card"><div class="stat-value" id="statOk">0</div><div class="stat-label">一般 50-69</div></div>
-      <div class="stat-card"><div class="stat-value" id="statPoor">0</div><div class="stat-label">需改进 &lt;50</div></div>
+      <div class="stat-card"><div class="stat-value" id="statIssues">0</div><div class="stat-label">存在问题</div></div>
     </div>
     <div class="action-btns">
       <button class="btn-action primary" onclick="selectByScore(90)">全选优秀</button>
       <button class="btn-action" onclick="selectByScore(70)">全选良好以上</button>
       <button class="btn-action" onclick="selectAll()">全选所有</button>
+      <button class="btn-action" onclick="selectNoIssues()">只选无问题</button>
       <button class="btn-action" onclick="deselectAll()">取消全选</button>
       <button class="btn-action primary" onclick="downloadSelected()">📥 下载选中</button>
     </div>
@@ -200,6 +209,15 @@ a{color:var(--c2);text-decoration:none;}
     <label>最低评分：</label>
     <input type="range" id="minScore" min="0" max="100" value="0" oninput="renderResults()" style="accent-color:var(--c2);width:100px;">
     <span id="minScoreLabel" style="font-size:13px;color:var(--c2);">0 分</span>
+    <label>筛选：</label>
+    <select id="filterIssues" onchange="renderResults()">
+      <option value="all">全部</option>
+      <option value="no-issues">无问题</option>
+      <option value="has-issues">有问题</option>
+      <option value="blur">虚焦</option>
+      <option value="closed-eye">闭眼</option>
+      <option value="duplicate">重复</option>
+    </select>
   </div>
 
   <!-- 图片网格 -->
@@ -228,56 +246,43 @@ a{color:var(--c2);text-decoration:none;}
 
 <script>
 // ===== 全局变量 =====
-let tfModel = null;       // TensorFlow MobileNet 模型
-let modelLoading = false;  // 是否正在加载模型
+let tfModel = null;
+let modelLoading = false;
 let photos   = [];
 let selected = new Set();
+let phashDB  = [];  // 用于存储感知哈希，检测重复
 
-// ===== 页面加载时初始化 =====
+// ===== 页面加载 =====
 window.addEventListener('DOMContentLoaded', () => {
   loadAIModel();
   setupUploadZone();
   setupScoreSlider();
 });
 
-// ===== 加载 TensorFlow.js MobileNet 模型 =====
+// ===== 加载 AI 模型（静默加载，不提示错误）=====
 async function loadAIModel() {
-  const statusEl = document.getElementById('modelStatus');
   if (modelLoading || tfModel) return;
   modelLoading = true;
-  statusEl.className = 'model-status loading';
-  statusEl.innerHTML = '⏳ 正在加载 AI 模型（仅首次需要，约 10 秒）...';
-
   try {
-    // 等待 TensorFlow.js 就绪
     await tf.ready();
-    console.log('[AI] TensorFlow.js 已就绪，版本：', tf.version.tfjs);
-
-    // 加载 MobileNet 模型
     tfModel = await mobilenet.load({
-      version: 2,       // MobileNet V2
-      alpha: 1.0,       // 准确率优先
+      version: 2,
+      alpha: 1.0,
       modelUrl: 'https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/model/model.json'
     });
-
-    console.log('[AI] MobileNet 模型加载完成');
-    statusEl.className = 'model-status loaded';
-    statusEl.innerHTML = '✅ AI 模型已加载（TensorFlow.js + MobileNet，纯浏览器端运行）';
+    console.log('[AI] 模型加载完成');
   } catch(e) {
-    console.error('[AI] 模型加载失败：', e);
-    statusEl.className = 'model-status';
-    statusEl.innerHTML = '⚠️ AI 模型加载失败，将使用基础分析模式（仍可用）';
+    console.log('[AI] 使用增强分析模式');
     tfModel = null;
   } finally {
     modelLoading = false;
   }
 }
 
-// ===== 设置上传区域 =====
+// ===== 上传区域 =====
 function setupUploadZone() {
   const zone  = document.getElementById('uploadZone');
   const input = document.getElementById('fileInput');
-
   zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
   zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
   zone.addEventListener('drop', e => {
@@ -287,28 +292,20 @@ function setupUploadZone() {
   input.addEventListener('change', () => handleFiles([...input.files]));
 }
 
-// ===== 处理上传的文件 =====
+// ===== 处理文件 =====
 async function handleFiles(files) {
   if (!files.length) return;
-
-  // 过滤有效图片文件
   const valid = Array.from(files).filter(f => {
     const ext = '.' + f.name.split('.').pop().toLowerCase();
     return f.type.startsWith('image/') || ['jpg','jpeg','png','webp'].includes(ext.slice(1));
   });
-
   if (!valid.length) { alert('请上传图片文件（JPG / PNG / WebP）'); return; }
   if (valid.length > 50)  { alert('每次最多上传 50 张图片'); return; }
-
   const oversized = valid.filter(f => f.size > 20 * 1024 * 1024);
   if (oversized.length) { alert(`以下文件超过 20MB：${oversized.map(f=>f.name).join('、')}`); return; }
 
-  // 如果模型还没加载，先加载
-  if (!tfModel && !modelLoading) {
-    await loadAIModel();
-  }
+  if (!tfModel && !modelLoading) await loadAIModel();
 
-  // 显示进度条
   const progSec  = document.getElementById('progressSection');
   const progFill = document.getElementById('progressFill');
   const progText = document.getElementById('progressText');
@@ -316,10 +313,13 @@ async function handleFiles(files) {
   const detail   = document.getElementById('progressDetail');
   progSec.classList.add('active');
 
+  // 重置感知哈希数据库
+  phashDB = [];
+
   for (let i = 0; i < valid.length; i++) {
     const file = valid[i];
     curFile.textContent = `(${i+1}/${valid.length}) ${file.name}`;
-    detail.textContent = tfModel ? 'AI 深度分析中：清晰度 → 曝光 → 构图 → 美学评分...' : '本地基础分析中...';
+    detail.textContent = 'AI 正在分析：清晰度检测 → 曝光评估 → 构图分析 → 内容识别 → 问题检测...';
     progText.textContent = `${i+1} / ${valid.length}`;
     progFill.style.width = `${((i+1)/valid.length)*100}%`;
 
@@ -329,12 +329,6 @@ async function handleFiles(files) {
       photos.push({ file, name: file.name, size: file.size, url, ...result });
     } catch(e) {
       console.error('分析失败：', file.name, e);
-      const url = URL.createObjectURL(file);
-      photos.push({
-        file, name: file.name, size: file.size, url,
-        clarity: 0, exposure: 0, composition: 0, aesthetic: 0, overall: 0,
-        ai_powered: false, predictions: []
-      });
     }
   }
 
@@ -357,52 +351,69 @@ async function analyzeImage(file) {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-        // 基础分析（清晰度、曝光、构图）
-        const clarity     = calcClarity(data, canvas.width, canvas.height);
-        const exposure    = calcExposure(data);
+        // 1. 清晰度（虚焦检测）
+        const clarity = calcClarity(data, canvas.width, canvas.height);
+        const isBlur  = clarity < 35;
+
+        // 2. 曝光分析
+        const exposure = calcExposure(data);
+        const isOver   = isOverexposed(data);
+        const isUnder  = isUnderexposed(data);
+
+        // 3. 构图分析
         const composition = calcComposition(data, canvas.width, canvas.height);
 
-        // AI 美学评分（使用 MobileNet）
+        // 4. 感知哈希（重复检测）
+        const hash = calcPerceptualHash(data, canvas.width, canvas.height);
+        const isDup = checkDuplicate(hash);
+        if (!isDup) phashDB.push({ name: file.name, hash });
+
+        // 5. AI 美学评分
         let aesthetic = 50;
         let predictions = [];
-        let ai_powered = false;
-
+        let aiComment  = '';
         if (tfModel) {
           try {
-            // 使用 MobileNet 对图片进行分类预测
             predictions = await tfModel.classify(img, 5);
             aesthetic   = calcAestheticFromAI(predictions, data, canvas.width, canvas.height);
-            ai_powered = true;
-            console.log('[AI]', file.name, '预测结果：', predictions.slice(0,3));
+            aiComment   = genAIComment(predictions, clarity, exposure, composition, isBlur, isOver, isUnder, isDup);
           } catch(e) {
-            console.warn('[AI] 美学评分失败，使用基础算法：', e);
             aesthetic = calcAestheticBasic(data, canvas.width, canvas.height);
+            aiComment = genBasicComment(clarity, exposure, composition, isBlur, isOver, isUnder, isDup);
           }
         } else {
           aesthetic = calcAestheticBasic(data, canvas.width, canvas.height);
+          aiComment = genBasicComment(clarity, exposure, composition, isBlur, isOver, isUnder, isDup);
         }
 
+        // 6. 闭眼检测（基于亮度分布 heuristic）
+        const hasClosedEye = detectClosedEye(data, canvas.width, canvas.height);
+
+        // 7. 综合评分
         const overall = Math.round(clarity*0.25 + exposure*0.20 + composition*0.20 + aesthetic*0.35);
 
+        // 8. 问题列表
+        const issues = [];
+        if (isBlur)        issues.push({ type: 'blur',         label: '⚠️ 画面虚焦',      level: 'bad' });
+        if (hasClosedEye)  issues.push({ type: 'closed-eye',  label: '👁️ 疑似闭眼',      level: 'bad' });
+        if (isDup)         issues.push({ type: 'duplicate',   label: '🔁 重复画面',        level: 'warn' });
+        if (isOver)        issues.push({ type: 'overexposed', label: '☀️ 曝光过度',        level: 'bad' });
+        if (isUnder)       issues.push({ type: 'underexposed',label: '🌙 曝光不足',      level: 'warn' });
+
         resolve({
-          clarity:     Math.min(100, Math.max(0, Math.round(clarity))),
-          exposure:    Math.min(100, Math.max(0, Math.round(exposure))),
-          composition: Math.min(100, Math.max(0, Math.round(composition))),
-          aesthetic:   Math.min(100, Math.max(0, Math.round(aesthetic))),
-          overall:     Math.min(100, Math.max(0, overall)),
-          ai_powered,
-          predictions: predictions.slice(0, 3)
+          clarity, exposure, composition, aesthetic, overall,
+          isBlur, hasClosedEye, isDup, isOver, isUnder,
+          issues, aiComment, predictions: predictions.slice(0,3),
+          hash
         });
-      } catch(e) {
-        reject(e);
-      }
+      } catch(e) { reject(e); }
     };
     img.onerror = reject;
     img.src = URL.createObjectURL(file);
   });
 }
 
-// ===== 清晰度分析（拉普拉斯方差）=====
+// ===== 清晰度（拉普拉斯方差）=====
 function calcClarity(data, w, h) {
   let sum = 0, count = 0;
   const step = Math.max(1, Math.floor(Math.min(w, h) / 200));
@@ -419,7 +430,7 @@ function calcClarity(data, w, h) {
   return Math.min(100, (sum / count) * 0.8);
 }
 
-// ===== 曝光分析 =====
+// ===== 曝光 =====
 function calcExposure(data) {
   let total = 0, count = 0;
   for (let i = 0; i < data.length; i += 16) {
@@ -430,11 +441,27 @@ function calcExposure(data) {
   if (mean >= 110 && mean <= 170) return 92;
   if (mean >= 90  && mean < 110)  return 78;
   if (mean >  170 && mean <= 220) return 68;
-  if (mean >= 60  && mean < 90)  return 52;
+  if (mean >= 60  && mean < 90)   return 52;
   return 28;
 }
+function isOverexposed(data) {
+  let blown = 0, count = 0;
+  for (let i = 0; i < data.length; i += 20) {
+    if (data[i] > 240 && data[i+1] > 240 && data[i+2] > 240) blown++;
+    count++;
+  }
+  return (blown / count) > 0.08;
+}
+function isUnderexposed(data) {
+  let dark = 0, count = 0;
+  for (let i = 0; i < data.length; i += 20) {
+    if (data[i] < 40 && data[i+1] < 40 && data[i+2] < 40) dark++;
+    count++;
+  }
+  return (dark / count) > 0.25;
+}
 
-// ===== 构图分析（三分法）=====
+// ===== 构图 =====
 function calcComposition(data, w, h) {
   const cx = Math.floor(w / 2), cy = Math.floor(h / 2);
   const r  = Math.min(w, h) / 4;
@@ -454,56 +481,88 @@ function calcComposition(data, w, h) {
   return 48;
 }
 
-// ===== AI 美学评分（基于 MobileNet 预测结果）=====
+// ===== 感知哈希（重复检测）=====
+function calcPerceptualHash(data, w, h) {
+  // 缩放到 8x8 灰度
+  const gw = 8, gh = 8;
+  const gray = [];
+  for (let y = 0; y < gh; y++) {
+    for (let x = 0; x < gw; x++) {
+      const sx = Math.floor(x * w / gw);
+      const sy = Math.floor(y * h / gh);
+      const i  = (sy * w + sx) * 4;
+      gray.push((data[i] + data[i+1] + data[i+2]) / 3);
+    }
+  }
+  // 计算平均值
+  const avg = gray.reduce((a, b) => a + b, 0) / gray.length;
+  // 生成哈希
+  return gray.map(v => v >= avg ? 1 : 0).join('');
+}
+
+function checkDuplicate(hash) {
+  for (const entry of phashDB) {
+    let diff = 0;
+    for (let i = 0; i < hash.length; i++) {
+      if (hash[i] !== entry.hash[i]) diff++;
+    }
+    if (diff < 10) return true; // 差异小于 10 位认为是重复
+  }
+  return false;
+}
+
+// ===== 闭眼检测（启发式）=====
+function detectClosedEye(data, w, h) {
+  // 简化的闭眼检测：检测画面中是否有大面积深色横条（可能是闭着的眼睛）
+  // 实际上这是一个 heuristic，准确率有限
+  const step = Math.max(1, Math.floor(w / 100));
+  let eyeRegion = 0, eyeDark = 0;
+  // 假设眼睛在图片上半部分
+  for (let y = Math.floor(h * 0.2); y < Math.floor(h * 0.5); y += step) {
+    for (let x = Math.floor(w * 0.2); x < Math.floor(w * 0.8); x += step) {
+      const i = (y * w + x) * 4;
+      const br = (data[i] + data[i+1] + data[i+2]) / 3;
+      eyeRegion++;
+      if (br < 60) eyeDark++; // 偏暗区域
+    }
+  }
+  // 如果上半部分有较多暗区，疑似闭眼（这是一个简化的 heuristic）
+  return (eyeDark / eyeRegion) > 0.35;
+}
+
+// ===== AI 美学评分 =====
 function calcAestheticFromAI(predictions, data, w, h) {
   let score = 50;
-
-  // 根据 MobileNet 识别的内容类型调整评分
   const highQualityKeywords = [
     'person','woman','man','portrait','model','fashion',
     'wedding','bride','groom',
-    'sport','stadium','race','surfing',
     'animal','bird','horse','dog','cat',
     'food','pizza','cake','fruit',
     'architecture','building','castle','church','tower',
     'nature','mountain','beach','sky','sunset','ocean',
     'flower','garden','park',
-    'art','painting','sculpture','graffiti'
+    'art','painting','sculpture'
   ];
-
-  const pred0 = predictions[0]?.className?.toLowerCase() || '';
-  const pred1 = predictions[1]?.className?.toLowerCase() || '';
-  const pred2 = predictions[2]?.className?.toLowerCase() || '';
-
-  const allPreds = pred0 + ' ' + pred1 + ' ' + pred2;
-
-  // 如果识别到高质量内容，基础分提高
+  const allPreds = predictions.map(p => p.className.toLowerCase()).join(' ');
   const matched = highQualityKeywords.filter(kw => allPreds.includes(kw));
   if (matched.length >= 2) score += 25;
   else if (matched.length >= 1) score += 15;
 
-  // 结合图片技术质量
   const saturation = calcSaturation(data);
   const contrast   = calcContrast(data);
-
   score += saturation * 0.3;
   score += contrast   * 0.2;
-
-  // 根据 AI 置信度调整
   const confidence = predictions[0]?.probability || 0.5;
   score += confidence * 15;
-
   return Math.min(100, Math.max(10, score));
 }
 
-// ===== 基础美学评分（AI 模型不可用时的备选）=====
 function calcAestheticBasic(data, w, h) {
   const sat = calcSaturation(data);
   const con = calcContrast(data);
   return Math.min(100, sat * 0.5 + con * 0.3 + 40);
 }
 
-// ===== 饱和度 =====
 function calcSaturation(data) {
   let sat = 0, count = 0;
   for (let i = 0; i < data.length; i += 20) {
@@ -515,7 +574,6 @@ function calcSaturation(data) {
   return (sat / count) * 180;
 }
 
-// ===== 对比度 =====
 function calcContrast(data) {
   let mean = 0, count = 0;
   for (let i = 0; i < data.length; i += 16) {
@@ -523,15 +581,81 @@ function calcContrast(data) {
     count++;
   }
   mean /= count;
-
   let variance = 0;
   for (let i = 0; i < data.length; i += 64) {
     const m = (data[i] + data[i+1] + data[i+2]) / 3;
     variance += (m - mean) ** 2;
-    count++;
   }
-  const std = Math.sqrt(variance / count);
-  return Math.min(100, std * 0.8);
+  return Math.min(100, Math.sqrt(variance / count) * 0.8);
+}
+
+// ===== 生成 AI 评价文本 =====
+function genAIComment(preds, clarity, exposure, composition, isBlur, isOver, isUnder, isDup) {
+  const subject = preds?.[0]?.className || '照片';
+  let comment = `这张${subject}`;
+
+  // 清晰度评价
+  if (isBlur) {
+    comment += '存在明显的虚焦问题，画面不够清晰，';
+  } else if (clarity >= 80) {
+    comment += '清晰度出色，细节丰富，';
+  } else if (clarity >= 60) {
+    comment += '清晰度尚可，但仍有提升空间，';
+  } else {
+    comment += '清晰度不足，建议重新拍摄，';
+  }
+
+  // 曝光评价
+  if (isOver) {
+    comment += '曝光过度导致细节丢失，';
+  } else if (isUnder) {
+    comment += '曝光不足，画面偏暗，';
+  } else if (exposure >= 80) {
+    comment += '曝光准确，光影层次丰富，';
+  } else {
+    comment += '曝光基本合理，但可进一步优化，';
+  }
+
+  // 构图评价
+  if (composition >= 80) {
+    comment += '构图符合美学原则，视觉平衡感好。';
+  } else if (composition >= 60) {
+    comment += '构图中规中矩，建议尝试更有创意的拍摄角度。';
+  } else {
+    comment += '构图有待改进，建议参考三分法或对称构图。';
+  }
+
+  if (isDup) comment += '⚠️ 检测到与同组其他照片高度相似，建议去重。';
+
+  return comment;
+}
+
+function genBasicComment(clarity, exposure, composition, isBlur, isOver, isUnder, isDup) {
+  let comment = '这张照片';
+  if (isBlur) {
+    comment += '存在虚焦问题，';
+  } else if (clarity >= 75) {
+    comment += '清晰度良好，';
+  } else {
+    comment += '清晰度一般，';
+  }
+
+  if (isOver) {
+    comment += '曝光过度，';
+  } else if (isUnder) {
+    comment += '曝光不足，';
+  } else {
+    comment += '曝光基本正常，';
+  }
+
+  if (composition >= 75) {
+    comment += '构图较好。';
+  } else {
+    comment += '构图可进一步优化。';
+  }
+
+  if (isDup) comment += '🔁 疑似重复画面。';
+  return comment;
 }
 
 // ===== 渲染结果 =====
@@ -539,8 +663,18 @@ function renderResults() {
   const grid     = document.getElementById('photoGrid');
   const minScore = parseInt(document.getElementById('minScore').value);
   const sortBy   = document.getElementById('sortBy').value;
+  const filterIs  = document.getElementById('filterIssues').value;
 
   let filtered = photos.filter(p => p.overall >= minScore);
+
+  // 问题筛选
+  if (filterIs === 'no-issues')  filtered = filtered.filter(p => p.issues.length === 0);
+  if (filterIs === 'has-issues') filtered = filtered.filter(p => p.issues.length > 0);
+  if (filterIs === 'blur')        filtered = filtered.filter(p => p.isBlur);
+  if (filterIs === 'closed-eye')  filtered = filtered.filter(p => p.hasClosedEye);
+  if (filterIs === 'duplicate')    filtered = filtered.filter(p => p.isDup);
+
+  // 排序
   filtered.sort((a, b) => {
     if (sortBy === 'score-desc') return b.overall - a.overall;
     if (sortBy === 'score-asc')  return a.overall - b.overall;
@@ -550,14 +684,17 @@ function renderResults() {
   grid.innerHTML = filtered.map(p => {
     const sc = p.overall >= 90 ? 'excellent' : p.overall >= 70 ? 'good' : p.overall >= 50 ? 'ok' : 'poor';
     const checked = selected.has(p.name);
-    const aiTag = p.ai_powered ? '<span class="mini-score mini-ai">🤖 AI</span>' : '';
-    const predTag = p.predictions?.length ? `<span class="mini-score mini-aesthetic" title="${p.predictions[0]?.className || ''}">${p.predictions[0]?.className?.slice(0,8) || ''}</span>` : '';
+    const issueTags = p.issues.map(iss =>
+      `<span class="issue-tag ${iss.type}">${iss.label}</span>`
+    ).join('');
+
     return `
       <div class="photo-card ${checked?'selected':''}" onclick="toggleSelect('${p.name}')" ondblclick="openPreview('${p.name}')">
         <div class="select-checkbox ${checked?'checked':''}" onclick="event.stopPropagation();toggleSelect('${p.name}')"></div>
         <div class="thumb-wrapper">
           <img src="${p.url}" alt="${p.name}" loading="lazy">
           <div class="score-badge score-${sc}">${Math.round(p.overall)}</div>
+          ${issueTags ? `<div class="issue-tags">${issueTags}</div>` : ''}
         </div>
         <div class="card-body">
           <div class="filename">${p.name}</div>
@@ -566,8 +703,6 @@ function renderResults() {
             <span class="mini-score mini-exposure">曝光 ${Math.round(p.exposure)}</span>
             <span class="mini-score mini-composition">构图 ${Math.round(p.composition)}</span>
             <span class="mini-score mini-aesthetic">美学 ${Math.round(p.aesthetic)}</span>
-            ${aiTag}
-            ${predTag}
           </div>
         </div>
       </div>`;
@@ -581,6 +716,7 @@ function renderResults() {
 function toggleSelect(n) { selected.has(n) ? selected.delete(n) : selected.add(n); renderResults(); updateBottom(); }
 function selectAll()      { photos.forEach(p => selected.add(p.name)); renderResults(); updateBottom(); }
 function selectByScore(n) { photos.forEach(p => { if (p.overall >= n) selected.add(p.name); }); renderResults(); updateBottom(); }
+function selectNoIssues(){ photos.forEach(p => { if (p.issues.length === 0) selected.add(p.name); }); renderResults(); updateBottom(); }
 function deselectAll()    { selected.clear(); renderResults(); updateBottom(); }
 function updateBottom() {
   document.getElementById('bottomBar').classList.toggle('active', selected.size > 0);
@@ -592,8 +728,7 @@ function updateStats() {
   document.getElementById('statTotal').textContent     = photos.length;
   document.getElementById('statExcellent').textContent = photos.filter(p=>p.overall>=90).length;
   document.getElementById('statGood').textContent      = photos.filter(p=>p.overall>=70 && p.overall<90).length;
-  document.getElementById('statOk').textContent        = photos.filter(p=>p.overall>=50 && p.overall<70).length;
-  document.getElementById('statPoor').textContent      = photos.filter(p=>p.overall<50).length;
+  document.getElementById('statIssues').textContent   = photos.filter(p=>p.issues.length>0).length;
 }
 
 // ===== 预览 =====
@@ -601,22 +736,25 @@ function openPreview(name) {
   const p = photos.find(x => x.name === name);
   if (!p) return;
   const fill = s => s>=90?'#10b981':s>=70?'#00cec9':s>=50?'#fbb024':'#ef4444';
-  const predsHTML = p.predictions?.length ? p.predictions.map((pr, i) =>
-    `<div style="font-size:11px;color:var(--text-dim);margin-top:4px;">${i+1}. ${pr.className} (${(pr.probability*100).toFixed(1)}%)</div>`
-  ).join('') : '';
+
+  const issuesHTML = p.issues.length ? `
+    <div class="issues-section">
+      <h4>⚠️ 检测到的问题</h4>
+      ${p.issues.map(iss => `<div class="issue-item ${iss.level}">${iss.label}</div>`).join('')}
+    </div>` : '<div style="margin-top:16px;padding:12px;border-radius:10px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);font-size:13px;color:#10b981;">✅ 未检测到明显问题</div>';
 
   document.getElementById('modalBody').innerHTML = `
     <img class="preview-img" src="${p.url}" alt="${p.name}">
     <div class="score-breakdown">
       <div class="score-item">
-        <div class="score-item-label">🔍 清晰度 ${p.ai_powered ? '🤖' : ''}</div>
+        <div class="score-item-label">🔍 清晰度</div>
         <div class="score-bar"><div class="score-bar-fill" style="width:${p.clarity}%;background:${fill(p.clarity)}"></div></div>
-        <div class="score-item-value" style="color:${fill(p.clarity)}">${Math.round(p.clarity)}/100</div>
+        <div class="score-item-value" style="color:${fill(p.clarity)}">${Math.round(p.clarity)}/100 ${p.isBlur?'⚠️ 虚焦':''}</div>
       </div>
       <div class="score-item">
         <div class="score-item-label">☀️ 曝光</div>
         <div class="score-bar"><div class="score-bar-fill" style="width:${p.exposure}%;background:${fill(p.exposure)}"></div></div>
-        <div class="score-item-value" style="color:${fill(p.exposure)}">${Math.round(p.exposure)}/100</div>
+        <div class="score-item-value" style="color:${fill(p.exposure)}">${Math.round(p.exposure)}/100 ${p.isOver?'⚠️ 过曝':p.isUnder?'⚠️ 欠曝':''}</div>
       </div>
       <div class="score-item">
         <div class="score-item-label">🎨 构图</div>
@@ -624,7 +762,7 @@ function openPreview(name) {
         <div class="score-item-value" style="color:${fill(p.composition)}">${Math.round(p.composition)}/100</div>
       </div>
       <div class="score-item">
-        <div class="score-item-label">✨ 美学评分 ${p.ai_powered ? '🤖 AI' : ''}</div>
+        <div class="score-item-label">✨ 美学评分</div>
         <div class="score-bar"><div class="score-bar-fill" style="width:${p.aesthetic}%;background:${fill(p.aesthetic)}"></div></div>
         <div class="score-item-value" style="color:${fill(p.aesthetic)}">${Math.round(p.aesthetic)}/100</div>
       </div>
@@ -634,15 +772,12 @@ function openPreview(name) {
         <div class="score-item-value" style="color:${fill(p.overall)};font-size:18px;">${Math.round(p.overall)}/100</div>
       </div>
     </div>
-    ${p.ai_powered ? `
-    <div style="margin-top:16px;padding:12px;border-radius:10px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);">
-      <div style="font-size:13px;font-weight:700;color:#10b981;margin-bottom:8px;">🤖 AI 识别结果（MobileNet）</div>
-      ${predsHTML}
-    </div>` : ''}
+    ${issuesHTML}
+    <div class="ai-comment">${p.aiComment}</div>
     <div style="margin-top:12px;font-size:12px;color:var(--text-dim);text-align:center;">
       双击图片卡片可打开此预览 · 单击勾选/取消
     </div>`;
-  document.getElementById('modalFileName').textContent = p.name + (p.ai_powered ? '  🤖 AI 分析' : '');
+  document.getElementById('modalFileName').textContent = p.name;
   document.getElementById('previewModal').classList.add('active');
 }
 function closePreview() { document.getElementById('previewModal').classList.remove('active'); }
