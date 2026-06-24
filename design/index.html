@@ -18,6 +18,7 @@
         <li><a href="../miniprogram/index.html">小程序开发</a></li>
         <li><a href="../social-media.html">社交媒体运营</a></li>
         <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="../tools/index.html">智能工具</a></li>
       </ul>
       <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
     </div>
@@ -133,48 +134,71 @@
   <section class="fake-comments" id="fakeComments">
   </section>
 
-  <!-- ======== 客户案例展示 ======== -->
+  <!-- ======== 客户案例展示（图片墙）======== -->
   <section class="cases-section" id="cases">
     <div class="container">
       <div class="section-head">
         <span class="tag">CASE STUDY</span>
         <h2>客户案例展示</h2>
-        <p>点击查看真实客户案例，了解我们的设计质量</p>
+        <p>部分真实设计作品 · 悬停可放大查看</p>
       </div>
 
-      <!-- 案例卡片（马赛克预览） -->
-      <div class="cases-card" onclick="openCaseLightbox()">
-        <div class="cases-card-mosaic">
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);grid-column:1/3;grid-row:1/3;"></div>
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#00cec9,#81ecec);"></div>
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#fd79a8,#fab1a0);"></div>
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#ffeaa7,#fdcb6e);"></div>
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#55efc4,#00b894);"></div>
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#74b9ff,#0984e3);"></div>
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#a29bfe,#6c5ce7);grid-column:2/4;"></div>
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#fab1a0,#e17055);"></div>
-          <div class="mosaic-block" style="background:linear-gradient(135deg,#81ecec,#00cec9);"></div>
-        </div>
-        <div class="cases-card-overlay">
-          <div class="cases-card-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            点击查看全部案例
-          </div>
-          <span class="cases-card-count">20+ 真实案例</span>
-        </div>
+      <!-- 全部30张案例图 —— 密集拼贴墙（12列固定网格，30张全引入） -->
+      <div class="cases-collage-wrap">
+      <div class="cases-collage-scale" id="casesScale">
+      <div class="cases-collage" id="casesWall">
+
+        <!-- 左上大图 + 右侧中小图 -->
+        <div class="case-piece" style="--w:3;--h:4"><img src="../cases/06-brand-showcase-zuihoucanba.png" alt="品牌展示" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/01-logo-vi-lvqidaijia.png" alt="Logo VI" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:4"><img src="../cases/03-brochure-chengying.png" alt="折页" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/04-poster-zuihoucanba.png" alt="海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:1;--h:2"><img src="../cases/05-qrcode-cards.png" alt="二维码卡" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:4"><img src="../cases/11-packaging-zuihoucanba.png" alt="包装设计" loading="lazy"/></div>
+
+        <!-- 中间大图 + 周围中小图 -->
+        <div class="case-piece" style="--w:3;--h:3"><img src="../cases/09-miniprogram-games.png" alt="游戏小程序" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/10-poster-event-zuihoucanba.png" alt="活动海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/02-flyer-lvqidaijia.png" alt="宣传单" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/16-flyer-health.png" alt="健康传单" loading="lazy"/></div>
+        <div class="case-piece" style="--w:1;--h:2"><img src="../cases/12-welcome-signs.png" alt="欢迎牌" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/17-poster-yoga.jpg" alt="瑜伽海报" loading="lazy"/></div>
+
+        <!-- 中间下部：大图 + 混排 -->
+        <div class="case-piece" style="--w:2;--h:3"><img src="../cases/14-brochure-energy.png" alt="折页" loading="lazy"/></div>
+        <div class="case-piece" style="--w:3;--h:3"><img src="../cases/19-flyer-restaurant.png" alt="餐饮传单" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/18-poster-breakfast.jpg" alt="早餐海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:3"><img src="../cases/23-tickets-designs.jpg" alt="门票设计" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/13-poster-fitness.png" alt="健身海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:1;--h:2"><img src="../cases/24-stage-realestate.png" alt="舞台" loading="lazy"/></div>
+
+        <!-- 底部：铺满右下角 -->
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/07-miniprogram-zuihoucanba.png" alt="小程序" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/08-miniprogram-wine.png" alt="红酒小程序" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/15-fold-school.png" alt="学校折页" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/21-entrance-waterpark.png" alt="水乐园入口" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/22-tickets-photo.png" alt="门票" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/25-decoration-cny.png" alt="春节装饰" loading="lazy"/></div>
+
+        <!-- 第5行：合计12 -->
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/26-culturewall-party.png" alt="文化墙" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/27-activityroom-party.png" alt="活动室" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/28-meetingroom-layout.png" alt="会议室" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/29-poster-youthcenter.png" alt="青年中心海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/30-pillar-youthcenter.png" alt="青年中心柱子" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:1"><img src="../cases/20-flyer-petshop.png" alt="宠物店传单" loading="lazy"/></div>
+
+      </div>
+      </div>
       </div>
     </div>
   </section>
 
-  <!-- 案例灯箱（全屏弹出） -->
-  <div class="cases-lightbox" id="casesLightbox">
-    <div class="cases-lb-header">
-      <h3>📁 客户案例展示</h3>
-      <button class="cases-lb-close" onclick="closeCaseLightbox()" aria-label="关闭">✕</button>
-    </div>
-    <div class="cases-lb-grid" id="casesLbGrid">
-      <!-- JS 动态生成 20 张案例占位图 -->
-    </div>
+  <!-- 图片放大查看器（点击任意图片触发） -->
+  <div class="case-viewer" id="caseViewer" onclick="closeCaseViewer(event)">
+    <button class="case-viewer-close" aria-label="关闭">✕</button>
+    <img class="case-viewer-img" id="caseViewerImg" src="" alt="" />
+    <div class="case-viewer-caption" id="caseViewerCaption"></div>
   </div>
 
   <!-- ======== 为什么选择我们 ======== -->

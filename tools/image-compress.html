@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>图片压缩工具 — 智能工具中心</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🗜️</text></svg>" />
+  <link rel="stylesheet" href="../style.css?v=20260624a" />
+  <style>
+    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: 70vh; position:relative; z-index:1; }
+    .tool-container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
+    .tool-back:hover { color: var(--c1); }
+    .tool-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .tool-title span { color: var(--c1); }
+    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; }
+
+    .upload-zone {
+      border: 2px dashed rgba(255,255,255,.12);
+      border-radius: 16px; padding: 40px 20px; text-align: center;
+      cursor: pointer; transition: border-color .3s, background .3s;
+      margin-bottom: 24px; background: rgba(255,255,255,.02);
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--c1); background: rgba(108,92,231,.06);
+    }
+    .upload-icon { font-size: 42px; margin-bottom: 12px; }
+    .upload-zone p { color: rgba(255,255,255,.5); font-size: 14px; }
+    .browse-btn {
+      display: inline-block; margin-top: 10px; padding: 8px 24px; border-radius: 20px;
+      background: rgba(108,92,231,.15); color: var(--c1);
+      font-size: 13px; border: 1px solid rgba(108,92,231,.25);
+      cursor: pointer; transition: background .3s;
+    }
+    .upload-zone:hover .browse-btn { background: rgba(108,92,231,.25); }
+
+    .options-bar {
+      display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+      margin-bottom: 24px; padding: 16px 20px;
+      background: rgba(255,255,255,.03); border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .opt-label { font-size: 13px; color: rgba(255,255,255,.6); white-space: nowrap; }
+    .opt-range { display: flex; align-items: center; gap: 8px; }
+    .opt-range input[type=range] { width: 120px; accent-color: var(--c1); }
+    .opt-range-val { font-size: 12px; color: var(--c1); min-width: 36px; }
+    .compress-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 36px; border-radius: 28px;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      color: #fff; font-size: 15px; font-weight: 600;
+      border: none; cursor: pointer; transition: transform .3s, box-shadow .3s;
+    }
+    .compress-btn:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(108,92,231,.35); }
+    .compress-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* 结果 */
+    .result-area { margin-top: 28px; }
+    .result-compare { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .result-card {
+      flex: 1; min-width: 200px; background: rgba(255,255,255,.04);
+      border-radius: 12px; border: 1px solid rgba(255,255,255,.06);
+      padding: 12px; text-align: center;
+    }
+    .result-card img { width: 100%; border-radius: 8px; margin-bottom: 10px; max-height: 200px; object-fit: contain; background: rgba(0,0,0,.2); }
+    .result-card .r-label { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+    .result-card .r-val { font-size: 14px; color: #fff; font-weight: 600; }
+    .result-card .r-saved { color: #4ade80; }
+    .dl-all-btn {
+      display: inline-block; padding: 10px 28px; border-radius: 10px;
+      background: rgba(108,92,231,.15); color: var(--c1);
+      font-size: 13px; text-decoration: none; border: 1px solid rgba(108,92,231,.25);
+      transition: background .3s; cursor: pointer;
+    }
+    .dl-all-btn:hover { background: rgba(108,92,231,.3); }
+
+    @media (max-width: 768px) {
+      .tool-page { padding: 70px 0 30px; }
+      .tool-title { font-size: 22px; }
+      .upload-zone { padding: 28px 16px; }
+      .options-bar { padding: 12px 14px; flex-direction: column; align-items: stretch; }
+      .result-card { min-width: 140px; }
+    }
+    @media (max-width: 480px) {
+      .tool-page { padding: 60px 0 24px; }
+      .tool-title { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="index.html" class="active">智能工具</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="tool-page">
+    <div class="tool-container">
+      <a class="tool-back" href="index.html">← 返回工具中心</a>
+      <h1 class="tool-title">图片<span>压缩工具</span></h1>
+      <p class="tool-desc">批量压缩 JPG / PNG / WEBP 图片，纯前端处理，支持自定义压缩比。</p>
+
+      <div class="upload-zone" id="upZone">
+        <div class="upload-icon">🗜️</div>
+        <p>拖拽图片到此处，或 <span class="browse-btn">选择文件</span></p>
+        <p style="margin-top:8px;font-size:12px;color:rgba(255,255,255,.3);">支持多选，单文件最大 10MB</p>
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none" />
+      </div>
+
+      <div class="options-bar">
+        <span class="opt-label">压缩品质：</span>
+        <div class="opt-range">
+          <input type="range" id="quality" min="0.1" max="1" step="0.05" value="0.7" />
+          <span class="opt-range-val" id="qVal">0.70</span>
+        </div>
+        <span class="opt-label" style="margin-left:12px;">最大宽度：</span>
+        <select id="maxWidth" style="padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1);font-size:13px;">
+          <option value="0">不限制</option>
+          <option value="800">800px</option>
+          <option value="1200" selected>1200px</option>
+          <option value="1920">1920px</option>
+        </select>
+      </div>
+
+      <button class="compress-btn" id="compressBtn" disabled>🗜️ 开始压缩</button>
+
+      <div class="result-area" id="resultArea" style="display:none;">
+        <div class="result-compare" id="compareBox"></div>
+        <a class="dl-all-btn" id="dlAllBtn">⬇ 下载全部</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div class="footer-brand"><h3>兴程<span>网络</span></h3><p style="color:rgba(255,255,255,.35);font-size:13px;margin-top:8px;line-height:1.7;">微信：xcing888<br/>QQ：738874448<br/>邮箱：738874448@qq.com</p></div>
+    <div class="footer-info"><h4>智能工具</h4><ul>
+      <li><a href="index.html">工具中心</a></li>
+      <li><a href="image-convert.html">格式转换</a></li>
+      <li><a href="qrcode.html">二维码生成</a></li>
+      <li><a href="image-compress.html">图片压缩</a></li>
+      <li><a href="price.html">报价计算器</a></li>
+      <li><a href="color.html">配色方案</a></li>
+      <li><a href="font.html">字体预览</a></li>
+    </ul></div>
+  </div></div></footer>
+
+<script>
+(function(){
+  var zone = document.getElementById('upZone');
+  var input = document.getElementById('fileInput');
+  var btn = document.getElementById('compressBtn');
+  var area = document.getElementById('resultArea');
+  var compare = document.getElementById('compareBox');
+  var qSlider = document.getElementById('quality');
+  var qVal = document.getElementById('qVal');
+  var files = [];
+
+  zone.addEventListener('click', function(e){ if(e.target.tagName!=='INPUT') input.click(); });
+  input.addEventListener('change', function(){ addFiles(input.files); input.value=''; });
+  zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', function(){ zone.classList.remove('drag-over'); });
+  zone.addEventListener('drop', function(e){ e.preventDefault(); zone.classList.remove('drag-over'); addFiles(e.dataTransfer.files); });
+
+  qSlider.addEventListener('input', function(){ qVal.textContent = parseFloat(qSlider.value).toFixed(2); });
+
+  function addFiles(fl){
+    for(var i=0;i<fl.length;i++) files.push(fl[i]);
+    btn.disabled = !files.length;
+  }
+
+  btn.addEventListener('click', function(){
+    if(!files.length) return;
+    area.style.display = 'block';
+    compare.innerHTML = '压缩中…';
+    var q = parseFloat(qSlider.value);
+    var mw = parseInt(document.getElementById('maxWidth').value) || 0;
+    var done = 0;
+    compare.innerHTML = '';
+
+    files.forEach(function(f){
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        var img = new Image();
+        img.onload = function(){
+          // 压缩
+          var w = img.width, h = img.height;
+          if(mw && w > mw) { h = Math.round(h * mw / w); w = mw; }
+          var cv = document.createElement('canvas');
+          cv.width = w; cv.height = h;
+          cv.getContext('2d').drawImage(img,0,0,w,h);
+          cv.toBlob(function(blob){
+            var ratio = ((1 - blob.size / f.size) * 100).toFixed(1);
+            if(ratio<0) ratio = '0.0';
+            var card = document.createElement('div');
+            card.className = 'result-card';
+            var url = URL.createObjectURL(blob);
+            var ext = f.name.split('.').pop() || 'jpg';
+            var name = f.name.replace(/\.[^.]+$/, '') + '_compressed.' + ext;
+            card.innerHTML =
+              '<img src="'+url+'" alt="" />' +
+              '<div class="r-label">原始大小</div><div class="r-val">'+(f.size/1024).toFixed(1)+' KB</div>' +
+              '<div class="r-label" style="margin-top:6px;">压缩后</div><div class="r-val r-saved">'+(blob.size/1024).toFixed(1)+' KB（省 '+ratio+'%）</div>' +
+              '<a class="dl-all-btn" href="'+url+'" download="'+name+'" style="margin-top:10px;display:inline-block;">⬇ 下载</a>';
+            compare.appendChild(card);
+            done++;
+            if(done===files.length) btn.textContent = '✅ 压缩完成';
+          }, 'image/jpeg', q);
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(f);
+    });
+  });
+})();
+  </script>
+  <script src="../script.js?v=20260624b"></script>
+</body>
+</html>

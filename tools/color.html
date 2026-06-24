@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>配色方案生成 — 智能工具中心</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🎨</text></svg>" />
+  <link rel="stylesheet" href="../style.css?v=20260624a" />
+  <style>
+    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: 70vh; position:relative; z-index:1; }
+    .tool-container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
+    .tool-back:hover { color: var(--c1); }
+    .tool-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .tool-title span { color: var(--c1); }
+    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; }
+
+    .color-form { margin-bottom: 28px; }
+    .color-field { margin-bottom: 16px; }
+    .color-label { font-size: 13px; color: rgba(255,255,255,.6); margin-bottom: 8px; display: block; }
+    .color-input {
+      width: 100%; padding: 12px 16px; border-radius: 10px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      color: #fff; font-size: 14px; outline: none; box-sizing: border-box;
+      transition: border-color .3s;
+    }
+    .color-input:focus { border-color: var(--c1); }
+
+    .color-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 36px; border-radius: 28px;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      color: #fff; font-size: 15px; font-weight: 600;
+      border: none; cursor: pointer; transition: transform .3s, box-shadow .3s;
+    }
+    .color-btn:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(108,92,231,.35); }
+
+    /* 结果 */
+    .color-result { margin-top: 32px; display: none; }
+    .color-result.show { display: block; }
+    .schemes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+    .scheme-card {
+      background: rgba(255,255,255,.03); border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.06); overflow: hidden;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .scheme-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+    .scheme-colors { display: flex; height: 100px; }
+    .scheme-color { flex: 1; position: relative; cursor: pointer; transition: flex .3s; }
+    .scheme-color:hover { flex: 2; }
+    .scheme-color::after {
+      content: attr(data-hex); position: absolute; bottom: 6px; left: 0; right: 0;
+      text-align: center; font-size: 11px; color: #fff; font-weight: 600;
+      text-shadow: 0 1px 3px rgba(0,0,0,.6); opacity: 0; transition: opacity .3s;
+    }
+    .scheme-color:hover::after { opacity: 1; }
+    .scheme-info { padding: 14px 16px; }
+    .scheme-name { font-size: 14px; color: #fff; font-weight: 600; margin-bottom: 4px; }
+    .scheme-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.6; }
+    .copy-btn {
+      display: inline-block; margin-top: 8px; padding: 4px 12px; border-radius: 6px;
+      background: rgba(108,92,231,.12); color: var(--c1); font-size: 11px;
+      border: 1px solid rgba(108,92,231,.2); cursor: pointer; transition: background .3s;
+    }
+    .copy-btn:hover { background: rgba(108,92,231,.25); }
+
+    @media (max-width: 768px) {
+      .tool-page { padding: 70px 0 30px; }
+      .tool-title { font-size: 22px; }
+      .schemes { grid-template-columns: 1fr; gap: 14px; }
+      .scheme-colors { height: 80px; }
+    }
+    @media (max-width: 480px) {
+      .tool-page { padding: 60px 0 24px; }
+      .tool-title { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="index.html" class="active">智能工具</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="tool-page">
+    <div class="tool-container">
+      <a class="tool-back" href="index.html">← 返回工具中心</a>
+      <h1 class="tool-title">配色<span>方案生成</span></h1>
+      <p class="tool-desc">输入关键词或选择风格，生成多套品牌配色方案，点击色块可复制色值。</p>
+
+      <div class="color-form">
+        <div class="color-field">
+          <label class="color-label">关键词（如：科技、餐饮、医疗、教育）</label>
+          <input class="color-input" id="keyword" type="text" placeholder="输入行业或风格关键词…" value="" />
+        </div>
+        <div class="color-field">
+          <label class="color-label">风格</label>
+          <select class="color-input" id="styleSelect" style="cursor:pointer; appearance:none; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;">
+            <option value="tech" style="background:#1a1f3a;color:#fff;">科技 · 未来感</option>
+            <option value="food" style="background:#1a1f3a;color:#fff;">餐饮 · 食欲感</option>
+            <option value="medical" style="background:#1a1f3a;color:#fff;">医疗 · 洁净感</option>
+            <option value="edu" style="background:#1a1f3a;color:#fff;">教育 · 信赖感</option>
+            <option value="fashion" style="background:#1a1f3a;color:#fff;">时尚 · 高级感</option>
+            <option value="nature" style="background:#1a1f3a;color:#fff;">自然 · 清新感</option>
+            <option value="festive" style="background:#1a1f3a;color:#fff;">节日 · 喜庆感</option>
+            <option value="minimal" style="background:#1a1f3a;color:#fff;">极简 · 性冷淡</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="color-btn" id="genBtn">🎨 生成配色方案</button>
+
+      <div class="color-result" id="colorResult">
+        <h3 style="color:#fff;font-size:16px;margin-bottom:20px;">推荐配色方案</h3>
+        <div class="schemes" id="schemesBox"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div class="footer-brand"><h3>兴程<span>网络</span></h3><p style="color:rgba(255,255,255,.35);font-size:13px;margin-top:8px;line-height:1.7;">微信：xcing888<br/>QQ：738874448<br/>邮箱：738874448@qq.com</p></div>
+    <div class="footer-info"><h4>智能工具</h4><ul>
+      <li><a href="index.html">工具中心</a></li>
+      <li><a href="image-convert.html">格式转换</a></li>
+      <li><a href="qrcode.html">二维码生成</a></li>
+      <li><a href="image-compress.html">图片压缩</a></li>
+      <li><a href="price.html">报价计算器</a></li>
+      <li><a href="color.html">配色方案</a></li>
+      <li><a href="font.html">字体预览</a></li>
+    </ul></div>
+  </div></div></footer>
+
+<script>
+(function(){
+  // 配色种子库
+  var palettes = {
+    tech: [
+      { name:'深空科技', colors:['#0f0c29','#302b63','#24243e','#6c5ce7','#00cec9'], desc:'适合科技、AI、互联网品牌' },
+      { name:'赛博朋克', colors:['#0d0221','#0d3b66','#ff2a6d','#05d9e8','#b000ff'], desc:'适合游戏、电竞、潮流品牌' },
+      { name:'极光冷调', colors:['#0b0e2a','#1a1f4e','#3b82f6','#06b6d4','#a78bfa'], desc:'适合SaaS、云计算、数据平台' },
+    ],
+    food: [
+      { name:'暖胃橙红', colors:['#d63031','#e17055','#fdcb6','#ffeaa7','#6ab04c'], desc:'适合餐饮、食品、外卖品牌' },
+      { name:'咖啡暖调', colors:['#3d2b1f','#6b4c3b','#a67c52','#d4a574','#f5e6ca'], desc:'适合咖啡、烘焙、轻食品牌' },
+      { name:'清新果蔬', colors:['#6ab04c','#badc58','#f9ca24','#f0932b','#eb4d4b'], desc:'适合健康餐、果蔬、有机品牌' },
+    ],
+    medical: [
+      { name:'洁净医疗', colors:['#0a3d62','#1e5f74','#3caea3','#e8f6f3','#ffffff'], desc:'适合医院、诊所、健康平台' },
+      { name:'安心蓝绿', colors:['#0984e3','#74b9ff','#00b894','#55efc4','#dfe6e9'], desc:'适合医疗App、健康管理品牌' },
+      { name:'温暖医护', colors:['#a29bfe','#6c5ce7','#fd79a8','#fab1a','#ffeaa7'], desc:'适合母婴、康复、护理品牌' },
+    ],
+    edu: [
+      { name:'书香墨韵', colors:['#2d3436','#636e72','#b2bec3','#dfe6e9','#fdcb6'], desc:'适合教育、培训、文化品牌' },
+      { name:'青春校园', colors:['#0984e3','#74b9ff','#a29bfe','#6c5ce7','#ffeaa7'], desc:'适合K12教育、兴趣培训品牌' },
+      { name:'智慧蓝黄', colors:['#0c2461','#1e3799','#f6b93a','#e58e26','#fdcb6'], desc:'适合在线教育、知识付费品牌' },
+    ],
+    fashion: [
+      { name:'高级黑金', colors:['#0a0a0a','#1a1a1a','#d4af37','#f5e6a3','#ffffff'], desc:'适合奢侈品、美容、高端品牌' },
+      { name:'莫兰迪', colors:['#8d8468','#b8a99d','#a2b9bc','#c6dabf','#f7d1cd'], desc:'适合服装、家居、生活方式品牌' },
+      { name:'极简白灰', colors:['#ffffff','#dfe6e9','#b2bec3','#636e72','#2d3436'], desc:'适合设计工作室、摄影、艺术品牌' },
+    ],
+    nature: [
+      { name:'森林氧吧', colors:['#1e3f20','#2d5a27','#4a7c3a','#7dbf6b','#c6f68e'], desc:'适合户外、运动、环保品牌' },
+      { name:'海洋清新', colors:['#0a3d62','#1e5f74','#4ecdc4','#a8e6cf','#ffeaa7'], desc:'适合旅游、海岛、水上运动品牌' },
+      { name:'大地暖调', colors:['#3d2b1f','#6b4c3b','#a67c52','#d4a574','#f5e6ca'], desc:'适合农产品、手工艺、民宿品牌' },
+    ],
+    festive: [
+      { name:'中国红金', colors:['#8b0000','#cc0000','#ff3333','#ffd700','#fff8dc'], desc:'适合节日、婚庆、活动策划品牌' },
+      { name:'喜庆彩灯', colors:['#cc0000','#ff6600','#ffcc00','#00cc66','#0066ff'], desc:'适合电商大促、年货、节庆品牌' },
+      { name:'新年福气', colors:['#b30000','#e60012','#ff6633','#ffcc00','#8b5a00'], desc:'适合新年营销、礼盒、食品品牌' },
+    ],
+    minimal: [
+      { name:'性冷淡', colors:['#ffffff','#f5f5f5','#e0e0e0','#a0a0a0','#404040'], desc:'适合设计师品牌、杂志、画廊' },
+      { name:'暖灰调', colors:['#fafafa','#f0ebe3','#d9cfc4','#b8a99d','#8d8468'], desc:'适合家居、香薰、生活方式品牌' },
+      { name:'冷灰调', colors:['#f8f9fa','#e9ecef','#adb5bd','#6c757d','#343a40'], desc:'适合科技周边、数码、极客品牌' },
+    ],
+  };
+
+  // 关键词映射
+  var keywordMap = {
+    '科技': 'tech', 'AI': 'tech', '互联网': 'tech', '游戏': 'tech', '电竞': 'tech',
+    '餐饮': 'food', '食品': 'food', '美食': 'food', '咖啡': 'food', '烘焙': 'food',
+    '医疗': 'medical', '健康': 'medical', '医院': 'medical', '医药': 'medical',
+    '教育': 'edu', '培训': 'edu', '学校': 'edu', '学习': 'edu',
+    '时尚': 'fashion', '奢侈': 'fashion', '美容': 'fashion', '高端': 'fashion',
+    '自然': 'nature', '环保': 'nature', '户外': 'nature', '清新': 'nature',
+    '节日': 'festive', '喜庆': 'festive', '新年': 'festive', '婚礼': 'festive',
+    '简约': 'minimal', '极简': 'minimal', '冷淡': 'minimal', '极客': 'minimal',
+  };
+
+  document.getElementById('genBtn').addEventListener('click', function(){
+    var kw = document.getElementById('keyword').value.trim();
+    var style = document.getElementById('styleSelect').value;
+
+    // 尝试从关键词匹配风格
+    var matched = null;
+    for (var key in keywordMap) {
+      if (kw.indexOf(key) !== -1) { matched = keywordMap[key]; break; }
+    }
+    var useStyle = matched || style;
+    var schemes = palettes[useStyle] || palettes.tech;
+
+    var box = document.getElementById('schemesBox');
+    box.innerHTML = '';
+    schemes.forEach(function(s){
+      var card = document.createElement('div');
+      card.className = 'scheme-card';
+      var colorsHTML = '';
+      s.colors.forEach(function(c){
+        colorsHTML += '<div class="scheme-color" style="background:'+c+'" data-hex="'+c+'"></div>';
+      });
+      card.innerHTML =
+        '<div class="scheme-colors">'+colorsHTML+'</div>' +
+        '<div class="scheme-info">' +
+          '<div class="scheme-name">'+s.name+'</div>' +
+          '<div class="scheme-desc">'+s.desc+'</div>' +
+          '<button class="copy-btn" onclick="copyScheme(this, \''+s.colors.join(',')+'\')">📋 复制色值</button>' +
+        '</div>';
+      box.appendChild(card);
+    });
+
+    document.getElementById('colorResult').classList.add('show');
+    document.getElementById('colorResult').scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  // 复制色值
+  window.copyScheme = function(btn, colors) {
+    navigator.clipboard.writeText(colors).then(function(){
+      btn.textContent = '✅ 已复制';
+      setTimeout(function(){ btn.textContent = '📋 复制色值'; }, 1500);
+    });
+  };
+
+  // 关键词输入回车触发生成
+  document.getElementById('keyword').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') document.getElementById('genBtn').click();
+  });
+})();
+</script>
+<script src="../script.js?v=20260624b"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>设计报价计算器 — 智能工具中心</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>💰</text></svg>" />
+  <link rel="stylesheet" href="../style.css?v=20260624a" />
+  <style>
+    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: 70vh; position:relative; z-index:1; }
+    .tool-container { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
+    .tool-back:hover { color: var(--c1); }
+    .tool-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .tool-title span { color: var(--c1); }
+    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; }
+
+    .calc-box {
+      background: rgba(255,255,255,.03); border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.06); padding: 28px 24px; margin-bottom: 24px;
+    }
+    .calc-group { margin-bottom: 20px; }
+    .calc-label { font-size: 13px; color: rgba(255,255,255,.6); margin-bottom: 8px; display: block; }
+    .calc-select {
+      width: 100%; padding: 10px 14px; border-radius: 10px;
+      background: rgba(255,255,255,.06); color: #fff;
+      border: 1px solid rgba(255,255,255,.1); font-size: 14px;
+      outline: none; cursor: pointer; box-sizing: border-box;
+    }
+    .calc-select option { background: #1a1f3a; }
+    .calc-checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
+    .calc-checkbox {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 8px;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      font-size: 13px; color: rgba(255,255,255,.6); cursor: pointer; transition: all .3s;
+    }
+    .calc-checkbox.active {
+      background: rgba(108,92,231,.12); border-color: rgba(108,92,231,.3);
+      color: var(--c1);
+    }
+    .calc-checkbox input { accent-color: var(--c1); }
+
+    .calc-range { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+    .calc-range input[type=range] { flex: 1; accent-color: var(--c1); }
+    .calc-range-val { font-size: 12px; color: var(--c1); min-width: 48px; }
+
+    .calc-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 36px; border-radius: 28px;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      color: #fff; font-size: 15px; font-weight: 600;
+      border: none; cursor: pointer; transition: transform .3s, box-shadow .3s;
+    }
+    .calc-btn:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(108,92,231,.35); }
+
+    /* 结果 */
+    .price-result {
+      display: none; margin-top: 32px; padding: 28px 24px;
+      background: rgba(108,92,231,.06); border-radius: 16px;
+      border: 1px solid rgba(108,92,231,.15); text-align: center;
+    }
+    .price-result.show { display: block; }
+    .price-label { font-size: 13px; color: rgba(255,255,255,.5); margin-bottom: 8px; }
+    .price-amount { font-size: 44px; font-weight: 800; color: var(--c1); }
+    .price-unit { font-size: 16px; color: rgba(255,255,255,.4); margin-left: 4px; }
+    .price-detail { margin-top: 18px; text-align: left; }
+    .price-row {
+      display: flex; justify-content: space-between; padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px;
+    }
+    .price-row .pr-label { color: rgba(255,255,255,.5); }
+    .price-row .pr-val { color: #fff; }
+    .price-note {
+      margin-top: 16px; font-size: 12px; color: rgba(255,255,255,.3);
+      line-height: 1.7; text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .tool-page { padding: 70px 0 30px; }
+      .tool-title { font-size: 22px; }
+      .calc-box { padding: 20px 16px; }
+      .calc-checkbox-group { flex-wrap: wrap; }
+      .price-amount { font-size: 36px; }
+    }
+    @media (max-width: 480px) {
+      .tool-page { padding: 60px 0 24px; }
+      .tool-title { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="index.html" class="active">智能工具</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="tool-page">
+    <div class="tool-container">
+      <a class="tool-back" href="index.html">← 返回工具中心</a>
+      <h1 class="tool-title">设计<span>报价计算器</span></h1>
+      <p class="tool-desc">选择设计类型与需求，自动估算市场价格，方便您报价参考。此为参考价，实际以沟通为准。</p>
+
+      <div class="calc-box">
+        <div class="calc-group">
+          <label class="calc-label">设计类型</label>
+          <select class="calc-select" id="typeSelect">
+            <option value="logo">Logo / VI 设计</option>
+            <option value="poster" selected>海报 / 宣传单</option>
+            <option value="flyer">折页 / 画册</option>
+            <option value="package">包装设计</option>
+            <option value="social">社交媒体配图</option>
+            <option value="mini">小程序界面设计</option>
+          </select>
+        </div>
+
+        <div class="calc-group">
+          <label class="calc-label">需求复杂度</label>
+          <div class="calc-checkbox-group" id="complexGroup">
+            <label class="calc-checkbox active"><input type="radio" name="complex" value="simple" checked /> 简单（参考模板）</label>
+            <label class="calc-checkbox"><input type="radio" name="complex" value="normal" /> 中等（原创设计）</label>
+            <label class="calc-checkbox"><input type="radio" name="complex" value="complex" /> 复杂（品牌全案）</label>
+          </div>
+        </div>
+
+        <div class="calc-group">
+          <label class="calc-label">数量：<span id="qtyVal">1</span> 款</label>
+          <div class="calc-range">
+            <input type="range" id="qtyRange" min="1" max="20" value="1" />
+          </div>
+        </div>
+
+        <div class="calc-group">
+          <label class="calc-label">交付速度</label>
+          <div class="calc-checkbox-group" id="speedGroup">
+            <label class="calc-checkbox"><input type="radio" name="speed" value="normal" checked /> 标准（3-5天）</label>
+            <label class="calc-checkbox active"><input type="radio" name="speed" value="fast" /> 加急（24小时内）</label>
+          </div>
+        </div>
+      </div>
+
+      <button class="calc-btn" id="calcBtn">💰 估算报价</button>
+
+      <div class="price-result" id="priceResult">
+        <div class="price-label">预估报价（参考价）</div>
+        <div><span class="price-amount" id="priceAmount">0</span><span class="price-unit">元 起</span></div>
+        <div class="price-detail" id="priceDetail"></div>
+        <div class="price-note">* 此为市场参考价，实际价格根据需求细节、修改次数、版权归属等因素调整。兴程网络承诺：免费修改直到满意！</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div class="footer-brand"><h3>兴程<span>网络</span></h3><p style="color:rgba(255,255,255,.35);font-size:13px;margin-top:8px;line-height:1.7;">微信：xcing888<br/>QQ：738874448<br/>邮箱：738874448@qq.com</p></div>
+    <div class="footer-info"><h4>智能工具</h4><ul>
+      <li><a href="index.html">工具中心</a></li>
+      <li><a href="image-convert.html">格式转换</a></li>
+      <li><a href="qrcode.html">二维码生成</a></li>
+      <li><a href="image-compress.html">图片压缩</a></li>
+      <li><a href="price.html">报价计算器</a></li>
+      <li><a href="color.html">配色方案</a></li>
+      <li><a href="font.html">字体预览</a></li>
+    </ul></div>
+  </div></div></footer>
+
+<script>
+(function(){
+  // 价格表（元）
+  var prices = {
+    logo:    { simple:80,  normal:200, complex:500 },
+    poster:  { simple:50,  normal:120, complex:300 },
+    flyer:   { simple:80,  normal:200, complex:500 },
+    package: { simple:150, normal:400, complex:1000 },
+    social:  { simple:30,  normal:80,  complex:200 },
+    mini:    { simple:300, normal:800, complex:2000 },
+  };
+  var names = { logo:'Logo/VI', poster:'海报/宣传单', flyer:'折页/画册', package:'包装设计', social:'社交媒体配图', mini:'小程序界面' };
+  var speedMul = { normal:1, fast:1.5 };
+
+  // 单选高亮
+  document.querySelectorAll('.calc-checkbox-group').forEach(function(g){
+    g.querySelectorAll('label').forEach(function(lb){
+      lb.addEventListener('click', function(){
+        g.querySelectorAll('label').forEach(function(x){ x.classList.remove('active'); });
+        lb.classList.add('active');
+      });
+    });
+  });
+
+  // 数量滑块
+  var qtyRange = document.getElementById('qtyRange');
+  var qtyVal = document.getElementById('qtyVal');
+  qtyRange.addEventListener('input', function(){ qtyVal.textContent = qtyRange.value; });
+
+  // 计算
+  document.getElementById('calcBtn').addEventListener('click', function(){
+    var type = document.getElementById('typeSelect').value;
+    var complex = document.querySelector('input[name=complex]:checked').value;
+    var speed = document.querySelector('input[name=speed]:checked').value;
+    var qty = parseInt(qtyRange.value);
+
+    var base = prices[type][complex];
+    var mul = speedMul[speed];
+    // 数量折扣
+    var discount = qty >= 10 ? 0.8 : qty >= 5 ? 0.9 : qty >= 3 ? 0.95 : 1;
+    var total = Math.round(base * mul * qty * discount);
+
+    document.getElementById('priceAmount').textContent = total;
+    var detail = document.getElementById('priceDetail');
+    detail.innerHTML =
+      '<div class="price-row"><span class="pr-label">设计类型</span><span class="pr-val">' + names[type] + '</span></div>' +
+      '<div class="price-row"><span class="pr-label">复杂度</span><span class="pr-val">' + ({simple:'简单',normal:'中等',complex:'复杂'})[complex] + '</span></div>' +
+      '<div class="price-row"><span class="pr-label">数量</span><span class="pr-val">' + qty + ' 款</span></div>' +
+      '<div class="price-row"><span class="pr-label">单款价格</span><span class="pr-val">' + Math.round(base*mul*discount) + ' 元</span></div>' +
+      (speed==='fast' ? '<div class="price-row"><span class="pr-label">加急费</span><span class="pr-val">×1.5</span></div>' : '') +
+      (discount<1 ? '<div class="price-row"><span class="pr-label">数量优惠</span><span class="pr-val">' + (discount*10).toFixed(1) + ' 折</span></div>' : '');
+    document.getElementById('priceResult').classList.add('show');
+    document.getElementById('priceResult').scrollIntoView({behavior:'smooth', block:'center'});
+  });
+})();
+</script>
+<script src="../script.js?v=20260624b"></script>
+</body>
+</html>

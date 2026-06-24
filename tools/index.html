@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="兴程网络智能工具中心 — 免费在线工具：图片格式转换、二维码生成、图片压缩、设计报价计算、配色方案生成、字体预览" />
+  <title>智能工具中心 — 兴程网络</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🛠️</text></svg>" />
+  <link rel="stylesheet" href="../style.css?v=20260624a" />
+  <style>
+    /* ===== 工具中心专属样式 ===== */
+    .tools-hero {
+      position: relative;
+      padding: 100px 0 60px;
+      text-align: center;
+      background: var(--bg-deep);
+      overflow: hidden;
+    }
+    .tools-hero::before {
+      content: '';
+      position: absolute;
+      top: -30%; left: -10%;
+      width: 120%; height: 160%;
+      background:
+        radial-gradient(2px 2px at 15% 25%, rgba(108,92,231,.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 60%, rgba(0,206,201,.45) 0%, transparent 100%),
+        radial-gradient(1.8px 1.8px at 65% 35%, rgba(253,121,168,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 70%, rgba(255,234,167,.35) 0%, transparent 100%);
+      background-size: 200px 200px, 240px 240px, 180px 180px, 220px 220px;
+      animation: toolsBgDrift 30s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes toolsBgDrift {
+      0%   { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-60px) rotate(0.5deg); }
+    }
+    .tools-hero .container { position: relative; z-index: 1; }
+    .tools-hero-tag {
+      display: inline-block;
+      padding: 6px 20px;
+      border-radius: 20px;
+      background: rgba(108,92,231,.15);
+      color: var(--c1);
+      font-size: 13px;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(108,92,231,.25);
+    }
+    .tools-hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .tools-hero h1 span { color: var(--c1); }
+    .tools-hero-desc {
+      color: rgba(255,255,255,.55);
+      font-size: 15px;
+      max-width: 520px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    /* 工具卡片网格 */
+    .tools-grid-section {
+      padding: 50px 0 80px;
+      background: var(--bg-deep);
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .tool-card {
+      position: relative;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 32px 24px 28px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+      overflow: hidden;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(108,92,231,.08), rgba(0,206,201,.05), rgba(253,121,168,.04));
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+    .tool-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(108,92,231,.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,.35), 0 0 20px rgba(108,92,231,.12);
+    }
+    .tool-card:hover::before { opacity: 1; }
+    .tool-card * { position: relative; z-index: 1; }
+
+    .tool-card-icon {
+      width: 64px; height: 64px;
+      margin: 0 auto 18px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      background: rgba(108,92,231,.12);
+      border: 1px solid rgba(108,92,231,.2);
+    }
+    .tool-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .tool-card p {
+      font-size: 13px;
+      color: rgba(255,255,255,.5);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .tool-card-tag {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 12px;
+      background: rgba(108,92,231,.1);
+      color: var(--c1);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    /* 手机端：1列 */
+    @media (max-width: 768px) {
+      .tools-grid { grid-template-columns: 1fr; gap: 16px; padding: 0 16px; }
+      .tools-hero { padding: 70px 0 36px; }
+      .tools-hero h1 { font-size: 28px; }
+      .tool-card { padding: 24px 18px 22px; }
+      .tool-card-icon { width: 52px; height: 52px; font-size: 26px; }
+    }
+    @media (max-width: 480px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .tools-hero { padding: 60px 0 28px; }
+      .tools-hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 导航 ===== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="index.html" class="active">智能工具</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <header class="tools-hero">
+    <div class="container">
+      <div class="tools-hero-tag">🛠️ FREE TOOLS</div>
+      <h1>智能<span>工具中心</span></h1>
+      <p class="tools-hero-desc">6款免费在线工具，助力您的设计与创作。纯前端运行，无需上传服务器，保护您的隐私。</p>
+    </div>
+  </header>
+
+  <!-- ===== 工具卡片 ===== -->
+  <section class="tools-grid-section">
+    <div class="container">
+      <div class="tools-grid">
+
+        <!-- 1. 格式转换 -->
+        <a class="tool-card" href="image-convert.html">
+          <div class="tool-card-icon">🖼️</div>
+          <h3>图片格式转换</h3>
+          <p>支持 PNG / JPG / WEBP 互转，可选输出质量，纯前端处理</p>
+          <span class="tool-card-tag">立即使用 →</span>
+        </a>
+
+        <!-- 2. 二维码生成 -->
+        <a class="tool-card" href="qrcode.html">
+          <div class="tool-card-icon">📱</div>
+          <h3>二维码生成器</h3>
+          <p>输入链接或文字，生成可自定义颜色、尺寸的二维码</p>
+          <span class="tool-card-tag">立即使用 →</span>
+        </a>
+
+        <!-- 3. 图片压缩 -->
+        <a class="tool-card" href="image-compress.html">
+          <div class="tool-card-icon">🗜️</div>
+          <h3>图片压缩工具</h3>
+          <p>批量压缩图片体积，支持 JPG/PNG/WEBP，可自定义压缩比</p>
+          <span class="tool-card-tag">立即使用 →</span>
+        </a>
+
+        <!-- 4. 设计报价计算 -->
+        <a class="tool-card" href="price.html">
+          <div class="tool-card-icon">💰</div>
+          <h3>设计报价计算器</h3>
+          <p>选择设计类型与需求，自动估算市场价格，方便报价参考</p>
+          <span class="tool-card-tag">立即使用 →</span>
+        </a>
+
+        <!-- 5. 配色方案生成 -->
+        <a class="tool-card" href="color.html">
+          <div class="tool-card-icon">🎨</div>
+          <h3>配色方案生成</h3>
+          <p>输入关键词或选择风格，AI 生成品牌配色方案</p>
+          <span class="tool-card-tag">立即使用 →</span>
+        </a>
+
+        <!-- 6. 字体预览工具 -->
+        <a class="tool-card" href="font.html">
+          <div class="tool-card-icon">🔤</div>
+          <h3>字体预览工具</h3>
+          <p>输入文字，实时预览多种字体效果，支持字号/颜色调整</p>
+          <span class="tool-card-tag">立即使用 →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 底部 ===== -->
+  <footer class="footer" id="contact">
+    <div class="footer-glow g1"></div>
+    <div class="footer-glow g2"></div>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>兴程<span>网络</span></h3>
+          <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+        </div>
+        <div class="footer-info">
+          <h4>联系方式</h4>
+          <ul>
+            <li>微信：xcing888</li>
+            <li>QQ：738874448</li>
+            <li>邮箱：738874448@qq.com</li>
+          </ul>
+        </div>
+        <div class="footer-info">
+          <h4>智能工具</h4>
+          <ul>
+            <li><a href="image-convert.html">图片格式转换</a></li>
+            <li><a href="qrcode.html">二维码生成器</a></li>
+            <li><a href="image-compress.html">图片压缩工具</a></li>
+            <li><a href="price.html">设计报价计算器</a></li>
+            <li><a href="color.html">配色方案生成</a></li>
+            <li><a href="font.html">字体预览工具</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 <span>兴程网络</span> · 保留所有权利</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script.js?v=20260624a"></script>
+</body>
+</html>

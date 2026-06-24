@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>图片格式转换 — 智能工具中心</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🖼️</text></svg>" />
+  <link rel="stylesheet" href="../style.css?v=20260624a" />
+  <style>
+    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: 70vh; position:relative; z-index:1; }
+    .tool-container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
+    .tool-back:hover { color: var(--c1); }
+    .tool-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .tool-title span { color: var(--c1); }
+    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; }
+
+    /* 上传区 */
+    .upload-zone {
+      border: 2px dashed rgba(255,255,255,.12);
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .3s, background .3s;
+      margin-bottom: 24px;
+      background: rgba(255,255,255,.02);
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--c1);
+      background: rgba(108,92,231,.06);
+    }
+    .upload-icon { font-size: 42px; margin-bottom: 12px; }
+    .upload-zone p { color: rgba(255,255,255,.5); font-size: 14px; }
+    .upload-zone .browse-btn {
+      display: inline-block; margin-top: 10px;
+      padding: 8px 24px; border-radius: 20px;
+      background: rgba(108,92,231,.15); color: var(--c1);
+      font-size: 13px; border: 1px solid rgba(108,92,231,.25);
+      cursor: pointer; transition: background .3s;
+    }
+    .upload-zone:hover .browse-btn { background: rgba(108,92,231,.25); }
+
+    /* 文件列表 */
+    .file-list { margin-bottom: 24px; }
+    .file-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; margin-bottom: 8px;
+      background: rgba(255,255,255,.04); border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .file-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: rgba(0,0,0,.3); }
+    .file-info { flex: 1; min-width: 0; }
+    .file-name { font-size: 13px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-size { font-size: 11px; color: rgba(255,255,255,.4); }
+    .file-remove {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,80,80,.1); border: none; color: #ff5050;
+      cursor: pointer; font-size: 16px; transition: background .3s;
+    }
+    .file-remove:hover { background: rgba(255,80,80,.25); }
+
+    /* 选项区 */
+    .options-bar {
+      display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+      margin-bottom: 24px; padding: 16px 20px;
+      background: rgba(255,255,255,.03); border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .opt-label { font-size: 13px; color: rgba(255,255,255,.6); white-space: nowrap; }
+    .opt-select {
+      padding: 8px 14px; border-radius: 8px;
+      background: rgba(255,255,255,.06); color: #fff;
+      border: 1px solid rgba(255,255,255,.1);
+      font-size: 13px; cursor: pointer; outline: none;
+    }
+    .opt-select option { background: #1a1f3a; }
+    .opt-range { display: flex; align-items: center; gap: 8px; }
+    .opt-range input[type=range] { width: 100px; accent-color: var(--c1); }
+    .opt-range-val { font-size: 12px; color: var(--c1); min-width: 36px; }
+
+    /* 转换按钮 */
+    .convert-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 36px; border-radius: 28px;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      color: #fff; font-size: 15px; font-weight: 600;
+      border: none; cursor: pointer; transition: transform .3s, box-shadow .3s;
+    }
+    .convert-btn:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(108,92,231,.35); }
+    .convert-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* 结果区 */
+    .result-area { margin-top: 28px; }
+    .result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    .result-item {
+      background: rgba(255,255,255,.04); border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.06); overflow: hidden;
+    }
+    .result-thumb { width: 100%; height: 110px; object-fit: cover; display: block; }
+    .result-info { padding: 10px 12px; }
+    .result-name { font-size: 12px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .result-download {
+      display: inline-block; margin-top: 8px;
+      padding: 5px 14px; border-radius: 8px;
+      background: rgba(108,92,231,.15); color: var(--c1);
+      font-size: 12px; text-decoration: none; transition: background .3s;
+    }
+    .result-download:hover { background: rgba(108,92,231,.3); }
+
+    @media (max-width: 768px) {
+      .tool-page { padding: 70px 0 30px; }
+      .tool-title { font-size: 22px; }
+      .upload-zone { padding: 28px 16px; }
+      .options-bar { padding: 12px 14px; flex-direction: column; align-items: stretch; }
+      .opt-label { margin-bottom: 4px; }
+    }
+    @media (max-width: 480px) {
+      .tool-page { padding: 60px 0 24px; }
+      .tool-title { font-size: 20px; }
+      .result-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="index.html" class="active">智能工具</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="tool-page">
+    <div class="tool-container">
+      <a class="tool-back" href="index.html">← 返回工具中心</a>
+      <h1 class="tool-title">图片<span>格式转换</span></h1>
+      <p class="tool-desc">支持 PNG / JPG / WEBP 互转，纯前端处理，图片不会上传到服务器。</p>
+
+      <!-- 上传区 -->
+      <div class="upload-zone" id="uploadZone">
+        <div class="upload-icon">📁</div>
+        <p>拖拽图片到此处，或 <span class="browse-btn">选择文件</span></p>
+        <p style="margin-top:8px;font-size:12px;color:rgba(255,255,255,.3);">支持 PNG / JPG / WEBP，可多选</p>
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" multiple style="display:none" />
+      </div>
+
+      <!-- 文件列表 -->
+      <div class="file-list" id="fileList"></div>
+
+      <!-- 选项 -->
+      <div class="options-bar">
+        <span class="opt-label">输出格式：</span>
+        <select class="opt-select" id="outFmt">
+          <option value="image/png">PNG</option>
+          <option value="image/jpeg">JPG</option>
+          <option value="image/webp">WEBP</option>
+        </select>
+        <span class="opt-label" style="margin-left:12px;">品质：</span>
+        <div class="opt-range">
+          <input type="range" id="quality" min="0.1" max="1" step="0.05" value="0.92" />
+          <span class="opt-range-val" id="qVal">0.92</span>
+        </div>
+      </div>
+
+      <!-- 转换按钮 -->
+      <button class="convert-btn" id="convertBtn" disabled>
+        🔄 开始转换
+      </button>
+
+      <!-- 结果 -->
+      <div class="result-area" id="resultArea" style="display:none;">
+        <h3 style="color:#fff;font-size:16px;margin-bottom:16px;">转换结果</h3>
+        <div class="result-grid" id="resultGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid">
+    <div class="footer-brand"><h3>兴程<span>网络</span></h3><p style="color:rgba(255,255,255,.35);font-size:13px;margin-top:8px;line-height:1.7;">微信：xcing888<br/>QQ：738874448<br/>邮箱：738874448@qq.com</p></div>
+    <div class="footer-info"><h4>智能工具</h4><ul>
+      <li><a href="index.html">工具中心</a></li>
+      <li><a href="image-convert.html">格式转换</a></li>
+      <li><a href="qrcode.html">二维码生成</a></li>
+      <li><a href="image-compress.html">图片压缩</a></li>
+      <li><a href="price.html">报价计算器</a></li>
+      <li><a href="color.html">配色方案</a></li>
+      <li><a href="font.html">字体预览</a></li>
+    </ul></div>
+  </div></div></footer>
+
+<script>
+(function(){
+  var zone = document.getElementById('uploadZone');
+  var input = document.getElementById('fileInput');
+  var list = document.getElementById('fileList');
+  var btn = document.getElementById('convertBtn');
+  var area = document.getElementById('resultArea');
+  var grid = document.getElementById('resultGrid');
+  var qSlider = document.getElementById('quality');
+  var qVal = document.getElementById('qVal');
+  var files = [];
+
+  // 点击上传
+  zone.addEventListener('click', function(e){ if(e.target.tagName!=='INPUT') input.click(); });
+  input.addEventListener('change', function(){ addFiles(input.files); input.value=''; });
+
+  // 拖拽
+  zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', function(){ zone.classList.remove('drag-over'); });
+  zone.addEventListener('drop', function(e){ e.preventDefault(); zone.classList.remove('drag-over'); addFiles(e.dataTransfer.files); });
+
+  // 品质滑块
+  qSlider.addEventListener('input', function(){ qVal.textContent = qSlider.value; });
+
+  function addFiles(fileList) {
+    for (var i=0;i<fileList.length;i++) files.push(fileList[i]);
+    renderList();
+  }
+
+  function renderList() {
+    list.innerHTML = '';
+    files.forEach(function(f, idx){
+      var item = document.createElement('div');
+      item.className = 'file-item';
+      var url = URL.createObjectURL(f);
+      item.innerHTML =
+        '<img class="file-thumb" src="'+url+'" alt="" />' +
+        '<div class="file-info">' +
+          '<div class="file-name">'+f.name+'</div>' +
+          '<div class="file-size">'+(f.size/1024).toFixed(1)+' KB · '+f.type+'</div>' +
+        '</div>' +
+        '<button class="file-remove" data-idx="'+idx+'">✕</button>';
+      list.appendChild(item);
+    });
+    btn.disabled = !files.length;
+    // 删除
+    list.querySelectorAll('.file-remove').forEach(function(b){
+      b.addEventListener('click', function(){
+        files.splice(+this.dataset.idx,1); renderList();
+      });
+    });
+  }
+
+  // 转换
+  btn.addEventListener('click', function(){
+    if(!files.length) return;
+    area.style.display = 'block';
+    grid.innerHTML = '处理中…';
+    var fmt = document.getElementById('outFmt').value;
+    var q = parseFloat(qSlider.value);
+    var ext = fmt==='image/png'?'png':fmt==='image/jpeg'?'jpg':'webp';
+
+    var done = 0;
+    grid.innerHTML = '';
+    files.forEach(function(f){
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        var img = new Image();
+        img.onload = function(){
+          var cv = document.createElement('canvas');
+          cv.width = img.width; cv.height = img.height;
+          var ctx = cv.getContext('2d');
+          ctx.drawImage(img,0,0);
+          cv.toBlob(function(blob){
+            var outUrl = URL.createObjectURL(blob);
+            var name = f.name.replace(/\.[^.]+$/, '') + '.' + ext;
+            var card = document.createElement('div');
+            card.className = 'result-item';
+            card.innerHTML =
+              '<img class="result-thumb" src="'+outUrl+'" alt="" />' +
+              '<div class="result-info">' +
+                '<div class="result-name">'+name+'</div>' +
+                '<a class="result-download" href="'+outUrl+'" download="'+name+'">⬇ 下载</a>' +
+              '</div>';
+            grid.appendChild(card);
+            done++;
+            if(done===files.length) btn.textContent = '✅ 转换完成';
+          }, fmt, q);
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(f);
+    });
+  });
+})();
+</script>
+<script src="../script.js?v=20260624b"></script>
+</body>
+</html>

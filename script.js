@@ -303,36 +303,74 @@ function initFakeComments() {
   showNext();
 }
 
-/* =========== 案例灯箱 =========== */
-const CASE_LABELS = [
-  'VI设计', 'Logo设计', '海报设计', '包装设计', '名片设计',
-  '画册设计', '展板设计', '菜单设计', '横幅设计', '折页设计',
-  '台历设计', '吊牌设计', '不干胶', '手提袋', '工牌设计',
-  'PPT设计', 'H5页面', '公众号首图', '电商主图', '详情页设计',
-];
-function openCaseLightbox() {
-  const lb = document.getElementById('casesLightbox');
-  const grid = document.getElementById('casesLbGrid');
-  if (!lb || !grid) return;
-  // 动态生成 20 张案例卡片
-  if (!grid.children.length) {
-    for (let i = 0; i < 20; i++) {
-      const card = document.createElement('div');
-      card.className = 'case-img-card';
-      card.innerHTML = `<span class="case-num">${String(i+1).padStart(2,'0')}</span><span class="case-label">${CASE_LABELS[i] || '案例 '+(i+1)}</span><span style="font-size:32px;opacity:.5">🖼️</span>`;
-      grid.appendChild(card);
+/* =========== 案例图片墙（点击放大）========== */
+(function() {
+  const viewer = document.getElementById('caseViewer');
+  const vImg = document.getElementById('caseViewerImg');
+  const vCap = document.getElementById('caseViewerCaption');
+  if (!viewer || !vImg) return;
+
+  // 点击墙上的任意图片 → 放大查看
+  document.getElementById('casesWall')?.addEventListener('click', function(e) {
+    const tile = e.target.closest('.case-piece');
+    if (!tile) return;
+    const img = tile.querySelector('img');
+    if (!img) return;
+    vImg.src = img.src;
+    vCap.textContent = img.alt || '案例作品';
+    viewer.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  });
+
+  // 关闭查看器
+  window.closeCaseViewer = function(e) {
+    if (e && e.target !== viewer && !e.target.classList.contains('case-viewer-close')) return;
+    viewer.classList.remove('show');
+    document.body.style.overflow = '';
+  };
+
+  // ESC 关闭
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && viewer.classList.contains('show')) {
+      viewer.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+  });
+})();
+
+/* ========== 固定比例缩放 + 自动裁切溢出 ========== */
+(function() {
+  var scaler = document.getElementById('casesScale');
+  if (!scaler) return;
+  var DESIGN_W = 1180;
+
+  function fitScale() {
+    var wrap = scaler.parentElement;
+    var availW = (wrap ? wrap.clientWidth : window.innerWidth) - 12;
+
+    if (availW >= DESIGN_W) {
+      scaler.style.cssText = 'width:' + DESIGN_W + 'px;transform:none;zoom:1;';
+      wrap.style.paddingBottom = '0';
+    } else {
+      var s = availW / DESIGN_W;
+      scaler.style.width = DESIGN_W + 'px';
+      scaler.style.zoom = s;
+      scaler.style.transform = 'none';
+      wrap.style.paddingBottom = '0';
+    }
+
+    /* 裁切：锁定Grid容器高度，超出部分hidden */
+    var wall = document.getElementById('casesWall');
+    if (wall && wall.offsetHeight > 0) {
+      // 取实际高度的95%，确保边框内不溢出
+      wall.style.maxHeight = Math.floor(wall.offsetHeight * 0.96) + 'px';
+      wall.style.overflow = 'hidden';
     }
   }
-  lb.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeCaseLightbox() {
-  const lb = document.getElementById('casesLightbox');
-  if (lb) lb.classList.remove('open');
-  document.body.style.overflow = '';
-}
-// ESC 关闭灯箱
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeCaseLightbox();
-});
+
+  window.addEventListener('resize', fitScale);
+  window.addEventListener('load', function() { setTimeout(fitScale, 200); });
+  setTimeout(fitScale, 300);
+})();
+
 initFakeComments();
