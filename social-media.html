@@ -3,77 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="兴程网络社交媒体运营服务 — 抖音快手粉丝增长、短视频点赞、会员代充、影视会员、QQ业务，一站式全网流量解决方案。" />
   <title>社交媒体运营 — 兴程网络</title>
-  <link rel="stylesheet" href="style.css?v=20260622f" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css?v=25062517" />
   <style>
     body::before, body::after { z-index: -1 !important; }
     body { position: relative; }
-    .redirect-page {
-      min-height: 100vh;
-      background: #0b0f2e;
-      position: relative;
-      z-index: 10;
-      padding-top: 64px; /* 避开 fixed 导航栏 */
+    .service-page { min-height:100vh; background:var(--bg); position:relative; z-index:10; padding-top:64px; }
+    .service-hero { padding:80px 24px 60px; text-align:center; background:linear-gradient(180deg, rgba(108,92,231,.08), transparent); }
+    .service-hero h1 { font-size:clamp(28px,5vw,40px); font-weight:800; color:#f0f2ff; margin-bottom:16px; }
+    .service-hero p { color:var(--muted); font-size:16px; max-width:600px; margin:0 auto; line-height:1.8; }
+
+    .service-section { padding:60px 24px; max-width:1100px; margin:0 auto; }
+    .service-section h2 { font-size:24px; font-weight:700; color:#f0f2ff; margin-bottom:32px; text-align:center; }
+
+    .service-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+    @media (max-width:900px) { .service-grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:480px) { .service-grid { grid-template-columns:repeat(2,1fr); gap:12px; } }
+    .service-item { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:28px 16px; text-align:center; transition:.35s; }
+    .service-item:hover { transform:translateY(-4px); border-color:rgba(108,92,231,.3); box-shadow:0 12px 40px rgba(108,92,231,.15); }
+    .service-item .icon { font-size:40px; margin-bottom:12px; }
+    .service-item h3 { font-size:16px; font-weight:700; color:#f0f2ff; margin-bottom:10px; }
+    .service-item p { color:var(--muted); font-size:13px; line-height:1.6; }
+    .service-item .tag { display:inline-block; padding:3px 10px; background:rgba(108,92,231,.15); color:var(--c1); border-radius:50px; font-size:11px; margin-top:10px; }
+
+    .howto-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:24px; }
+    .howto-step { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:28px 20px; text-align:center; }
+    .howto-step .num { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--c1),var(--c2)); color:#fff; font-weight:700; font-size:18px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+    .howto-step h4 { font-size:16px; font-weight:700; color:#f0f2ff; margin-bottom:8px; }
+    .howto-step p { color:var(--muted); font-size:13px; line-height:1.7; }
+
+    .notice-box { background:rgba(255,193,7,.05); border:1px solid rgba(255,193,7,.15); border-radius:16px; padding:24px; margin-top:40px; }
+    .notice-box h3 { color:#ffc107; font-size:16px; font-weight:700; margin-bottom:12px; }
+    .notice-box ul { color:var(--muted); font-size:14px; line-height:2; padding-left:20px; }
+    .notice-box ul li { margin-bottom:4px; }
+
+    .cta-section { text-align:center; padding:60px 24px; background:linear-gradient(180deg, transparent, rgba(108,92,231,.06)); }
+    .cta-btn { display:inline-block; padding:16px 56px; background:linear-gradient(135deg, #6c5ce7, #fd79a8); color:#fff; border-radius:50px; text-decoration:none; font-weight:700; font-size:16px; transition:.3s; box-shadow:0 4px 20px rgba(108,92,231,.3); }
+    .cta-btn:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(108,92,231,.5); }
+
+    @media (max-width:900px) {
+      .service-hero { padding:60px 20px 40px; }
+      .service-section { padding:40px 16px; }
+      .howto-steps { grid-template-columns:repeat(2,1fr); gap:16px; }
+      .howto-step { padding:24px 16px; }
     }
-    .redirect-main {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 64px);
-      padding: 40px 24px;
-    }
-    .redirect-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 48px 40px;
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-    }
-    .redirect-icon {
-      font-size: 64px;
-      margin-bottom: 24px;
-    }
-    .redirect-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: #f0f2ff;
-      margin-bottom: 12px;
-    }
-    .redirect-desc {
-      color: #8a96c0;
-      font-size: 14px;
-      line-height: 1.8;
-      margin-bottom: 32px;
-    }
-    .redirect-btn {
-      display: inline-block;
-      padding: 14px 48px;
-      background: linear-gradient(135deg, #6c5ce7, #fd79a8);
-      color: #fff;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 16px;
-      transition: all 0.3s;
-      margin-bottom: 24px;
-    }
-    .redirect-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(108,92,231,0.4);
-    }
-    .redirect-note {
-      color: #5a6490;
-      font-size: 12px;
-      line-height: 1.8;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 20px;
-      margin-top: 8px;
+    @media (max-width:480px) {
+      .howto-steps { grid-template-columns:repeat(2,1fr); gap:12px; }
+      .howto-step { padding:20px 12px; }
+      .howto-step h4 { font-size:14px; }
+      .howto-step p { font-size:12px; }
     }
   </style>
 </head>
-<body class="redirect-page">
+<body class="service-page">
 
   <!-- 导航 -->
   <nav class="nav" id="nav">
@@ -85,33 +70,121 @@
         <li><a href="miniprogram/index.html">小程序开发</a></li>
         <li><a href="social-media.html" class="active">社交媒体运营</a></li>
         <li><a href="pdd-assist.html">拼多多助力</a></li>
-        <li><a href="tools/index.html">智能工具</a></li>
+        <li><a href="tools/index.html">智能工具中心</a></li>
+        <li><a href="design/ai-culling.html">AI智能选图</a></li>
+        
+        <li class="nav-group">更多</li>
+        <li><a href="blog/index.html">博客文章</a></li>
+        <li><a href="faq.html">常见问题</a></li>
+        
       </ul>
-      <button class="nav-ham" id="navHam" aria-label="菜单">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
-  <!-- 主内容 -->
-  <div class="redirect-main">
-    <div class="redirect-card">
-      <div class="redirect-icon">📱</div>
-      <h2 class="redirect-title">社交媒体运营</h2>
-      <p class="redirect-desc">
-        代刷会员 · 短视频粉丝 · 影视会员 · QQ业务等<br>
-        点击下方按钮，跳转至服务页面
-      </p>
-      <a href="https://xc6.ccuse.cn/" target="_blank" class="redirect-btn" id="openBtn">立即访问 →</a>
-      <div class="redirect-note">
-        ⚠️ 温馨提示<br>
-        本链接为正规业务合作渠道，非恶意链接<br>
-        将在浏览器新标签页中打开，请放心访问<br>
-        如有疑问请联系客服微信：xcing888
+  <!-- Hero -->
+  <section class="service-hero">
+    <h1>📱 社交媒体运营服务</h1>
+    <p>抖音 · 快手 · 微博 · QQ · 影视会员，一站式全网流量增长与业务办理平台。真人操作、安全稳定、快速到账。</p>
+  </section>
+
+  <!-- 服务项目 -->
+  <section class="service-section">
+    <h2>我们提供的服务</h2>
+    <div class="service-grid">
+      <div class="service-item">
+        <div class="icon">🔥</div>
+        <h3>短视频粉丝增长</h3>
+        <p>抖音、快手真人粉丝增长，提升账号权重与曝光量，助力创作者快速涨粉。</p>
+        <span class="tag">真人活跃</span>
+      </div>
+      <div class="service-item">
+        <div class="icon">❤️</div>
+        <h3>点赞评论互动</h3>
+        <p>视频点赞、评论、转发、收藏一站式完成，提升作品热度与推荐权重。</p>
+        <span class="tag">真实互动</span>
+      </div>
+      <div class="service-item">
+        <div class="icon">👑</div>
+        <h3>会员代充服务</h3>
+        <p>各大影视平台会员、音乐会员、QQ会员/钻等，低价代充，秒到账。</p>
+        <span class="tag">低价秒到</span>
+      </div>
+      <div class="service-item">
+        <div class="icon">📊</div>
+        <h3>QQ业务办理</h3>
+        <p>QQ等级加速、名片赞、空间访客、群组推广等，满足多样化需求。</p>
+        <span class="tag">业务齐全</span>
+      </div>
+      <div class="service-item">
+        <div class="icon">🎬</div>
+        <h3>影视会员充值</h3>
+        <p>爱奇艺、腾讯视频、优酷、芒果TV等主流平台会员，低价稳定。</p>
+        <span class="tag">正规渠道</span>
+      </div>
+      <div class="service-item">
+        <div class="icon">🛡️</div>
+        <h3>直播人气提升</h3>
+        <p>直播间人气、点赞、评论、礼物互动，打造高人气直播氛围。</p>
+        <span class="tag">安全稳定</span>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- 使用流程 -->
+  <section class="service-section" style="border-top:1px solid rgba(255,255,255,.06);">
+    <h2>如何使用</h2>
+    <div class="howto-steps">
+      <div class="howto-step">
+        <div class="num">1</div>
+        <h4>选择服务</h4>
+        <p>进入下单平台，浏览服务列表，选择您需要的粉丝增长或业务办理项目。</p>
+      </div>
+      <div class="howto-step">
+        <div class="num">2</div>
+        <h4>填写信息</h4>
+        <p>根据提示填写您的账号信息（如抖音ID、快手主页链接等），确保信息准确。</p>
+      </div>
+      <div class="howto-step">
+        <div class="num">3</div>
+        <h4>支付下单</h4>
+        <p>选择支付方式完成付款，系统会自动处理您的订单，无需人工干预。</p>
+      </div>
+      <div class="howto-step">
+        <div class="num">4</div>
+        <h4>等待完成</h4>
+        <p>大部分订单在几分钟到几小时内完成，您可在订单中心查看实时进度。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 安全提示 -->
+  <section class="service-section">
+    <div class="notice-box">
+      <h3>⚠️ 安全提示与注意事项</h3>
+      <ul>
+        <li>请确保填写的账号信息准确无误，错误信息可能导致订单无法完成</li>
+        <li>建议不要同时操作多个平台的同类服务，避免系统冲突</li>
+        <li>会员代充服务请使用正规账号，共享账号可能存在风险</li>
+        <li>如遇订单异常，请及时联系客服处理，不要重复提交</li>
+        <li>本平台服务均为正规渠道，请放心使用</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 前往下单 -->
+  <section class="cta-section">
+    <h2 style="font-size:24px; font-weight:700; color:#f0f2ff; margin-bottom:16px;">准备好提升您的社交媒体影响力了吗？</h2>
+    <p style="color:var(--muted); font-size:15px; margin-bottom:32px;">点击下方按钮前往下单平台，享受便捷的一站式服务</p>
+    <a href="https://xc6.ccuse.cn/" target="_blank" rel="noopener noreferrer" class="cta-btn">前往下单平台 →</a>
+    <p style="color:#5a6490; font-size:12px; margin-top:16px;">将在浏览器新标签页中打开 · 如有疑问请联系微信：xcing888</p>
+  </section>
+
+  <footer class="footer" style="padding:40px 24px;text-align:center;background:var(--bg-deep);border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1;">
+    <p style="color:rgba(255,255,255,.4);font-size:13px;">© 2026 <span style="color:var(--c1);font-weight:700;">兴程网络</span> · 保留所有权利</p>
+  </footer>
 
   <script src="script.js"></script>
+  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
 </body>
 </html>

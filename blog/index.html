@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="兴程网络博客 — 分享平面设计技巧、小程序开发经验、社交媒体运营指南等实用干货。" />
+  <title>博客 — 兴程网络</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="stylesheet" href="../style.css?v=25062517" />
+  <style>
+    body::before, body::after { z-index: -1 !important; }
+    body { position: relative; }
+    .blog-page { min-height:100vh; background:var(--bg); position:relative; z-index:10; padding-top:64px; }
+    .blog-hero { padding:80px 24px 60px; text-align:center; background:linear-gradient(180deg, rgba(108,92,231,.08), transparent); }
+    .blog-hero h1 { font-size:clamp(28px,5vw,40px); font-weight:800; color:#f0f2ff; margin-bottom:12px; }
+    .blog-hero p { color:var(--muted); font-size:16px; max-width:560px; margin:0 auto; line-height:1.8; }
+    .blog-section { padding:40px 24px 80px; max-width:1100px; margin:0 auto; }
+    .blog-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
+    .blog-card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:20px; overflow:hidden; transition:.35s; display:flex; flex-direction:column; }
+    .blog-card:hover { transform:translateY(-4px); border-color:rgba(108,92,231,.3); box-shadow:0 12px 40px rgba(108,92,231,.12); }
+    .blog-card .cover { height:160px; background:linear-gradient(135deg, var(--c1), var(--c2)); display:flex; align-items:center; justify-content:center; font-size:56px; }
+    .blog-card .body { padding:28px 24px; flex:1; display:flex; flex-direction:column; }
+    .blog-card .tag { display:inline-block; padding:4px 12px; background:rgba(108,92,231,.15); color:var(--c1); border-radius:50px; font-size:12px; margin-bottom:12px; width:fit-content; }
+    .blog-card h3 { font-size:18px; font-weight:700; color:#f0f2ff; margin-bottom:10px; line-height:1.5; }
+    .blog-card p { color:var(--muted); font-size:14px; line-height:1.7; flex:1; }
+    .blog-card .meta { display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.06); color:#5a6490; font-size:13px; }
+    .blog-card .meta a { color:var(--c1); text-decoration:none; font-weight:600; }
+    @media (max-width:640px) { .blog-hero { padding:60px 20px 40px; } .blog-section { padding:30px 16px 60px; } }
+  </style>
+</head>
+<body class="blog-page">
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程网络</a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="../tools/index.html">智能工具中心</a></li>
+        <li><a href="../design/ai-culling.html">AI智能选图</a></li>
+        
+        <li class="nav-group">更多</li>
+        <li><a href="../blog/index.html">博客文章</a></li>
+        <li><a href="../faq.html">常见问题</a></li>
+        
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="blog-hero">
+    <h1>📝 博客</h1>
+    <p>分享设计技巧、开发经验、运营干货，助力您的数字化成长</p>
+  </section>
+
+  <section class="blog-section">
+    <div class="blog-grid">
+      <div class="blog-card">
+        <div class="cover">🎨</div>
+        <div class="body">
+          <span class="tag">设计技巧</span>
+          <h3>平面设计新手避坑指南：找设计师前必须知道的5件事</h3>
+          <p>第一次找设计师做图？这些坑千万别踩：不明确需求、不给参考、反复改方向...本文帮您少走弯路，高效沟通。</p>
+          <div class="meta">
+            <span>2026-06-25</span>
+            <a href="design-tips.html">阅读全文 →</a>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="cover">📱</div>
+        <div class="body">
+          <span class="tag">开发经验</span>
+          <h3>小程序开发常见问题：从注册到上线的完整避坑手册</h3>
+          <p>想做小程序却不知道从哪开始？本文详解小程序注册、认证、开发、审核、上线的全流程，以及常见的审核被拒原因。</p>
+          <div class="meta">
+            <span>2026-06-25</span>
+            <a href="miniprogram-guide.html">阅读全文 →</a>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="cover">📱</div>
+        <div class="body">
+          <span class="tag">运营指南</span>
+          <h3>社交媒体运营入门：零基础也能掌握的涨粉秘诀</h3>
+          <p>没有粉丝基础怎么办？内容怎么发才有流量？本文分享社交媒体运营的底层逻辑，从定位到内容到变现的实战方法。</p>
+          <div class="meta">
+            <span>2026-06-25</span>
+            <a href="social-media-guide.html">阅读全文 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" style="padding:40px 24px;text-align:center;background:var(--bg-deep);border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1;">
+    <p style="color:rgba(255,255,255,.4);font-size:13px;">© 2026 <span style="color:var(--c1);font-weight:700;">兴程网络</span> · 保留所有权利</p>
+  </footer>
+
+  <script src="../script.js"></script>
+  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+</body>
+</html>

@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="免费在线图片压缩工具 — 批量压缩 JPG/PNG/WEBP，自定义压缩比例，保持画质。" />
   <title>图片压缩工具 — 智能工具中心</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🗜️</text></svg>" />
-  <link rel="stylesheet" href="../style.css?v=20260624a" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="stylesheet" href="../style.css?v=25062517" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: 70vh; position:relative; z-index:1; }
     .tool-container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
@@ -85,6 +87,7 @@
       .tool-page { padding: 60px 0 24px; }
       .tool-title { font-size: 20px; }
     }
+  .tool-guide { background:rgba(108,92,231,.06); border:1px solid rgba(108,92,231,.15); border-radius:12px; padding:16px 20px; margin-bottom:24px; } .tool-guide h4 { font-size:14px; color:var(--c1); margin-bottom:10px; } .tool-guide ol { color:var(--muted); font-size:13px; line-height:2; padding-left:20px; margin:0; } .tool-guide li { margin-bottom:2px; }
   </style>
 </head>
 <body>
@@ -98,7 +101,13 @@
         <li><a href="../miniprogram/index.html">小程序开发</a></li>
         <li><a href="../social-media.html">社交媒体运营</a></li>
         <li><a href="../pdd-assist.html">拼多多助力</a></li>
-        <li><a href="index.html" class="active">智能工具</a></li>
+        <li><a href="index.html">智能工具中心</a></li>
+        <li><a href="index.html">智能工具中心</a></li>
+        
+        <li class="nav-group">更多</li>
+        <li><a href="../blog/index.html">博客文章</a></li>
+        <li><a href="../faq.html">常见问题</a></li>
+        
       </ul>
       <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
     </div>
@@ -108,7 +117,8 @@
     <div class="tool-container">
       <a class="tool-back" href="index.html">← 返回工具中心</a>
       <h1 class="tool-title">图片<span>压缩工具</span></h1>
-      <p class="tool-desc">批量压缩 JPG / PNG / WEBP 图片，纯前端处理，支持自定义压缩比。</p>
+      
+      <div class="tool-guide"><h4>📖 使用步骤</h4><ol><li>点击或拖放图片到上传区域</li><li>拖动滑块调整压缩比例（推荐 60%-80%）</li><li>对比压缩前后的预览效果</li><li>点击「下载」保存压缩后的图片</li></ol></div>
 
       <div class="upload-zone" id="upZone">
         <div class="upload-icon">🗜️</div>
@@ -223,6 +233,8 @@
   });
 })();
   </script>
-  <script src="../script.js?v=20260624b"></script>
+  <script src="../script.js?v=25062517"></script>
+
+  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
 </body>
 </html>

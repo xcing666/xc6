@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI 智能选图工具 — 基于 TensorFlow MobileNet 模型，自动识别图片内容并智能筛选，提升选图效率。" />
 <title>AI 智能选图 — 兴程网络</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
-  <link rel="manifest" href="../manifest.json" />
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
 <style>
@@ -22,9 +19,6 @@ a{color:var(--c2);text-decoration:none;}
 .top-nav .logo{font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .top-nav .back-link{color:var(--text-dim);font-size:14px;transition:.3s;}
 .top-nav .back-link:hover{color:var(--c2);}
-.top-nav .nav-links{display:flex;gap:20px;align-items:center;}
-.top-nav .nav-links a{color:var(--text-dim);font-size:14px;transition:.3s;}
-.top-nav .nav-links a:hover{color:var(--c2);}
 
 .main-container{margin-top:64px;padding:40px 24px 60px;max-width:1400px;margin-left:auto;margin-right:auto;}
 
@@ -154,9 +148,7 @@ a{color:var(--c2);text-decoration:none;}
 
 <nav class="top-nav">
   <div class="logo">兴程网络 · AI 选图</div>
-  <div class="nav-links">
-    <a href="../index.html" class="back-link">返回首页</a>
-  </div>
+  <a href="../index.html" class="back-link">← 返回首页</a>
 </nav>
 
 <div class="main-container">

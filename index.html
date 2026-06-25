@@ -9,11 +9,27 @@
   <meta property="og:type" content="website" />
   <title>兴程网络 — 广告设计 · 小程序 · 社媒运营 · 拼多多助力</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
-  <link rel="stylesheet" href="style.css?v=20260622f" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css?v=25062517" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "兴程网络",
+    "url": "https://xc6.ccuse.cn",
+    "logo": "https://xc6.ccuse.cn/showcase_bg.png",
+    "description": "技术驱动创意，专注数字服务。提供广告平面设计、微信小程序开发、社交媒体运营、拼多多助力等一站式数字化解决方案。",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "客户服务",
+      "email": "738874448@qq.com"
+    },
+    "sameAs": []
+  }
+  </script>
 </head>
 <body>
-
-  <!-- ======== 滚动进度条 ======== -->
+<!-- ======== 滚动进度条 ======== -->
   <div class="scroll-progress" id="scrollProgress"></div>
 
   <!-- ======== 粒子画布（全屏） ======== -->
@@ -30,7 +46,12 @@
         <li><a href="social-media.html">社交媒体运营</a></li>
         <li><a href="pdd-assist.html">拼多多助力</a></li>
         <li><a href="design/ai-culling.html">AI智能选图</a></li>
-        <li><a href="tools/index.html">智能工具</a></li>
+        <li><a href="tools/index.html">智能工具中心</a></li>
+        
+        <li class="nav-group">更多</li>
+        <li><a href="blog/index.html">博客文章</a></li>
+        <li><a href="faq.html">常见问题</a></li>
+        
       </ul>
       <button class="nav-ham" id="navHam" aria-label="菜单">
         <span></span><span></span><span></span>
@@ -83,12 +104,12 @@
       </h1>
       <p class="hero-desc">广告平面设计 · 微信小程序开发 · 社交媒体运营 · 拼多多助力</p>
       <div class="hero-services">
-        <a href="design/ai-culling.html" class="hs-tag hs-ai" target="_blank"><b>AI</b> 智能选图</a>
-        <a href="social-media.html" class="hs-tag hs-movie" target="_blank">🎬 影视会员</a>
-        <a href="pdd-assist.html" class="hs-tag hs-pdd" target="_blank">🔥 拼多多助力</a>
-        <a href="design/index.html" class="hs-tag hs-design" target="_blank">🎨 平面设计</a>
-        <a href="miniprogram/index.html" class="hs-tag hs-mini" target="_blank">📱 小程序开发</a>
-        <a href="social-media.html" class="hs-tag hs-video" target="_blank">▶ KS·DY 粉丝·点赞·人气</a>
+        <a href="design/ai-culling.html" class="hs-tag hs-ai" target="_blank" rel="noopener noreferrer"><b>AI</b> 智能选图</a>
+        <a href="social-media.html" class="hs-tag hs-movie" target="_blank" rel="noopener noreferrer">🎬 影视会员</a>
+        <a href="pdd-assist.html" class="hs-tag hs-pdd" target="_blank" rel="noopener noreferrer">🔥 拼多多助力</a>
+        <a href="design/index.html" class="hs-tag hs-design" target="_blank" rel="noopener noreferrer">🎨 平面设计</a>
+        <a href="miniprogram/index.html" class="hs-tag hs-mini" target="_blank" rel="noopener noreferrer">📱 小程序开发</a>
+        <a href="social-media.html" class="hs-tag hs-video" target="_blank" rel="noopener noreferrer">▶ KS·DY 粉丝·点赞·人气</a>
       </div>
       <a href="#services" class="hero-btn">查看服务 <span class="arrow">↓</span></a>
     </div>
@@ -96,57 +117,6 @@
 
   <!-- ======== Hero 分隔装饰 ======== -->
   <div class="hero-divider"></div>
-
-  <!-- ======== AI 智能选图 ======== -->
-  <section class="ai-culling-intro" id="ai-culling-intro">
-    <div class="ai-culling-bg">
-      <div class="ai-particle ai-particle-1"></div>
-      <div class="ai-particle ai-particle-2"></div>
-      <div class="ai-particle ai-particle-3"></div>
-      <div class="ai-gridlines"></div>
-    </div>
-    <div class="ai-culling-content">
-      <div class="ai-badge">AI 智能工具</div>
-      <h2 class="ai-title">AI 智能选图</h2>
-      <p class="ai-subtitle">一键筛选最佳照片，让 AI 帮您挑出最完美的作品</p>
-      <div class="ai-features">
-        <div class="ai-feature-item">
-          <div class="ai-feature-icon">📸</div>
-          <div class="ai-feature-text">
-            <strong>智能分析</strong>
-            <span>AI 自动检测清晰度、曝光、构图质量</span>
-          </div>
-        </div>
-        <div class="ai-feature-item">
-          <div class="ai-feature-icon">⚡</div>
-          <div class="ai-feature-text">
-            <strong>极速筛选</strong>
-            <span>批量上传，秒级完成，告别手动翻图</span>
-          </div>
-        </div>
-        <div class="ai-feature-item">
-          <div class="ai-feature-icon">🎯</div>
-          <div class="ai-feature-text">
-            <strong>精准推荐</strong>
-            <span>AI 评分排序，最佳作品一目了然</span>
-          </div>
-        </div>
-      </div>
-      <div class="ai-target-users">
-        <span class="ai-target-label">适用人群：</span>
-        <span class="ai-target-tag">摄影师</span>
-        <span class="ai-target-tag">婚庆公司</span>
-        <span class="ai-target-tag">活动策划</span>
-        <span class="ai-target-tag">电商卖家</span>
-        <span class="ai-target-tag">设计师</span>
-      </div>
-      <a href="design/ai-culling.html" class="ai-cta-btn" target="_blank">
-        <span class="ai-cta-icon">🚀</span>
-        立即体验 AI 选图
-        <span class="ai-cta-arrow">→</span>
-      </a>
-    </div>
-  </section>
 
   <!-- ======== 科技展示区 ======== -->
   <section class="showcase" id="showcase">
@@ -241,6 +211,57 @@
     </div>
   </section>
 
+  <!-- ======== AI 智能选图 ======== -->
+  <section class="ai-culling-intro" id="ai-culling-intro">
+    <div class="ai-culling-bg">
+      <div class="ai-particle ai-particle-1"></div>
+      <div class="ai-particle ai-particle-2"></div>
+      <div class="ai-particle ai-particle-3"></div>
+      <div class="ai-gridlines"></div>
+    </div>
+    <div class="ai-culling-content">
+      <div class="ai-badge">AI 智能工具</div>
+      <h2 class="ai-title">AI 智能选图</h2>
+      <p class="ai-subtitle">一键筛选最佳照片，让 AI 帮您挑出最完美的作品</p>
+      <div class="ai-features">
+        <div class="ai-feature-item">
+          <div class="ai-feature-icon">📸</div>
+          <div class="ai-feature-text">
+            <strong>智能分析</strong>
+            <span>AI 自动检测清晰度、曝光、构图质量</span>
+          </div>
+        </div>
+        <div class="ai-feature-item">
+          <div class="ai-feature-icon">⚡</div>
+          <div class="ai-feature-text">
+            <strong>极速筛选</strong>
+            <span>批量上传，秒级完成，告别手动翻图</span>
+          </div>
+        </div>
+        <div class="ai-feature-item">
+          <div class="ai-feature-icon">🎯</div>
+          <div class="ai-feature-text">
+            <strong>精准推荐</strong>
+            <span>AI 评分排序，最佳作品一目了然</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-target-users">
+        <span class="ai-target-label">适用人群：</span>
+        <span class="ai-target-tag">摄影师</span>
+        <span class="ai-target-tag">婚庆公司</span>
+        <span class="ai-target-tag">活动策划</span>
+        <span class="ai-target-tag">电商卖家</span>
+        <span class="ai-target-tag">设计师</span>
+      </div>
+      <a href="design/ai-culling.html" class="ai-cta-btn" target="_blank" rel="noopener noreferrer">
+        <span class="ai-cta-icon">🚀</span>
+        立即体验 AI 选图
+        <span class="ai-cta-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
   <!-- ======== 智能工具中心 ======== -->
   <section class="tools-intro" id="toolsIntro">
     <div class="tools-intro-bg">
@@ -292,6 +313,29 @@
     </div>
   </section>
 
+  <!-- ======== 了解更多 ======== -->
+  <section class="learn-more" id="learnMore" style="position:relative;z-index:1;padding:80px 24px;text-align:center;background:linear-gradient(180deg,transparent,rgba(108,92,231,.06)));">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="tag">LEARN MORE</span>
+        <h2>了解更多<span>实用资源</span></h2>
+        <p>博客文章、常见问题，帮您了解更多实用信息</p>
+      </div>
+      <div class="resource-grid">
+        <a href="blog/index.html" class="resource-card">
+          <div class="card-icon">📝</div>
+          <h3>博客文章</h3>
+          <p>设计技巧、小程序指南、社媒运营攻略等实用文章</p>
+        </a>
+        <a href="faq.html" class="resource-card">
+          <div class="card-icon">❓</div>
+          <h3>常见问题</h3>
+          <p>设计、小程序、社媒、拼多多等服务的常见问题解答</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ======== 底部 ======== -->
   <footer class="footer" id="contact">
     <div class="footer-glow g1"></div>
@@ -337,6 +381,6 @@
   <!-- ======== 提示 Toast ======== -->
   <div class="toast" id="toast"></div>
 
-  <script src="script.js?v=20260622f"></script>
+  <script src="script.js?v=25062517"></script>
 </body>
 </html>

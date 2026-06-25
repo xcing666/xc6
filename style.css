@@ -53,7 +53,7 @@ ul { list-style:none; }
 
 /* ---------- 全屏粒子画布 ---------- */
 #particle-canvas {
-  position:fixed; inset:0; z-index:0;
+  position:fixed; inset:0; z-index:2;
   pointer-events:none;
 }
 #particle-canvas.active { pointer-events:auto; }
@@ -124,6 +124,22 @@ body::after {
   color:var(--white);
   background:linear-gradient(135deg, rgba(108,92,231,.25), rgba(0,206,201,.2));
 }
+/* 导航分组标题（移动端菜单） */
+.nav-group { display:none; }
+@media(max-width:1024px){
+  .nav-group { display:block; padding:12px 20px 6px; font-size:11px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; border-top:1px solid rgba(255,255,255,.06); margin-top:8px; }
+}
+/* 了解更多区域 */
+.learn-more { position:relative; z-index:1; padding:60px 24px; text-align:center; background:linear-gradient(180deg, transparent, rgba(108,92,231,.06)); }
+.learn-more .section-head { margin-bottom:32px; }
+.learn-more .resource-grid { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; max-width:720px; margin:0 auto; }
+.resource-card { flex:1; min-width:200px; max-width:340px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:24px 20px; text-align:center; text-decoration:none; color:inherit; transition:.35s; }
+.resource-card:hover { transform:translateY(-4px); border-color:rgba(108,92,231,.3); }
+.resource-card .card-icon { font-size:32px; margin-bottom:10px; }
+.resource-card h3 { font-size:15px; font-weight:700; color:#f0f2ff; margin-bottom:6px; }
+.resource-card p { font-size:12px; color:var(--muted); line-height:1.6; }
+@media (max-width:768px) { .learn-more { padding:48px 16px; } .resource-grid { gap:12px; max-width:100%; } .resource-card { min-width:0; max-width:none; flex:1; padding:20px 14px; border-radius:14px; } .resource-card .card-icon { font-size:28px; margin-bottom:8px; } .resource-card h3 { font-size:14px; } .resource-card p { font-size:11px; } }
+@media (max-width:480px) { .resource-card { padding:16px 12px; border-radius:12px; } .resource-card .card-icon { font-size:24px; } }
 /* 右侧 CTA 按钮 */
 .nav-cta {
   padding:8px 24px; border-radius:50px;
@@ -434,7 +450,7 @@ body::after {
 /* ========== 科技展示区（参考 xiaoice 风格）========== */
 .showcase {
   position:relative; z-index:1;
-  padding:140px 0;
+  padding:100px 0;
   overflow:hidden;
   background:var(--bg-deep);
 }
@@ -534,7 +550,7 @@ body::after {
 /* ========== 服务板块 ========== */
 .services {
   position:relative; z-index:1;
-  padding:120px 0 140px;
+  padding:80px 0 100px;
   overflow:hidden;
 }
 
@@ -672,6 +688,7 @@ body::after {
   border-radius:14px;
   background:linear-gradient(135deg, rgba(108,92,231,.2), rgba(0,206,201,.15));
   margin-bottom:4px; transition:.4s;
+  color:#fff;
 }
 .card-icon-wrap svg { width:26px; height:26px; }
 .service-card:hover .card-icon-wrap {
@@ -1587,7 +1604,7 @@ body.js-loaded .reveal.visible { opacity:1; transform:translateY(0); }
   gap:24px;
 }
 @media(max-width:1024px){ .why-grid{grid-template-columns:repeat(2,1fr);} }
-@media(max-width:600px){ .why-grid{grid-template-columns:1fr;} }
+@media(max-width:600px){ .why-grid{grid-template-columns:repeat(2,1fr);} }
 
 .why-item {
   background:var(--card-bg);
@@ -1991,7 +2008,7 @@ body.js-loaded .reveal.visible { opacity:1; transform:translateY(0); }
   max-width:1100px; margin:0 auto;
 }
 @media(max-width:1100px){ .price-grid{grid-template-columns:repeat(2,1fr);} }
-@media(max-width:600px){ .price-grid{grid-template-columns:1fr;} }
+@media(max-width:600px){ .price-grid{grid-template-columns:repeat(2,1fr);} }
 
 .price-card {
   position:relative;
@@ -2790,5 +2807,30 @@ header, section, footer, .hero, .sub-hero, .showcase, .services, .price-section,
   .ti-icon { width:38px; height:38px; font-size:20px; margin-bottom:10px; border-radius:10px; }
   .ti-card h3 { font-size:14px; }
   .ti-card p { font-size:12px; }
+}
+
+
+/* ========== 减少动画偏好支持（无障碍） ========== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-orb, .showcase-orb, .sub-hero-orb, .footer-glow,
+  .showcase-gridlines, .tools-hero::before {
+    animation: none !important;
+  }
+}
+
+/* ========== 打印友好样式 ========== */
+@media print {
+  .nav, .back-to-top, .scroll-progress, .hero-orb, .showcase-orb,
+  .sub-hero-orb, .footer-glow, .showcase-gridlines, .tools-hero::before,
+  #particle-canvas, .hero-bg-img { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .service-card, .tool-card, .ti-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #ddd !important; }
+  a { text-decoration: underline !important; color: #000 !important; }
 }
 

@@ -3,77 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="兴程网络拼多多助力服务 — 支持砍价助力、现金红包、好友助力等所有拼多多活动，10人低至3.5元起，快速到账。" />
   <title>拼多多助力 — 兴程网络</title>
-  <link rel="stylesheet" href="style.css?v=20260622f" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css?v=25062517" />
   <style>
     body::before, body::after { z-index: -1 !important; }
     body { position: relative; }
-    .redirect-page {
-      min-height: 100vh;
-      background: #0b0f2e;
-      position: relative;
-      z-index: 10;
-      padding-top: 64px; /* 避开 fixed 导航栏 */
+    .service-page { min-height:100vh; background:var(--bg); position:relative; z-index:10; padding-top:64px; }
+    .service-hero { padding:80px 24px 60px; text-align:center; background:linear-gradient(180deg, rgba(232,67,147,.08), transparent); }
+    .service-hero h1 { font-size:clamp(28px,5vw,40px); font-weight:800; color:#f0f2ff; margin-bottom:16px; }
+    .service-hero p { color:var(--muted); font-size:16px; max-width:600px; margin:0 auto; line-height:1.8; }
+
+    .service-section { padding:60px 24px; max-width:1100px; margin:0 auto; }
+    .service-section h2 { font-size:24px; font-weight:700; color:#f0f2ff; margin-bottom:32px; text-align:center; }
+
+    .feature-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:40px; }
+    @media (max-width:900px) { .feature-grid { grid-template-columns:repeat(2,1fr); gap:16px; } }
+    @media (max-width:480px) { .feature-grid { grid-template-columns:repeat(2,1fr); gap:12px; } }
+    .feature-item { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:24px 16px; text-align:center; transition:.35s; }
+    .feature-item:hover { transform:translateY(-4px); border-color:rgba(232,67,147,.3); }
+    .feature-item .icon { font-size:36px; margin-bottom:10px; }
+    .feature-item h3 { font-size:15px; font-weight:700; color:#f0f2ff; margin-bottom:6px; }
+    .feature-item p { color:var(--muted); font-size:13px; line-height:1.5; }
+
+    .price-compare { display:flex; flex-wrap:wrap; gap:16px; margin-top:24px; justify-content:center; }
+    .price-card { flex:0 1 calc(33.333% - 12px); max-width:calc(33.333% - 12px); background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:24px; text-align:center; transition:.35s; box-sizing:border-box; }
+    @media (max-width:900px) { .price-card { flex:0 1 calc(50% - 12px); max-width:calc(50% - 12px); } }
+    @media (max-width:480px) { .price-card { flex:0 1 calc(50% - 8px); max-width:calc(50% - 8px); padding:20px 12px; } }
+    .price-card:hover { border-color:rgba(108,92,231,.3); box-shadow:0 8px 30px rgba(108,92,231,.12); }
+    .price-card .people { font-size:32px; font-weight:800; color:#f0f2ff; }
+    .price-card .people span { font-size:16px; font-weight:400; color:var(--muted); }
+    .price-card .price-tag { font-size:24px; font-weight:700; color:var(--c2); margin:12px 0; }
+    .price-card .stock { font-size:13px; color:#00d084; margin-bottom:16px; }
+    .price-card .buy-btn { display:inline-block; padding:10px 32px; background:linear-gradient(135deg, #6c5ce7, #fd79a8); color:#fff; border-radius:50px; text-decoration:none; font-weight:700; font-size:14px; transition:.3s; }
+    .price-card .buy-btn:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(108,92,231,.3); }
+
+    .howto-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:24px; }
+    .howto-step { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:28px 20px; text-align:center; }
+    .howto-step .num { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--c1),var(--c2)); color:#fff; font-weight:700; font-size:18px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+    .howto-step h4 { font-size:16px; font-weight:700; color:#f0f2ff; margin-bottom:8px; }
+    .howto-step p { color:var(--muted); font-size:13px; line-height:1.7; }
+
+    .notice-box { background:rgba(0,208,132,.05); border:1px solid rgba(0,208,132,.15); border-radius:16px; padding:24px; margin-top:40px; }
+    .notice-box h3 { color:#00d084; font-size:16px; font-weight:700; margin-bottom:12px; }
+    .notice-box ul { color:var(--muted); font-size:14px; line-height:2; padding-left:20px; }
+
+    .cta-section { text-align:center; padding:60px 24px; background:linear-gradient(180deg, transparent, rgba(232,67,147,.06)); }
+    .cta-btn { display:inline-block; padding:16px 56px; background:linear-gradient(135deg, #6c5ce7, #fd79a8); color:#fff; border-radius:50px; text-decoration:none; font-weight:700; font-size:16px; transition:.3s; box-shadow:0 4px 20px rgba(108,92,231,.3); }
+    .cta-btn:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(108,92,231,.5); }
+
+    @media (max-width:900px) {
+      .service-hero { padding:60px 20px 40px; }
+      .service-section { padding:40px 16px; }
+      .howto-steps { grid-template-columns:repeat(2,1fr); gap:16px; }
+      .howto-step { padding:24px 16px; }
     }
-    .redirect-main {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 64px);
-      padding: 40px 24px;
-    }
-    .redirect-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 48px 40px;
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-    }
-    .redirect-icon {
-      font-size: 64px;
-      margin-bottom: 24px;
-    }
-    .redirect-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: #f0f2ff;
-      margin-bottom: 12px;
-    }
-    .redirect-desc {
-      color: #8a96c0;
-      font-size: 14px;
-      line-height: 1.8;
-      margin-bottom: 32px;
-    }
-    .redirect-btn {
-      display: inline-block;
-      padding: 14px 48px;
-      background: linear-gradient(135deg, #6c5ce7, #fd79a8);
-      color: #fff;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 16px;
-      transition: all 0.3s;
-      margin-bottom: 24px;
-    }
-    .redirect-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(108,92,231,0.4);
-    }
-    .redirect-note {
-      color: #5a6490;
-      font-size: 12px;
-      line-height: 1.8;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 20px;
-      margin-top: 8px;
+    @media (max-width:480px) {
+      .howto-steps { grid-template-columns:repeat(2,1fr); gap:12px; }
+      .howto-step { padding:20px 12px; }
+      .howto-step h4 { font-size:14px; }
+      .howto-step p { font-size:12px; }
     }
   </style>
 </head>
-<body class="redirect-page">
+<body class="service-page">
 
   <!-- 导航 -->
   <nav class="nav" id="nav">
@@ -85,33 +80,172 @@
         <li><a href="miniprogram/index.html">小程序开发</a></li>
         <li><a href="social-media.html">社交媒体运营</a></li>
         <li><a href="pdd-assist.html" class="active">拼多多助力</a></li>
-        <li><a href="tools/index.html">智能工具</a></li>
+        <li><a href="tools/index.html">智能工具中心</a></li>
+        <li><a href="design/ai-culling.html">AI智能选图</a></li>
+        
+        <li class="nav-group">更多</li>
+        <li><a href="blog/index.html">博客文章</a></li>
+        <li><a href="faq.html">常见问题</a></li>
+        
       </ul>
-      <button class="nav-ham" id="navHam" aria-label="菜单">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
-  <!-- 主内容 -->
-  <div class="redirect-main">
-    <div class="redirect-card">
-      <div class="redirect-icon">🎯</div>
-      <h2 class="redirect-title">拼多多助力</h2>
-      <p class="redirect-desc">
-        砍价助力 · 现金红包 · 好友助力<br>
-        点击下方按钮，跳转至服务页面
-      </p>
-      <a href="https://1pdd.ccuse.cn/" target="_blank" class="redirect-btn" id="openBtn">立即访问 →</a>
-      <div class="redirect-note">
-        ⚠️ 温馨提示<br>
-        本链接为正规业务合作渠道，非恶意链接<br>
-        将在浏览器新标签页中打开，请放心访问<br>
-        如有疑问请联系客服微信：xcing888
+  <!-- Hero -->
+  <section class="service-hero">
+    <h1>🎯 拼多多助力服务</h1>
+    <p>支持拼多多所有活动助力 — 砍价免费拿、天天领现金、好友助力等。真人助力、快速到账、价格实惠。</p>
+  </section>
+
+  <!-- 服务特色 -->
+  <section class="service-section">
+    <h2>为什么选择我们</h2>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="icon">⚡</div>
+        <h3>快速到账</h3>
+        <p>特价通道24小时内完成，秒单通道更快，急需助力不等待</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">💰</div>
+        <h3>价格实惠</h3>
+        <p>10人助力低至3.5元，百人助力仅28.8元，全网性价比之选</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">✅</div>
+        <h3>支持所有活动</h3>
+        <p>砍价助力、现金红包、天天领现金、好友助力，全部支持</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">🛡️</div>
+        <h3>安全有保障</h3>
+        <p>正规渠道助力，无封号风险，售后有问题随时联系客服</p>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- 价格表 -->
+  <section class="service-section" style="border-top:1px solid rgba(255,255,255,.06);">
+    <h2>助力价格一览</h2>
+    <p style="text-align:center; color:var(--muted); font-size:14px; margin-bottom:32px;">两种通道可选，满足不同需求</p>
+
+    <div style="margin-bottom:40px;">
+      <h3 style="font-size:18px; font-weight:700; color:#f0f2ff; margin-bottom:20px; text-align:center;">🚀 特价通道（24小时）</h3>
+      <div class="price-compare">
+        <div class="price-card">
+          <div class="people">10<span>人助力</span></div>
+          <div class="price-tag">¥3.5</div>
+          <div class="stock">✓ 库存充足</div>
+          <a href="https://1pdd.ccuse.cn/?mod=buy&tid=3882" target="_blank" rel="noopener noreferrer" class="buy-btn">立即购买</a>
+        </div>
+        <div class="price-card">
+          <div class="people">30<span>人助力</span></div>
+          <div class="price-tag">¥8.5</div>
+          <div class="stock">✓ 库存充足</div>
+          <a href="https://1pdd.ccuse.cn/?mod=buy&tid=3883" target="_blank" rel="noopener noreferrer" class="buy-btn">立即购买</a>
+        </div>
+        <div class="price-card">
+          <div class="people">50<span>人助力</span></div>
+          <div class="price-tag">¥12.5</div>
+          <div class="stock">✓ 库存充足</div>
+          <a href="https://1pdd.ccuse.cn/?mod=buy&tid=3884" target="_blank" rel="noopener noreferrer" class="buy-btn">立即购买</a>
+        </div>
+        <div class="price-card">
+          <div class="people">100<span>人助力</span></div>
+          <div class="price-tag">¥28.8</div>
+          <div class="stock">✓ 库存充足</div>
+          <a href="https://1pdd.ccuse.cn/?mod=buy&tid=3885" target="_blank" rel="noopener noreferrer" class="buy-btn">立即购买</a>
+        </div>
+        <div class="price-card">
+          <div class="people">200<span>人助力</span></div>
+          <div class="price-tag">¥48.8</div>
+          <div class="stock">✓ 库存充足</div>
+          <a href="https://1pdd.ccuse.cn/?mod=buy&tid=3886" target="_blank" rel="noopener noreferrer" class="buy-btn">立即购买</a>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="font-size:18px; font-weight:700; color:#f0f2ff; margin-bottom:20px; text-align:center;">⚡ 秒单高质量通道（更快）</h3>
+      <div class="price-compare">
+        <div class="price-card">
+          <div class="people">10<span>人助力</span></div>
+          <div class="price-tag">¥4.5</div>
+          <div class="stock">✓ 库存充足</div>
+          <a href="https://1pdd.ccuse.cn/?mod=buy&tid=3888" target="_blank" rel="noopener noreferrer" class="buy-btn">立即购买</a>
+        </div>
+        <div class="price-card">
+          <div class="people">30<span>人助力</span></div>
+          <div class="price-tag">¥10.0</div>
+          <div class="stock">✓ 库存充足</div>
+          <a href="https://1pdd.ccuse.cn/?mod=buy&tid=3889" target="_blank" rel="noopener noreferrer" class="buy-btn">立即购买</a>
+        </div>
+        <div class="price-card">
+          <div class="people">50<span>人助力</span></div>
+          <div class="price-tag">¥16.8</div>
+          <div class="stock">✓ 库存充足</div>
+          <a href="https://1pdd.ccuse.cn/?mod=buy&tid=3890" target="_blank" rel="noopener noreferrer" class="buy-btn">立即购买</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 使用流程 -->
+  <section class="service-section" style="border-top:1px solid rgba(255,255,255,.06);">
+    <h2>如何使用</h2>
+    <div class="howto-steps">
+      <div class="howto-step">
+        <div class="num">1</div>
+        <h4>复制助力链接</h4>
+        <p>打开拼多多APP，进入需要助力的活动页面，点击"邀请好友"，复制助力链接。</p>
+      </div>
+      <div class="howto-step">
+        <div class="num">2</div>
+        <h4>选择助力人数</h4>
+        <p>根据活动需求选择合适的助力人数和通道类型（特价/秒单），点击购买。</p>
+      </div>
+      <div class="howto-step">
+        <div class="num">3</div>
+        <h4>粘贴链接支付</h4>
+        <p>在下单页面粘贴您的拼多多助力链接，完成支付后系统将自动开始处理。</p>
+      </div>
+      <div class="howto-step">
+        <div class="num">4</div>
+        <h4>查看进度</h4>
+        <p>在订单中心查看助力进度，完成后拼多多APP会收到助力通知，即可领取奖励。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 安全提示 -->
+  <section class="service-section">
+    <div class="notice-box">
+      <h3>✅ 使用须知</h3>
+      <ul>
+        <li>请确保复制的助力链接在有效期内，过期链接无法完成助力</li>
+        <li>每个拼多多活动对助力次数有限制，建议根据活动要求选择合适人数</li>
+        <li>特价通道24小时内完成，秒单通道更快，如需加急请选择秒单通道</li>
+        <li>助力完成后请及时在拼多多APP确认，如未到账请联系客服处理</li>
+        <li>同一活动链接不要重复提交，避免系统判定为异常</li>
+        <li style="color:#ffc107;">⚠️ 点击"立即购买"将跳转至外部下单平台，平台可能会有弹窗提示，属正常现象，关闭即可继续操作</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 前往下单 -->
+  <section class="cta-section">
+    <h2 style="font-size:24px; font-weight:700; color:#f0f2ff; margin-bottom:16px;">还在为拼多多活动差助力发愁？</h2>
+    <p style="color:var(--muted); font-size:15px; margin-bottom:32px;">点击下方按钮前往下单平台，10人助力低至3.5元，快速搞定活动</p>
+    <a href="https://1pdd.ccuse.cn/" target="_blank" rel="noopener noreferrer" class="cta-btn">前往下单平台 →</a>
+    <p style="color:#5a6490; font-size:12px; margin-top:16px;">将在浏览器新标签页中打开 · 如有疑问请联系微信：xcing888</p>
+  </section>
+
+  <footer class="footer" style="padding:40px 24px;text-align:center;background:var(--bg-deep);border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1;">
+    <p style="color:rgba(255,255,255,.4);font-size:13px;">© 2026 <span style="color:var(--c1);font-weight:700;">兴程网络</span> · 保留所有权利</p>
+  </footer>
 
   <script src="script.js"></script>
+  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
 </body>
 </html>

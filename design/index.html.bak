@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>广告平面图设计 — 兴程网络</title>
+  <link rel="stylesheet" href="../style.css?v=20260622q" />
+</head>
+<body>
+
+  <!-- ======== 导航 ======== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="index.html" class="active">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="../tools/index.html">智能工具</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- ======== Hero ======== -->
+  <header class="sub-hero" id="subHero">
+    <div class="sub-hero-bg">
+      <div class="sub-hero-orb o1"></div>
+      <div class="sub-hero-orb o2"></div>
+    </div>
+    <div class="sub-hero-inner">
+      <p class="sub-hero-tag">GRAPHIC DESIGN</p>
+      <h1 class="sub-hero-title">广告<span>平面图设计</span></h1>
+      <p class="sub-hero-desc">用视觉语言讲述品牌故事 · 让每一张图都为转化负责</p>
+      <div class="sub-hero-actions">
+        <a href="#contact-bottom" class="hero-btn">免费咨询</a>
+        <a href="../index.html" class="hero-btn-outline">返回首页</a>
+      </div>
+    </div>
+    <!-- 右侧装饰卡片 + 浮动设计元素 -->
+    <div class="sub-hero-mockup">
+      <div class="mockup-card mc1">🎨 品牌 VI</div>
+      <div class="mockup-card mc2">🖼️ 海报设计</div>
+      <div class="mockup-card mc3">📦 包装设计</div>
+      <div class="mockup-card mc4">📱 社媒配图</div>
+      <!-- 浮动设计装饰 -->
+      <div class="design-deco">
+        <div class="deco-ruler-h"></div>
+        <div class="deco-ruler-v"></div>
+        <div class="deco-pen-stroke"></div>
+        <div class="deco-palette"><span class="dp1"></span><span class="dp2"></span><span class="dp3"></span><span class="dp4"></span><span class="dp5"></span><span class="dp6"></span></div>
+        <div class="deco-tri-d"></div>
+        <div class="deco-diamond-d"></div>
+      </div>
+    </div>
+  </head  </div>
+  </div>
+  </header>
+
+  <!-- ======== 明码标价价格表 ======== -->
+  <section class="price-section" id="pricing">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag">PRICING</span>
+        <h2>明码标价 · 透明消费</h2>
+        <p>所有服务价格公开透明，无隐形消费，满意再付款</p>
+      </div>
+      <div class="price-grid">
+        <div class="price-card">
+          <div class="price-icon">🎨</div>
+          <h3>海报/宣传单设计</h3>
+          <div class="price-amount">¥<span>100</span><small>/张</small></div>
+          <ul class="price-features">
+            <li>✅ 高清源文件交付</li>
+            <li>✅ 2 次免费修改</li>
+            <li>✅ 支持 AI / PSD / PNG</li>
+            <li>✅ 24小时内交付</li>
+          </ul>
+          <a href="#contact-bottom" class="price-btn">立即下单</a>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">人气推荐</div>
+          <div class="price-icon">🏷️</div>
+          <h3>Logo 品牌设计</h3>
+          <div class="price-amount">¥<span>300</span><small>起</small></div>
+          <ul class="price-features">
+            <li>✅ 3 款初稿方案</li>
+            <li>✅ 无限次修改至满意</li>
+            <li>✅ 全套 VI 源文件</li>
+            <li>✅ 商业授权书</li>
+          </ul>
+          <a href="#contact-bottom" class="price-btn">立即下单</a>
+        </div>
+        <div class="price-card">
+          <div class="price-icon">📦</div>
+          <h3>包装/印刷设计</h3>
+          <div class="price-amount">¥<span>500</span><small>起</small></div>
+          <ul class="price-features">
+            <li>✅ 包装展开图 + 3D 效果图</li>
+            <li>✅ 印刷厂对接服务</li>
+            <li>✅ 免费打样指导</li>
+            <li>✅ 源文件完整交付</li>
+          </ul>
+          <a href="#contact-bottom" class="price-btn">立即下单</a>
+        </div>
+        <div class="price-card">
+          <div class="price-icon">🎬</div>
+          <h3>VI 全套设计</h3>
+          <div class="price-amount">¥<span>2000</span><small>起</small></div>
+          <ul class="price-features">
+            <li>✅ Logo + 名片 + 信封 + 文件夹</li>
+            <li>✅ 品牌规范手册</li>
+            <li>✅ 社交媒体全套配图</li>
+            <li>✅ 终身免费咨询</li>
+          </ul>
+          <a href="#contact-bottom" class="price-btn">立即下单</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 实时订单动态（标题独立区域）======== -->
+  <div class="fake-comments-title-wrap">
+    <div class="fake-comments-header">
+      <span class="fc-pulse-dot"></span>
+      <h3 class="fc-title">实时订单动态</h3>
+      <span class="fc-subtitle">—— 客户正在下单 ——</span>
+    </div>
+  </div>
+
+  <!-- 实时订单动态（弹幕区） -->
+  <section class="fake-comments" id="fakeComments">
+  </section>
+
+  <!-- ======== 客户案例展示（图片墙）======== -->
+  <section class="cases-section" id="cases">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag">CASE STUDY</span>
+        <h2>客户案例展示</h2>
+        <p>部分真实设计作品 · 悬停可放大查看</p>
+      </div>
+
+      <!-- 全部30张案例图 —— 密集拼贴墙（12列固定网格，30张全引入） -->
+      <div class="cases-collage-wrap">
+      <div class="cases-collage-scale" id="casesScale">
+      <div class="cases-collage" id="casesWall">
+
+        <!-- 左上大图 + 右侧中小图 -->
+        <div class="case-piece" style="--w:3;--h:4"><img src="../cases/06-brand-showcase-zuihoucanba.png" alt="品牌展示" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/01-logo-vi-lvqidaijia.png" alt="Logo VI" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:4"><img src="../cases/03-brochure-chengying.png" alt="折页" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/04-poster-zuihoucanba.png" alt="海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:1;--h:2"><img src="../cases/05-qrcode-cards.png" alt="二维码卡" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:4"><img src="../cases/11-packaging-zuihoucanba.png" alt="包装设计" loading="lazy"/></div>
+
+        <!-- 中间大图 + 周围中小图 -->
+        <div class="case-piece" style="--w:3;--h:3"><img src="../cases/09-miniprogram-games.png" alt="游戏小程序" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/10-poster-event-zuihoucanba.png" alt="活动海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/02-flyer-lvqidaijia.png" alt="宣传单" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/16-flyer-health.png" alt="健康传单" loading="lazy"/></div>
+        <div class="case-piece" style="--w:1;--h:2"><img src="../cases/12-welcome-signs.png" alt="欢迎牌" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/17-poster-yoga.jpg" alt="瑜伽海报" loading="lazy"/></div>
+
+        <!-- 中间下部：大图 + 混排 -->
+        <div class="case-piece" style="--w:2;--h:3"><img src="../cases/14-brochure-energy.png" alt="折页" loading="lazy"/></div>
+        <div class="case-piece" style="--w:3;--h:3"><img src="../cases/19-flyer-restaurant.png" alt="餐饮传单" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/18-poster-breakfast.jpg" alt="早餐海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:3"><img src="../cases/23-tickets-designs.jpg" alt="门票设计" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/13-poster-fitness.png" alt="健身海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:1;--h:2"><img src="../cases/24-stage-realestate.png" alt="舞台" loading="lazy"/></div>
+
+        <!-- 底部：铺满右下角 -->
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/07-miniprogram-zuihoucanba.png" alt="小程序" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/08-miniprogram-wine.png" alt="红酒小程序" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/15-fold-school.png" alt="学校折页" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/21-entrance-waterpark.png" alt="水乐园入口" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/22-tickets-photo.png" alt="门票" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/25-decoration-cny.png" alt="春节装饰" loading="lazy"/></div>
+
+        <!-- 第5行：合计12 -->
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/26-culturewall-party.png" alt="文化墙" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/27-activityroom-party.png" alt="活动室" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/28-meetingroom-layout.png" alt="会议室" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/29-poster-youthcenter.png" alt="青年中心海报" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:2"><img src="../cases/30-pillar-youthcenter.png" alt="青年中心柱子" loading="lazy"/></div>
+        <div class="case-piece" style="--w:2;--h:1"><img src="../cases/20-flyer-petshop.png" alt="宠物店传单" loading="lazy"/></div>
+
+      </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 图片放大查看器（点击任意图片触发） -->
+  <div class="case-viewer" id="caseViewer" onclick="closeCaseViewer(event)">
+    <button class="case-viewer-close" aria-label="关闭">✕</button>
+    <img class="case-viewer-img" id="caseViewerImg" src="" alt="" />
+    <div class="case-viewer-caption" id="caseViewerCaption"></div>
+  </div>
+
+  <!-- ======== 为什么选择我们 ======== -->
+  <section class="why-choose-us">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag">WHY US</span>
+        <h2>为什么选择兴程网络</h2>
+        <p>我们用心做好每一个设计，让您省心、放心、安心</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-item">
+          <div class="why-icon">🚀</div>
+          <h3>快速交付</h3>
+          <p>普通设计24小时内交付，加急订单最快2小时完成</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🔄</div>
+          <h3>免费修改</h3>
+          <p>不满意免费修改，直到您满意为止，不限次数</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">💰</div>
+          <h3>明码标价</h3>
+          <p>价格透明公开，无隐形消费，性价比超高</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🛡️</div>
+          <h3>售后保障</h3>
+          <p>交付后30天内免费调整，让您无后顾之忧</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+<!-- ======== 底部联系方式锚点 ======== -->
+  <div class="contact-anchor" id="contact-bottom"></div>
+
+  <!-- ======== 底部 ======== -->
+  <footer class="footer">
+    <div class="footer-glow g1"></div>
+    <div class="footer-glow g2"></div>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>兴程<span>网络</span></h3>
+          <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+        </div>
+        <div class="footer-info">
+          <h4>联系方式</h4>
+          <ul>
+            <li>QQ：738874448</li>
+            <li>微信：xcing888</li>
+            <li>邮箱：738874448@qq.com</li>
+          </ul>
+        </div>
+        <div class="footer-info">
+          <h4>服务项目</h4>
+          <ul>
+            <li>广告平面图设计</li>
+            <li>微信小程序开发</li>
+            <li>社交媒体运营</li>
+            <li>拼多多助力</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 <span>兴程网络</span> · 保留所有权利</p>
+        <p style="margin-top:8px;"><a href="../index.html" style="color:var(--c2);">← 返回首页</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script.js?v=20260622q"></script>
+  <!-- 兜底：确保虚假评论一定渲染 -->
+  <script>window.addEventListener('load', () => { setTimeout(() => { if (typeof initFakeComments === 'function') initFakeComments(); }, 200); });</script>
+</body>
+</html>

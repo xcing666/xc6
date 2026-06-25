@@ -1,12 +1,51 @@
 /* =============================================
    兴程网络 — 交互脚本（含粒子画布系统）
    ============================================= */
+
+/* =========== 节流函数 =========== */
+function throttle(fn, delay) {
+  var last = 0, timer = null;
+  return function() {
+    var ctx = this, args = arguments, now = Date.now();
+    if (now - last >= delay) {
+      clearTimeout(timer);
+      last = now;
+      fn.apply(ctx, args);
+    } else {
+      clearTimeout(timer);
+      timer = setTimeout(function() { last = now; fn.apply(ctx, args); }, delay - (now - last));
+    }
+  };
+}
+
+
+/* =========== 复制到剪贴板 (P0 修复) =========== */
+window.copyText = function(text, btn) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      if (btn) { var o = btn.textContent; btn.textContent = '已复制 ✓'; setTimeout(function(){ btn.textContent = o; }, 1500); }
+    }).catch(function() { fallbackCopy(text, btn); });
+  } else {
+    fallbackCopy(text, btn);
+  }
+};
+function fallbackCopy(text, btn) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); if (btn) { var o = btn.textContent; btn.textContent = '已复制 ✓'; setTimeout(function(){ btn.textContent = o; }, 1500); } } catch(e) {}
+  document.body.removeChild(ta);
+}
+
 /* 标记 JS 已加载，触发 CSS 滚动揭示动画 */
 document.body.classList.add('js-loaded');
 
+
 /* =========== 粒子画布系统（仅首页） =========== */
 const canvas = document.getElementById('particle-canvas');
-let ctx, W, H, particles = [], animId;
+let ctx, W, H, particles = [], ambientParticles = [], animId, ambientTime = 0;
 if (canvas) {
   ctx = canvas.getContext('2d');
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -19,28 +58,131 @@ const SERVICE_ICONS = {
   pdd:         ['💰','🎁','✅','🤝','🏷️','🧧','🎯'],
 };
 
+/* 粒子类定义 */
+function Particle(x, y, icons) {
+  this.x = x;
+  this.y = y;
+  const iconArr = Array.isArray(icons) ? icons : [icons];
+  this.icon = iconArr[Math.floor(Math.random() * iconArr.length)];
+  this.size = 16 + Math.random() * 18;
+  this.vx = (Math.random() - 0.5) * 8;
+  this.vy = (Math.random() - 1) * 8 - 2;
+  this.life = 1;
+  this.decay = 0.008 + Math.random() * 0.012;
+  this.rot = Math.random() * Math.PI * 2;
+  this.rotSpeed = (Math.random() - 0.5) * 0.2;
+  this.gravity = 0.15;
+}
+Particle.prototype.update = function() {
+  this.x += this.vx;
+  this.y += this.vy;
+  this.vy += this.gravity;
+  this.vx *= 0.98;
+  this.rot += this.rotSpeed;
+  this.life -= this.decay;
+};
+Particle.prototype.draw = function() {
+  if (this.life <= 0) return;
+  ctx.save();
+  ctx.translate(this.x, this.y);
+  ctx.rotate(this.rot);
+  ctx.globalAlpha = Math.max(0, this.life);
+  ctx.fillStyle = "rgba(255,255,255," + Math.max(0, this.life) + ")";
+  ctx.font = this.size + 'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(this.icon, 0, 0);
+  ctx.restore();
+};
+
+/* 环境跳动粒子（常驻少量） */
+function AmbientParticle() {
+  this.reset();
+}
+AmbientParticle.prototype.reset = function() {
+  this.x = Math.random() * window.innerWidth;
+  this.y = Math.random() * window.innerHeight;
+  this.baseY = this.y;
+  this.size = 12 + Math.random() * 8;
+  this.speed = 0.5 + Math.random() * 1.5;
+  this.phase = Math.random() * Math.PI * 2;
+  this.amp = 8 + Math.random() * 20;
+  this.drift = (Math.random() - 0.5) * 0.3;
+  this.rot = Math.random() * Math.PI * 2;
+  this.rotSpeed = (Math.random() - 0.5) * 0.015;
+  this.alpha = 0.4 + Math.random() * 0.3;
+  const icons = ['✨','◆','●','◇','▪','·','⭑','💫','◉','⬟'];
+  this.icon = icons[Math.floor(Math.random() * icons.length)];
+};
+AmbientParticle.prototype.update = function() {
+  this.x += this.drift;
+  this.baseY += this.drift * 0.5;
+  this.y = this.baseY + Math.sin(ambientTime * this.speed + this.phase) * this.amp;
+  this.rot += this.rotSpeed;
+  if (this.x < -20) this.x = window.innerWidth + 20;
+  if (this.x > window.innerWidth + 20) this.x = -20;
+  if (this.baseY < -40) this.baseY = window.innerHeight + 40;
+  if (this.baseY > window.innerHeight + 40) this.baseY = -40;
+};
+AmbientParticle.prototype.draw = function() {
+  ctx.save();
+  ctx.translate(this.x, this.y);
+  ctx.rotate(this.rot);
+  ctx.globalAlpha = this.alpha;
+  ctx.fillStyle = 'rgba(255,255,255,' + this.alpha + ')';
+  ctx.shadowBlur = 12;
+  ctx.shadowColor = 'rgba(255,255,255,0.6)';
+  ctx.font = this.size + 'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(this.icon, 0, 0);
+  ctx.restore();
+};
+
+
+
+
+
 /* 初始化画布尺寸 */
 function resizeCanvas() {
   W = canvas.width  = window.innerWidth  * DPR;
   H = canvas.height = window.innerHeight * DPR;
   canvas.style.width  = window.innerWidth  + 'px';
   canvas.style.height = window.innerHeight + 'px';
-  ctx.scale(DPR, DPR);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
-window.addEventListener('resize', () => { resizeCanvas(); });
+window.addEventListener('resize', throttle(function() { resizeCanvas(); }, 200));
 resizeCanvas();
+
+/* 初始化环境粒子（少量常驻） */
+function initAmbient() {
+  ambientParticles = [];
+  const count = window.innerWidth < 768 ? 8 : 15;
+  for (let i = 0; i < count; i++) {
+    ambientParticles.push(new AmbientParticle());
+  }
+}
+initAmbient();
+window.addEventListener('resize', throttle(initAmbient, 500));
+
+/* 页面可见性控制：切后台暂停动画 */
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden && animId) {
+    cancelAnimationFrame(animId);
+    animId = null;
+  } else if (!document.hidden) {
+    ensureLoop();
+  }
+});
 
 /* 主动画循环 */
 function animate() {
   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  ambientTime += 0.016;
+  ambientParticles.forEach(p => { p.update(); p.draw(); });
   particles = particles.filter(p => p.life > 0);
   particles.forEach(p => { p.update(); p.draw(); });
-  if (particles.length > 0) {
-    animId = requestAnimationFrame(animate);
-  } else {
-    cancelAnimationFrame(animId);
-    animId = null;
-  }
+  animId = requestAnimationFrame(animate);
 }
 function ensureLoop() {
   if (!animId) animate();
@@ -53,7 +195,7 @@ document.querySelectorAll('.service-card').forEach(card => {
     const rect = card.getBoundingClientRect();
     const service = card.dataset.service || 'design';
     const icons = SERVICE_ICONS[service] || SERVICE_ICONS.design;
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 8; i++) {
       const x = rect.left + Math.random() * rect.width;
       const y = rect.top  + rect.height * 0.3;
       particles.push(new Particle(x, y, icons));
@@ -90,6 +232,13 @@ function initMobileMenu() {
   navHam.addEventListener('click', () => {
     navMenu.classList.toggle('open');
     navHam.classList.toggle('active');
+  });
+  /* Issue 13: 移动端菜单点击链接后自动关闭 */
+  navMenu.querySelectorAll("a").forEach(function(link) {
+    link.addEventListener("click", function() {
+      navMenu.classList.remove("open");
+      navHam.classList.remove("active");
+    });
   });
 }
 initMobileMenu();
@@ -291,7 +440,11 @@ function initFakeComments() {
       animation: fc-pop-in 0.6s cubic-bezier(.34,1.56,.64,1) both,
                  fc-float-${floatIdx} var(--float-dur) var(--float-delay) ease-in-out infinite;
     `;
-    div.innerHTML = `<span class="fc-name">${m.name}</span><span class="fc-action">${m.action}</span><span class="fc-item-name">${m.item}</span><span class="fc-time">${m.time}</span>`;
+    var sp1=document.createElement('span');sp1.className='fc-name';sp1.textContent=m.name;
+    var sp2=document.createElement('span');sp2.className='fc-action';sp2.textContent=m.action;
+    var sp3=document.createElement('span');sp3.className='fc-item-name';sp3.textContent=m.item;
+    var sp4=document.createElement('span');sp4.className='fc-time';sp4.textContent=m.time;
+    div.appendChild(sp1);div.appendChild(sp2);div.appendChild(sp3);div.appendChild(sp4);
     el.appendChild(div);
 
     // 最多保留 MAX_ON_SCREEN 条，避免无限累积
@@ -368,8 +521,10 @@ function initFakeComments() {
     }
   }
 
-  window.addEventListener('resize', fitScale);
-  window.addEventListener('load', function() { setTimeout(fitScale, 200); });
+  window.addEventListener('resize', throttle(fitScale, 200));
+  window.addEventListener('load', function() {
+    setTimeout(fitScale, 200);
+  });
   setTimeout(fitScale, 300);
 })();
 

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="小程序开发常见问题与解决方案 — 从注册到上线的完整避坑手册。" />
+  <title>小程序开发避坑手册 — 兴程网络博客</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="stylesheet" href="../style.css?v=25062517" />
+  <style>
+    body::before, body::after { z-index: -1 !important; }
+    body { position: relative; }
+    .article-page { min-height:100vh; background:var(--bg); position:relative; z-index:10; padding-top:64px; }
+    .article-hero { padding:60px 24px 40px; text-align:center; background:linear-gradient(180deg, rgba(108,92,231,.08), transparent); }
+    .article-hero .tag { display:inline-block; padding:4px 14px; background:rgba(108,92,231,.15); color:var(--c1); border-radius:50px; font-size:12px; margin-bottom:16px; }
+    .article-hero h1 { font-size:clamp(22px,4vw,32px); font-weight:800; color:#f0f2ff; max-width:800px; margin:0 auto 16px; line-height:1.4; }
+    .article-hero .meta { color:#5a6490; font-size:13px; }
+    .article-body { padding:40px 24px 80px; max-width:760px; margin:0 auto; color:var(--muted); font-size:15px; line-height:2; }
+    .article-body h2 { font-size:20px; font-weight:700; color:#f0f2ff; margin:40px 0 16px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,.08); }
+    .article-body h3 { font-size:17px; font-weight:700; color:#f0f2ff; margin:28px 0 12px; }
+    .article-body p { margin-bottom:16px; }
+    .article-body ul, .article-body ol { padding-left:24px; margin-bottom:16px; }
+    .article-body li { margin-bottom:8px; }
+    .article-body .tip { background:rgba(108,92,231,.06); border-left:3px solid var(--c1); padding:16px 20px; border-radius:0 12px 12px 0; margin:24px 0; color:#f0f2ff; font-size:14px; }
+    .article-body .highlight { color:var(--c2); font-weight:600; }
+    .article-nav { display:flex; justify-content:space-between; padding:24px; max-width:760px; margin:0 auto; border-top:1px solid rgba(255,255,255,.08); }
+    .article-nav a { color:var(--c1); text-decoration:none; font-size:14px; font-weight:600; }
+    @media (max-width:640px) { .article-hero { padding:40px 16px 30px; } .article-body { padding:30px 16px 60px; } }
+  </style>
+</head>
+<body class="article-page">
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程网络</a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="../design/ai-culling.html">AI智能选图</a></li>
+        <li><a href="../tools/index.html">智能工具中心</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="article-hero">
+    <span class="tag">开发经验</span>
+    <h1>小程序开发常见问题：从注册到上线的完整避坑手册</h1>
+    <div class="meta">兴程网络 · 2026年6月25日</div>
+  </section>
+
+  <article class="article-body">
+    <p>微信小程序已经成为企业和个人触达用户的重要工具。但很多初次接触小程序的客户，对流程、资质、费用等问题存在误解。本文将为您解答从注册到上线全流程中最常见的问题。</p>
+
+    <h2>一、注册与资质：我能做小程序吗？</h2>
+    <h3>1. 个人可以注册小程序吗？</h3>
+    <p>可以，但功能受限。个人小程序不能开通支付、不能涉及电商/企业服务类目，适合做内容展示、工具类、个人博客等。</p>
+    <h3>2. 企业需要什么资质？</h3>
+    <p>企业主体需要：营业执照（副本照片）、对公账户（用于验证）、管理员身份证。个体工商户也可注册，流程相同。</p>
+    <h3>3. 认证费用是多少？</h3>
+    <p>微信官方收取300元/年的认证费，这是交给微信的，不是给开发者的。认证后才能开通支付、使用高级接口。</p>
+    <div class="tip"><strong>建议：</strong>如果您确定要做小程序，建议直接注册企业主体并认证，避免后期功能受限再迁移的麻烦。</div>
+
+    <h2>二、开发流程：做一个小程序要多久？</h2>
+    <p>开发周期取决于功能复杂度：</p>
+    <ul>
+      <li><span class="highlight">展示类</span>（企业介绍、产品展示）：3-5天</li>
+      <li><span class="highlight">预约类</span>（服务预约、表单收集）：5-7天</li>
+      <li><span class="highlight">电商类</span>（商品展示、购物车、支付）：7-14天</li>
+      <li><span class="highlight">定制类</span>（会员系统、积分、分销）：15-30天</li>
+    </ul>
+    <p>注意：以上时间不包含微信审核时间（通常1-3个工作日）。</p>
+
+    <h2>三、审核被拒：最常见的几个原因</h2>
+    <p>小程序提交审核后被拒，是最让人头疼的事情。以下是被拒最常见的几个原因：</p>
+    <ul>
+      <li><strong>类目不符：</strong>选择的类目与实际功能不匹配。比如做电商却选了"工具"类目。</li>
+      <li><strong>内容违规：</strong>包含敏感词、虚假宣传、医疗/金融等需要特殊资质的内容。</li>
+      <li><strong>功能不完整：</strong>存在明显的bug、按钮无法点击、页面空白等。</li>
+      <li><strong>缺少资质：</strong>涉及食品、医疗、教育等行业需要对应的许可证。</li>
+      <li><strong>用户体验差：</strong>强制登录、强制分享、诱导转发等。</li>
+    </ul>
+    <div class="tip"><strong>建议：</strong>找有经验的开发团队，他们了解审核规则，能在开发阶段就规避这些问题，避免反复提交审核浪费时间。</div>
+
+    <h2>四、费用问题：开发一个小程序多少钱？</h2>
+    <p>费用差异很大，主要取决于：</p>
+    <ul>
+      <li><strong>功能复杂度：</strong>展示类几千元，电商类几万元，定制系统更高</li>
+      <li><strong>设计要求：</strong>模板化 vs 定制化UI设计</li>
+      <li><strong>后期维护：</strong>是否包含服务器、域名、SSL证书、后续更新</li>
+    </ul>
+    <p>警惕：报价极低的小程序开发，通常使用模板或源码，后期难以修改和扩展，且可能存在安全隐患。</p>
+
+    <h2>五、上线后：小程序需要维护吗？</h2>
+    <p>需要的。小程序上线后需要持续关注：</p>
+    <ul>
+      <li><strong>服务器续费：</strong>域名、服务器、SSL证书每年需要续费</li>
+      <li><strong>微信政策变动：</strong>微信会不定期更新规则和接口，需要及时调整</li>
+      <li><strong>bug修复：</strong>用户反馈的问题需要及时修复</li>
+      <li><strong>功能迭代：</strong>根据业务需求不断增加新功能</li>
+    </ul>
+    <div class="tip"><strong>建议：</strong>选择提供长期维护服务的开发团队，避免上线后出问题找不到人解决。</div>
+
+    <h2>总结</h2>
+    <p>小程序开发是一个系统工程，从注册到上线到运营，每个环节都需要专业知识和经验。选择一个靠谱的开发团队，能帮您节省大量时间和试错成本。</p>
+    <p>如果您有小程序开发需求，欢迎<span class="highlight">免费咨询</span>，我们会根据您的业务场景给出最适合的方案和报价。</p>
+  </article>
+
+  <div class="article-nav">
+    <a href="design-tips.html">← 上一篇</a>
+    <a href="social-media-guide.html">下一篇 →</a>
+  </div>
+
+  <footer class="footer" style="padding:40px 24px;text-align:center;background:var(--bg-deep);border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1;">
+    <p style="color:rgba(255,255,255,.4);font-size:13px;">© 2026 <span style="color:var(--c1);font-weight:700;">兴程网络</span> · 保留所有权利</p>
+  </footer>
+
+  <script src="../script.js"></script>
+  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+</body>
+</html>

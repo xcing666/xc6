@@ -6,8 +6,7 @@
   <meta name="description" content="兴程网络智能工具中心 — 免费在线工具：图片格式转换、二维码生成、图片压缩、设计报价计算、配色方案生成、字体预览" />
   <title>智能工具中心 — 兴程网络</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🛠️</text></svg>" />
-  <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062517" />
+  <link rel="stylesheet" href="../style.css?v=20260624a" />
   <style>
     /* ===== 工具中心专属样式 ===== */
     .tools-hero {
@@ -136,16 +135,16 @@
       letter-spacing: 1px;
     }
 
-    /* 手机端：2列（2×3排版） */
+    /* 手机端：1列 */
     @media (max-width: 768px) {
-      .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 0 16px; }
+      .tools-grid { grid-template-columns: 1fr; gap: 16px; padding: 0 16px; }
       .tools-hero { padding: 70px 0 36px; }
       .tools-hero h1 { font-size: 28px; }
       .tool-card { padding: 24px 18px 22px; }
       .tool-card-icon { width: 52px; height: 52px; font-size: 26px; }
     }
     @media (max-width: 480px) {
-      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+      .tools-grid { grid-template-columns: 1fr; }
       .tools-hero { padding: 60px 0 28px; }
       .tools-hero h1 { font-size: 24px; }
     }
@@ -163,14 +162,7 @@
         <li><a href="../miniprogram/index.html">小程序开发</a></li>
         <li><a href="../social-media.html">社交媒体运营</a></li>
         <li><a href="../pdd-assist.html">拼多多助力</a></li>
-        <li><a href="index.html">智能工具中心</a></li>
-        <li><a href="index.html">智能工具中心</a></li>
-        <li><a href="../design/ai-culling.html">AI智能选图</a></li>
-        
-        <li class="nav-group">更多</li>
-        <li><a href="../blog/index.html">博客文章</a></li>
-        <li><a href="../faq.html">常见问题</a></li>
-        
+        <li><a href="index.html" class="active">智能工具</a></li>
       </ul>
       <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
     </div>
@@ -278,8 +270,6 @@
     </div>
   </footer>
 
-  <script src="../script.js?v=25062517"></script>
-
-  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+  <script src="../script.js?v=20260624a"></script>
 </body>
 </html>
