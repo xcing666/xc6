@@ -7,7 +7,7 @@
   <title>图片格式转换 — 智能工具中心</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🖼️</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062613" />
+  <link rel="stylesheet" href="../style.css?v=25062614" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
@@ -298,7 +298,7 @@
     </div>
   </footer>
 
-<script src="raw-preview.js?v=25062613"></script>
+<script src="raw-preview.js?v=25062614"></script>
 <script>
 (function(){
   var RAW_EXTS = ['.cr2','.nef','.arw','.dng','.orf','.rw2','.raf','.srw','.cr3'];
@@ -546,32 +546,101 @@
           }
 
           // ====== RAW处理核心流程 ======
-          // 重要说明：相机RAW预览图（尤其是Canon CR2）使用Adobe RGB等非标准色彩空间，
-          // 浏览器用<img>或canvas渲染都会显示为黑色。因此策略：
-          //   → 不显示图片预览（避免黑色）
-          //   → 直接提供原始JPEG下载（数据完整，用专业软件打开正常）
+          // 相机RAW预览图（如Canon CR2）常使用Adobe RGB色彩空间，
+          // 原始JPEG数据直接下载后其他软件无法打开（非标准格式）。
+          //
+          // 解决方案：
+          //   1. 浏览器 Image 对象能解码该 JPEG → 绘制到 canvas
+          //   2. 检测 canvas 是否全黑（Adobe RGB 问题）
+          //   3. 如全黑则自动校正亮度
+          //   4. 用 canvas.toBlob 导出为标准 sRGB JPEG → 任何软件都能打开
           var name = f.name.replace(/\.[^.]+$/, '') + '.jpg';
-          var rawUrl = result.url || (result.blob ? URL.createObjectURL(result.blob) : null);
+          var rawBlob = result.blob;
+          var rawUrl = result.url || (rawBlob ? URL.createObjectURL(rawBlob) : null);
           if (!rawUrl) {
             grid.innerHTML += '<p style="color:#ff5050;">' + f.name + '：无法提取预览图</p>';
             finishOne();
             return;
           }
-          // 直接生成结果卡片（不加载图片到<img>标签，避免Adobe RGB导致黑色显示）
-          var card = document.createElement('div');
-          card.className = 'result-item';
-          card.innerHTML =
-            '<div style="padding:20px;text-align:center;background:rgba(0,206,201,.06);border-radius:8px 8px 0 0;">' +
-              '<div style="font-size:36px;margin-bottom:6px;">📷</div>' +
-              '<div style="font-size:12px;color:rgba(255,255,255,.5);">RAW 预览图（浏览器无法渲染）</div>' +
-            '</div>' +
-            '<div class="result-info">' +
-              '<div class="result-name">'+name+'</div>' +
-              '<div class="result-size">'+(result.size/1024).toFixed(1)+' KB | '+(result.width||'?')+'x'+(result.height||'?')+' | '+result.source+'</div>' +
-              '<a class="result-download" href="'+rawUrl+'" download="'+name+'">⬇ 下载 JPG（用 Lightroom/PS/相册 打开）</a>' +
-            '</div>';
-          grid.appendChild(card);
-          finishOne();
+
+          // 通过 canvas 重编码为标准 JPEG
+          var reImg = new Image();
+          reImg.onload = function() {
+            var w = reImg.naturalWidth || reImg.width;
+            var h = reImg.naturalHeight || reImg.height;
+
+            // 创建 canvas 并绘制原始图像
+            var rCanvas = document.createElement('canvas');
+            rCanvas.width = w;
+            rCanvas.height = h;
+            var rCtx = rCanvas.getContext('2d');
+            rCtx.drawImage(reImg, 0, 0);
+
+            // 采样检测是否接近全黑（Adobe RGB 色彩空间问题的特征）
+            var sampleW = Math.min(100, w);
+            var sampleH = Math.min(100, h);
+            var sampleData = rCtx.getImageData(0, 0, sampleW, sampleH).data;
+            var totalLuma = 0;
+            var pixelCount = sampleData.length / 4;
+            for (var si = 0; si < sampleData.length; si += 4) {
+              totalLuma += (sampleData[si] * 0.299 + sampleData[si+1] * 0.587 + sampleData[si+2] * 0.114);
+            }
+            var avgLuma = totalLuma / pixelCount;
+
+            if (avgLuma < 35) {
+              // 接近全黑 → 自动校正：大幅提升亮度 + 增强对比度恢复可见度
+              var imgData = rCtx.getImageData(0, 0, w, h);
+              var px = imgData.data;
+              for (var pi = 0; pi < px.length; pi += 4) {
+                // Gamma 校正 + 亮度提升：将暗部像素大幅提亮
+                px[pi]     = Math.min(255, Math.pow(px[pi]     / 255, 0.55) * 255 * 1.6);
+                px[pi + 1] = Math.min(255, Math.pow(px[pi + 1] / 255, 0.55) * 255 * 1.6);
+                px[pi + 2] = Math.min(255, Math.pow(px[pi + 2] / 255, 0.55) * 255 * 1.6);
+              }
+              rCtx.putImageData(imgData, 0, 0);
+            }
+
+            // 导出为标准 sRGB JPEG（任何看图软件都能打开）
+            rCanvas.toBlob(function(outBlob) {
+              var outUrl = URL.createObjectURL(outBlob);
+
+              // 显示预览缩略图 + 下载链接
+              var card = document.createElement('div');
+              card.className = 'result-item';
+              var previewImgHtml = '<img class="result-thumb" src="'+outUrl+'" alt="" style="max-width:100%;max-height:180px;object-fit:contain;" />';
+              var statusTag = avgLuma < 35
+                ? '<span style="display:inline-block;font-size:10px;color:#f9a825;background:rgba(249,168,37,.12);padding:2px 6px;border-radius:4px;margin-top:4px;">✨ 已自动校正色彩</span>'
+                : '';
+              card.innerHTML =
+                previewImgHtml +
+                '<div class="result-info">' +
+                  '<div class="result-name">'+name+'</div>' +
+                  '<div class="result-size">'+(outBlob.size/1024).toFixed(1)+' KB | '+w+'x'+h+' | '+result.source+'</div>' +
+                  statusTag +
+                  '<a class="result-download" href="'+outUrl+'" download="'+name+'">⬇ 下载 JPG</a>' +
+                '</div>';
+              grid.appendChild(card);
+              finishOne();
+            }, 'image/jpeg', 0.92);
+          };
+          reImg.onerror = function() {
+            // 浏览器也无法解码 → 提供原始下载作为最后手段
+            var card = document.createElement('div');
+            card.className = 'result-item';
+            card.innerHTML =
+              '<div style="padding:16px;text-align:center;background:rgba(255,80,80,.06);border-radius:8px 8px 0 0;">' +
+                '<div style="font-size:28px;margin-bottom:4px;">⚠️</div>' +
+                '<div style="font-size:11px;color:rgba(255,255,255,.5);">预览图数据可能不完整</div>' +
+              '</div>' +
+              '<div class="result-info">' +
+                '<div class="result-name">'+name+'</div>' +
+                '<div class="result-size">'+(result.size/1024).toFixed(1)+' KB | '+result.source+'</div>' +
+                '<a class="result-download" href="'+rawUrl+'" download="'+name+'">⬇ 尝试下载原始数据</a>' +
+              '</div>';
+            grid.appendChild(card);
+            finishOne();
+          };
+          reImg.src = rawUrl;
         });
       } else {
         // 普通图片
