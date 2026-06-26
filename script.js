@@ -529,3 +529,55 @@ function initFakeComments() {
 })();
 
 initFakeComments();
+
+/* ========== 页脚分组展开/收起 ========== */
+function toggleFooterGroup(titleEl) {
+  var group = titleEl.parentElement;
+  group.classList.toggle('active');
+}
+
+/* ========== 二维码弹窗 ========== */
+function showQRCode(type) {
+  var modal = document.getElementById('qrModal');
+  var title = document.getElementById('qrTitle');
+  var content = document.getElementById('qrContent');
+  
+  if (type === 'wechat') {
+    title.textContent = '微信扫码';
+    content.innerHTML = '<img src="wechat-qrcode.png" alt="微信二维码" style="width:220px;height:220px;border-radius:12px;display:block;margin:0 auto;" /><p style="margin-top:16px;font-size:13px;color:var(--text-dim);text-align:center;">微信扫一扫添加好友 / 打开小程序</p>';
+  } else if (type === 'qq') {
+    title.textContent = 'QQ联系方式';
+    content.innerHTML = '<p>QQ号：738874448</p><p style="margin-top:12px;font-size:12px;color:var(--text-dim);">请添加QQ号咨询</p>';
+  } else if (type === 'email') {
+    title.textContent = '邮箱联系方式';
+    content.innerHTML = '<p>邮箱：738874448@qq.com</p><p style="margin-top:12px;font-size:12px;color:var(--text-dim);">请发送邮件咨询</p>';
+  }
+  
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeQRModal() {
+  var modal = document.getElementById('qrModal');
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+/* 点击弹窗背景关闭 */
+document.addEventListener('DOMContentLoaded', function() {
+  var modal = document.getElementById('qrModal');
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeQRModal();
+      }
+    });
+  }
+});
+
+/* ESC关闭弹窗 */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeQRModal();
+  }
+});

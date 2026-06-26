@@ -10,7 +10,8 @@
   <title>兴程网络 — 广告设计 · 小程序 · 社媒运营 · 拼多多助力</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css?v=25062517" />
+  <link rel="stylesheet" href="style.css?v=25062610" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -338,42 +339,81 @@
 
   <!-- ======== 底部 ======== -->
   <footer class="footer" id="contact">
-    <div class="footer-glow g1"></div>
-    <div class="footer-glow g2"></div>
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h3>兴程<span>网络</span></h3>
-          <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
-          <div class="footer-social">
-            <a href="javascript:void(0)" title="微信" onclick="copyText('xcing888','微信号')">💬</a>
-            <a href="javascript:void(0)" title="QQ" onclick="copyText('738874448','QQ号')">📱</a>
-            <a href="javascript:void(0)" title="邮箱" onclick="copyText('738874448@qq.com','邮箱')">✉️</a>
+      <div class="footer-brand">
+        <h3>兴程<span>网络</span></h3>
+        <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>服务项目</span>
+            <span class="footer-arrow">▸</span>
+          </div>
+          <div class="footer-group-content">
+            <a href="design/index.html">广告平面图设计</a>
+            <a href="miniprogram/index.html">微信小程序开发</a>
+            <a href="social-media.html">社交媒体运营</a>
+            <a href="pdd-assist.html">拼多多助力</a>
+            <a href="design/ai-culling.html">AI智能选图</a>
+            <a href="tools/index.html">智能工具中心</a>
           </div>
         </div>
-        <div class="footer-info">
-          <h4>联系方式</h4>
-          <ul>
-            <li>QQ：738874448</li>
-            <li>微信：xcing888</li>
-            <li>邮箱：738874448@qq.com</li>
-          </ul>
+
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>常见问题</span>
+            <span class="footer-arrow">▸</span>
+          </div>
+          <div class="footer-group-content">
+            <a href="faq.html#design">设计服务FAQ</a>
+            <a href="faq.html#miniprogram">小程序开发FAQ</a>
+            <a href="faq.html#social">社媒运营FAQ</a>
+            <a href="faq.html#pdd">拼多多助力FAQ</a>
+          </div>
         </div>
-        <div class="footer-info">
-          <h4>服务项目</h4>
-          <ul>
-            <li>广告平面图设计</li>
-            <li>微信小程序开发</li>
-            <li>社交媒体运营</li>
-            <li>拼多多助力</li>
-          </ul>
+
+        <div class="footer-group">
+          <div class="footer-group-title">
+            <span>联系方式</span>
+          </div>
+          <div class="footer-group-content" style="max-height:none; padding:12px 0; overflow:visible;">
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">QQ：738874448</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">微信：xcing888</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">邮箱：738874448@qq.com</p>
+          </div>
         </div>
       </div>
+
+      <div class="footer-social-icons">
+        <a href="javascript:void(0)" class="social-icon" onclick="showQRCode('wechat')" data-tooltip="扫码添加微信">
+          <i class="fa-brands fa-weixin" style="font-size:20px;"></i>
+        </a>
+        <a href="https://qm.qq.com/q/ARPMUBOd5m" class="social-icon" target="_blank" rel="noopener" data-tooltip="点击跳转添加QQ">
+          <i class="fa-brands fa-qq" style="font-size:20px;"></i>
+        </a>
+        <a href="mailto:738874448@qq.com?subject=咨询合作&body=您好，我对贵公司的服务感兴趣，请与我联系。" class="social-icon" data-tooltip="点击发送邮件">
+          <i class="fa-solid fa-envelope" style="font-size:20px;"></i>
+        </a>
+      </div>
+
+      <div class="footer-divider"></div>
+
       <div class="footer-bottom">
-        <p>© 2026 <span>兴程网络</span> · 保留所有权利</p>
+        <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
       </div>
     </div>
   </footer>
+
+  <!-- 二维码弹窗 -->
+  <div class="qr-modal" id="qrModal">
+    <div class="qr-modal-content">
+      <span class="qr-modal-close" onclick="closeQRModal()">&times;</span>
+      <h3 id="qrTitle">联系方式</h3>
+      <div id="qrContent"></div>
+    </div>
+  </div>
 
   <!-- ======== 回到顶部按钮 ======== -->
   <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
@@ -381,6 +421,6 @@
   <!-- ======== 提示 Toast ======== -->
   <div class="toast" id="toast"></div>
 
-  <script src="script.js?v=25062517"></script>
+  <script src="script.js?v=25062610"></script>
 </body>
 </html>
