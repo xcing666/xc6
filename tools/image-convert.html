@@ -7,7 +7,7 @@
   <title>图片格式转换 — 智能工具中心</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🖼️</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062614" />
+  <link rel="stylesheet" href="../style.css?v=25062615" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
@@ -218,6 +218,9 @@
         将直接提取RAW内嵌的高质量JPG预览图提供下载。浏览器对RAW预览图的色彩解码支持有限，如需调色请用 Lightroom / Photoshop / 相机官方软件处理。
       </div>
 
+      <!-- 调试信息显示区 -->
+      <div id="debugPanel" style="display:none;margin-bottom:16px;padding:12px 16px;border-radius:10px;background:rgba(0,206,201,.06);border:1px solid rgba(0,206,201,.2);font-size:12px;color:rgba(255,255,255,.7);line-height:1.8;max-height:200px;overflow-y:auto;"></div>
+
       <!-- 上传区 -->
       <div class="upload-zone" id="uploadZone">
         <div class="upload-icon">📁</div>
@@ -298,7 +301,7 @@
     </div>
   </footer>
 
-<script src="raw-preview.js?v=25062614"></script>
+<script src="raw-preview.js?v=25062615"></script>
 <script>
 (function(){
   var RAW_EXTS = ['.cr2','.nef','.arw','.dng','.orf','.rw2','.raf','.srw','.cr3'];
@@ -389,6 +392,16 @@
   var rawNotice = document.getElementById('rawNotice');
   var colorPanel= document.getElementById('colorPanel');
   var showCP    = document.getElementById('showColorPanel');
+  var debugPanel= document.getElementById('debugPanel');
+
+  // 调试信息显示函数
+  function showDebug(msg) {
+    debugPanel.style.display = 'block';
+    var time = new Date().toLocaleTimeString();
+    debugPanel.innerHTML += '<div>[' + time + '] ' + msg + '</div>';
+    debugPanel.scrollTop = debugPanel.scrollHeight;
+  }
+  window.showRawDebug = showDebug; // 让 raw-preview.js 也能调用
   var resetBtn  = document.getElementById('resetColor');
 
   var files = [];
@@ -533,6 +546,8 @@
           finishOne();
           return;
         }
+        showDebug('🔍 开始处理 RAW 文件: ' + f.name + ' (' + (f.size/1024/1024).toFixed(2) + ' MB)');
+        RawPreview.DEBUG = true; // 开启 RawPreview 内部调试
         RawPreview.extract(f, function(err, result){
           if (err) {
             var errEl = document.createElement('div');
@@ -546,101 +561,191 @@
           }
 
           // ====== RAW处理核心流程 ======
-          // 相机RAW预览图（如Canon CR2）常使用Adobe RGB色彩空间，
-          // 原始JPEG数据直接下载后其他软件无法打开（非标准格式）。
           //
-          // 解决方案：
-          //   1. 浏览器 Image 对象能解码该 JPEG → 绘制到 canvas
-          //   2. 检测 canvas 是否全黑（Adobe RGB 问题）
-          //   3. 如全黑则自动校正亮度
-          //   4. 用 canvas.toBlob 导出为标准 sRGB JPEG → 任何软件都能打开
+          // 问题根因：CR2/DNG 内嵌的 JPEG 预览图包含 Adobe RGB 色彩空间标记
+          // （ICC Profile / APP14 标记），浏览器按 Adobe RGB 解码后显示全黑，
+          // 其他看图软件直接报错"不支持格式"。
+          //
+          // 解决方案：在二进制层面删除色彩空间标记 → 浏览器默认按 sRGB 解码
+          //   1. 提取原始 JPEG 二进制数据
+          //   2. 扫描并移除 APP2(ICC) / APP14(Adobe) 色彩空间段
+          //   3. 用清理后的 JPEG 创建 Image 对象 → 正确显示颜色
+          //   4. canvas.toBlob() 导出标准 JPEG → 任何软件都能打开
+
+          showDebug('✅ RAW 预览图提取成功: ' + (result.size/1024).toFixed(1) + ' KB, 尺寸=' + (result.width||'?') + 'x' + (result.height||'?') + ', 来源=' + result.source);
           var name = f.name.replace(/\.[^.]+$/, '') + '.jpg';
           var rawBlob = result.blob;
-          var rawUrl = result.url || (rawBlob ? URL.createObjectURL(rawBlob) : null);
-          if (!rawUrl) {
-            grid.innerHTML += '<p style="color:#ff5050;">' + f.name + '：无法提取预览图</p>';
-            finishOne();
+          if (!rawBlob || rawBlob.size === 0) {
+            var rawUrl2 = result.url;
+            if (!rawUrl2) { grid.innerHTML += '<p style="color:#ff5050;">' + f.name + '：无法提取预览图</p>'; finishOne(); return; }
+
+            // 没有 blob（罕见情况），用 URL 方式降级
+            var fallbackImg = new Image();
+            fallbackImg.onload = function(){
+              var fc = document.createElement('canvas'); fc.width = fallbackImg.naturalWidth; fc.height = fallbackImg.naturalHeight;
+              fc.getContext('2d').drawImage(fallbackImg, 0, 0);
+              fc.toBlob(function(fb){ var fu = URL.createObjectURL(fb);
+                var c = document.createElement('div'); c.className = 'result-item';
+                c.innerHTML = '<img class="result-thumb" src="'+fu+'" style="max-width:100%;max-height:180px;object-fit:contain;" /><div class="result-info"><div class="result-name">'+name+'</div><div class="result-size">'+(fb.size/1024).toFixed(1)+' KB</div><a class="result-download" href="'+fu+'" download="'+name+'">⬇ 下载 JPG</a></div>';
+                grid.appendChild(c); finishOne();
+              }, 'image/jpeg', 0.92);
+            };
+            fallbackImg.onerror = function(){ grid.innerHTML += '<p style="color:#ff5050;">' + f.name + '：预览图加载失败</p>'; finishOne(); };
+            fallbackImg.src = rawUrl2;
             return;
           }
 
-          // 通过 canvas 重编码为标准 JPEG
-          var reImg = new Image();
-          reImg.onload = function() {
-            var w = reImg.naturalWidth || reImg.width;
-            var h = reImg.naturalHeight || reImg.height;
+          // === 核心函数：删除 JPEG 中的非 sRGB 色彩空间标记 ===
+          function stripColorSpaceMarkers(jpegBuf) {
+            // JPEG 结构：SOI(FFD8) + 段们 + SOS(FFDA) + 压缩数据 + EOI(FFD9)
+            // 需要移除的段：
+            //   FF E2 (APP2): ICC Profile — 包含完整的 Adobe RGB ICC 数据
+            //   FF EE (APP14): Adobe 标记 — colorTransform 字段标识 Adobe RGB
+            // 移除后浏览器默认用 sRGB 解码，图像正常显示
+            if (jpegBuf[0] !== 0xFF || jpegBuf[1] !== 0xD8) return jpegBuf;
 
-            // 创建 canvas 并绘制原始图像
-            var rCanvas = document.createElement('canvas');
-            rCanvas.width = w;
-            rCanvas.height = h;
-            var rCtx = rCanvas.getContext('2d');
-            rCtx.drawImage(reImg, 0, 0);
+            var parts = [];
+            parts.push(jpegBuf.subarray(0, 2)); // 保留 SOI
 
-            // 采样检测是否接近全黑（Adobe RGB 色彩空间问题的特征）
-            var sampleW = Math.min(100, w);
-            var sampleH = Math.min(100, h);
-            var sampleData = rCtx.getImageData(0, 0, sampleW, sampleH).data;
-            var totalLuma = 0;
-            var pixelCount = sampleData.length / 4;
-            for (var si = 0; si < sampleData.length; si += 4) {
-              totalLuma += (sampleData[si] * 0.299 + sampleData[si+1] * 0.587 + sampleData[si+2] * 0.114);
-            }
-            var avgLuma = totalLuma / pixelCount;
+            var pos = 2;
+            while (pos < jpegBuf.length - 1) {
+              // 寻找标记
+              if (jpegBuf[pos] !== 0xFF) { pos++; continue; }
+              // 跳过填充的 0xFF
+              while (pos < jpegBuf.length && jpegBuf[pos] === 0xFF) pos++;
+              if (pos >= jpegBuf.length) break;
 
-            if (avgLuma < 35) {
-              // 接近全黑 → 自动校正：大幅提升亮度 + 增强对比度恢复可见度
-              var imgData = rCtx.getImageData(0, 0, w, h);
-              var px = imgData.data;
-              for (var pi = 0; pi < px.length; pi += 4) {
-                // Gamma 校正 + 亮度提升：将暗部像素大幅提亮
-                px[pi]     = Math.min(255, Math.pow(px[pi]     / 255, 0.55) * 255 * 1.6);
-                px[pi + 1] = Math.min(255, Math.pow(px[pi + 1] / 255, 0.55) * 255 * 1.6);
-                px[pi + 2] = Math.min(255, Math.pow(px[pi + 2] / 255, 0.55) * 255 * 1.6);
+              var marker = jpegBuf[pos];
+              pos++;
+
+              // EOI (D9) 或 SOS (DA) — 到此为止，保留剩余全部数据
+              if (marker === 0xD9 || marker === 0xDA) {
+                parts.push(jpegBuf.subarray(pos - 1)); // 把标记本身也带上
+                break;
               }
-              rCtx.putImageData(imgData, 0, 0);
+
+              // RST (D0-D7) — 单字节重启标记
+              if (marker >= 0xD0 && marker <= 0xD7) {
+                var rstByte = new Uint8Array([0xFF, marker]);
+                parts.push(rstByte);
+                continue;
+              }
+
+              // 读取段长度（大端序）
+              if (pos + 1 >= jpegBuf.length) { parts.push(jpegBuf.subarray(pos - 1)); break; }
+              var segLen = (jpegBuf[pos] << 8) | jpegBuf[pos + 1]; // 包含自身长度的 2 字节
+              if (segLen < 2) break;
+
+              // === 关键：跳过色彩空间相关段 ===
+              if (marker !== 0xE2 && marker !== 0xEE) {
+                // 保留：不是 ICC Profile 也不是 Adobe 标记
+                parts.push(jpegBuf.subarray(pos - 1, pos - 1 + segLen + 2));
+              }
+              // 如果是 E2/EE 则静默跳过（不加入 parts）
+
+              pos += segLen;
             }
 
-            // 导出为标准 sRGB JPEG（任何看图软件都能打开）
-            rCanvas.toBlob(function(outBlob) {
-              var outUrl = URL.createObjectURL(outBlob);
+            // 合并为新的 Uint8Array
+            var totalLen = 0;
+            for (var pi = 0; pi < parts.length; pi++) totalLen += parts[pi].length;
+            var clean = new Uint8Array(totalLen);
+            var off = 0;
+            for (var pj = 0; pj < parts.length; pj++) {
+              clean.set(parts[pj], off);
+              off += parts[pj].length;
+            }
+            return clean;
+          }
 
-              // 显示预览缩略图 + 下载链接
-              var card = document.createElement('div');
-              card.className = 'result-item';
-              var previewImgHtml = '<img class="result-thumb" src="'+outUrl+'" alt="" style="max-width:100%;max-height:180px;object-fit:contain;" />';
-              var statusTag = avgLuma < 35
-                ? '<span style="display:inline-block;font-size:10px;color:#f9a825;background:rgba(249,168,37,.12);padding:2px 6px;border-radius:4px;margin-top:4px;">✨ 已自动校正色彩</span>'
-                : '';
-              card.innerHTML =
-                previewImgHtml +
+          showDebug('🔧 正在清理 JPEG 色彩空间标记...');
+          // 处理流程：读取二进制 → 清理标记 → 创建干净JPEG
+          var fileReader = new FileReader();
+          fileReader.onload = function(frEvent) {
+            showDebug('📂 原始 JPEG 数据读取完成: ' + (frEvent.target.result.byteLength/1024).toFixed(1) + ' KB');
+            var originalData = new Uint8Array(frEvent.target.result);
+            var cleanedData = stripColorSpaceMarkers(originalData);
+            showDebug('✅ 标记清理完成: ' + originalData.length + ' → ' + cleanedData.length + ' 字节');
+            var cleanBlob = new Blob([cleanedData], { type: 'image/jpeg' });
+            var cleanUrl = URL.createObjectURL(cleanBlob);
+
+            // 用清理后的 JPEG 加载图片（此时浏览器应按 sRGB 解码）
+            showDebug('🖼️ 正在加载清理后的 JPEG 图片...');
+            var finalImg = new Image();
+            finalImg.onload = function() {
+              var w = finalImg.naturalWidth || finalImg.width;
+              var h = finalImg.naturalHeight || finalImg.height;
+
+              // 绘制到 canvas 并导出为标准 JPEG
+              var outCanvas = document.createElement('canvas');
+              outCanvas.width = w;
+              outCanvas.height = h;
+              var outCtx = outCanvas.getContext('2d');
+              outCtx.drawImage(finalImg, 0, 0);
+
+              // 二次检测：如果还是太暗，做最后的 gamma 补救
+              var sw2 = Math.min(80, w), sh2 = Math.min(80, h);
+              var sd2 = outCtx.getImageData(0, 0, sw2, sh2).data;
+              var lSum = 0, pCount2 = sd2.length / 4;
+              for (var li = 0; li < sd2.length; li += 4) {
+                lSum += sd2[li]*0.299 + sd2[li+1]*0.587 + sd2[li+2]*0.114;
+              }
+              var avgL = lSum / pCount2;
+              var needsFix = avgL < 40;
+
+              showDebug('🖼️ 图片加载成功: ' + w + 'x' + h + (needsFix ? ' (偏暗，将自动校正)' : ' (亮度正常)'));
+              if (needsFix) {
+                var idata = outCtx.getImageData(0, 0, w, h);
+                var px2 = idata.data;
+                for (var k = 0; k < px2.length; k += 4) {
+                  // 强力 gamma 校正：把极暗的值大幅拉伸到可见范围
+                  var r = px2[k], g = px2[k+1], b = px2[k+2];
+                  px2[k]   = Math.min(255, Math.pow(Math.max(r,1)/255, 0.45) * 255 * 2.0);
+                  px2[k+1] = Math.min(255, Math.pow(Math.max(g,1)/255, 0.45) * 255 * 2.0);
+                  px2[k+2] = Math.min(255, Math.pow(Math.max(b,1)/255, 0.45) * 255 * 2.0);
+                }
+                outCtx.putImageData(idata, 0, 0);
+              }
+
+              // 导出最终 JPEG
+              outCanvas.toBlob(function(finalBlob) {
+                var finalUrl = URL.createObjectURL(finalBlob);
+
+                var card = document.createElement('div');
+                card.className = 'result-item';
+                card.innerHTML =
+                  '<img class="result-thumb" src="'+finalUrl+'" alt="" style="max-width:100%;max-height:200px;object-fit:contain;" />' +
+                  '<div class="result-info">' +
+                    '<div class="result-name">'+name+'</div>' +
+                    '<div class="result-size">'+(finalBlob.size/1024).toFixed(1)+' KB | '+w+'x'+h+' | '+result.source+'</div>' +
+                    (needsFix ? '<span style="display:inline-block;font-size:10px;color:#f9a825;background:rgba(249,168,37,.12);padding:2px 6px;border-radius:4px;margin-top:4px;">✨ 已校正色彩</span>' : '') +
+                    '<a class="result-download" href="'+finalUrl+'" download="'+name+'">⬇ 下载 JPG</a>' +
+                  '</div>';
+                grid.appendChild(card);
+                finishOne();
+              }, 'image/jpeg', 0.92);
+            };
+            showDebug('❌ 清理后的 JPEG 加载失败，尝试提供原始下载');
+            finalImg.onerror = function() {
+              // 清理后的 JPEG 也无法加载（极少见）→ 提供原始下载
+              var card2 = document.createElement('div');
+              card2.className = 'result-item';
+              card2.innerHTML =
+                '<div style="padding:16px;text-align:center;background:rgba(249,168,37,.08);border-radius:8px 8px 0 0;">' +
+                  '<div style="font-size:28px;margin-bottom:4px;">⚠️</div>' +
+                  '<div style="font-size:11px;color:rgba(255,255,255,.5);">预览异常，请尝试下载查看</div>' +
+                '</div>' +
                 '<div class="result-info">' +
                   '<div class="result-name">'+name+'</div>' +
-                  '<div class="result-size">'+(outBlob.size/1024).toFixed(1)+' KB | '+w+'x'+h+' | '+result.source+'</div>' +
-                  statusTag +
-                  '<a class="result-download" href="'+outUrl+'" download="'+name+'">⬇ 下载 JPG</a>' +
+                  '<div class="result-size">'+(result.size/1024).toFixed(1)+' KB | '+result.source+'</div>' +
+                  '<a class="result-download" href="'+cleanUrl+'" download="'+name+'">⬇ 下载 JPG</a>' +
                 '</div>';
-              grid.appendChild(card);
+              grid.appendChild(card2);
               finishOne();
-            }, 'image/jpeg', 0.92);
+            };
+            finalImg.src = cleanUrl;
           };
-          reImg.onerror = function() {
-            // 浏览器也无法解码 → 提供原始下载作为最后手段
-            var card = document.createElement('div');
-            card.className = 'result-item';
-            card.innerHTML =
-              '<div style="padding:16px;text-align:center;background:rgba(255,80,80,.06);border-radius:8px 8px 0 0;">' +
-                '<div style="font-size:28px;margin-bottom:4px;">⚠️</div>' +
-                '<div style="font-size:11px;color:rgba(255,255,255,.5);">预览图数据可能不完整</div>' +
-              '</div>' +
-              '<div class="result-info">' +
-                '<div class="result-name">'+name+'</div>' +
-                '<div class="result-size">'+(result.size/1024).toFixed(1)+' KB | '+result.source+'</div>' +
-                '<a class="result-download" href="'+rawUrl+'" download="'+name+'">⬇ 尝试下载原始数据</a>' +
-              '</div>';
-            grid.appendChild(card);
-            finishOne();
-          };
-          reImg.src = rawUrl;
+          fileReader.readAsArrayBuffer(rawBlob);
         });
       } else {
         // 普通图片
