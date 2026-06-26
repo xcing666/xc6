@@ -7,7 +7,7 @@
   <title>图片格式转换 — 智能工具中心</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🖼️</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062722" />
+  <link rel="stylesheet" href="../style.css?v=25062613" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
@@ -298,7 +298,7 @@
     </div>
   </footer>
 
-<script src="raw-preview.js?v=25062722"></script>
+<script src="raw-preview.js?v=25062613"></script>
 <script>
 (function(){
   var RAW_EXTS = ['.cr2','.nef','.arw','.dng','.orf','.rw2','.raf','.srw','.cr3'];
@@ -546,11 +546,10 @@
           }
 
           // ====== RAW处理核心流程 ======
-          // 重要说明：浏览器对相机RAW预览图的JPEG解码支持有限，
-          // 强行用canvas处理常导致输出黑色。因此统一策略：
-          //   → 直接提供相机原始JPEG预览图下载
-          //   → 不通过canvas做色彩增强（避免黑色输出）
-          //   → 如需要增强，建议用户用专业软件（Lightroom等）处理
+          // 重要说明：相机RAW预览图（尤其是Canon CR2）使用Adobe RGB等非标准色彩空间，
+          // 浏览器用<img>或canvas渲染都会显示为黑色。因此策略：
+          //   → 不显示图片预览（避免黑色）
+          //   → 直接提供原始JPEG下载（数据完整，用专业软件打开正常）
           var name = f.name.replace(/\.[^.]+$/, '') + '.jpg';
           var rawUrl = result.url || (result.blob ? URL.createObjectURL(result.blob) : null);
           if (!rawUrl) {
@@ -558,38 +557,21 @@
             finishOne();
             return;
           }
-          // 验证图片是否能正常加载显示
-          var verifyImg = new Image();
-          verifyImg.onload = function(){
-            var w = verifyImg.naturalWidth || 0;
-            var h = verifyImg.naturalHeight || 0;
-            var card = document.createElement('div');
-            card.className = 'result-item';
-            card.innerHTML =
-              '<img class="result-thumb" src="'+rawUrl+'" alt="" style="max-width:100%;max-height:200px;object-fit:contain;border-radius:6px;" />' +
-              '<div class="result-info">' +
-                '<div class="result-name">'+name+'</div>' +
-                '<div class="result-size">'+(result.size/1024).toFixed(1)+' KB | '+(w||'?')+'x'+(h||'?')+' | '+result.source+'</div>' +
-                '<a class="result-download" href="'+rawUrl+'" download="'+name+'">⬇ 下载 JPG（相机原始预览）</a>' +
-              '</div>';
-            grid.appendChild(card);
-            finishOne();
-          };
-          verifyImg.onerror = function(){
-            // 无法直接显示，提供下载链接
-            var card = document.createElement('div');
-            card.className = 'result-item';
-            card.innerHTML =
-              '<div style="padding:16px;color:rgba(255,255,255,.5);font-size:13px;">⚠️ 预览图无法直接显示（可能使用了浏览器不支持的色彩空间）</div>' +
-              '<div class="result-info">' +
-                '<div class="result-name">'+name+'</div>' +
-                '<div class="result-size">'+(result.size/1024).toFixed(1)+' KB | '+result.source+'</div>' +
-                '<a class="result-download" href="'+rawUrl+'" download="'+name+'">⬇ 下载 JPG（用 Lightroom/Photoshop 打开）</a>' +
-              '</div>';
-            grid.appendChild(card);
-            finishOne();
-          };
-          verifyImg.src = rawUrl;
+          // 直接生成结果卡片（不加载图片到<img>标签，避免Adobe RGB导致黑色显示）
+          var card = document.createElement('div');
+          card.className = 'result-item';
+          card.innerHTML =
+            '<div style="padding:20px;text-align:center;background:rgba(0,206,201,.06);border-radius:8px 8px 0 0;">' +
+              '<div style="font-size:36px;margin-bottom:6px;">📷</div>' +
+              '<div style="font-size:12px;color:rgba(255,255,255,.5);">RAW 预览图（浏览器无法渲染）</div>' +
+            '</div>' +
+            '<div class="result-info">' +
+              '<div class="result-name">'+name+'</div>' +
+              '<div class="result-size">'+(result.size/1024).toFixed(1)+' KB | '+(result.width||'?')+'x'+(result.height||'?')+' | '+result.source+'</div>' +
+              '<a class="result-download" href="'+rawUrl+'" download="'+name+'">⬇ 下载 JPG（用 Lightroom/PS/相册 打开）</a>' +
+            '</div>';
+          grid.appendChild(card);
+          finishOne();
         });
       } else {
         // 普通图片
