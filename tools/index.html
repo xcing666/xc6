@@ -7,7 +7,8 @@
   <title>智能工具中心 — 兴程网络</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🛠️</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062517" />
+  <link rel="stylesheet" href="../style.css?v=25062715" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     /* ===== 工具中心专属样式 ===== */
     .tools-hero {
@@ -157,20 +158,18 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
-      <ul class="nav-menu" id="navMenu">
+            <ul class="nav-menu" id="navMenu">
         <li><a href="../index.html">首页</a></li>
         <li><a href="../design/index.html">广告设计</a></li>
         <li><a href="../miniprogram/index.html">小程序开发</a></li>
         <li><a href="../social-media.html">社交媒体运营</a></li>
         <li><a href="../pdd-assist.html">拼多多助力</a></li>
-        <li><a href="index.html">智能工具中心</a></li>
-        <li><a href="index.html">智能工具中心</a></li>
+        <li><a href="../tools/index.html" class="active">智能工具中心</a></li>
         <li><a href="../design/ai-culling.html">AI智能选图</a></li>
-        
+
         <li class="nav-group">更多</li>
         <li><a href="../blog/index.html">博客文章</a></li>
         <li><a href="../faq.html">常见问题</a></li>
-        
       </ul>
       <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
     </div>
@@ -244,36 +243,69 @@
 
   <!-- ===== 底部 ===== -->
   <footer class="footer" id="contact">
-    <div class="footer-glow g1"></div>
-    <div class="footer-glow g2"></div>
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h3>兴程<span>网络</span></h3>
-          <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+      <div class="footer-brand">
+        <h3>兴程<span>网络</span></h3>
+        <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>服务项目</span>
+            <span class="footer-arrow">▸</span>
+          </div>
+          <div class="footer-group-content">
+            <a href="design/index.html">广告平面图设计</a>
+            <a href="miniprogram/index.html">微信小程序开发</a>
+            <a href="social-media.html">社交媒体运营</a>
+            <a href="pdd-assist.html">拼多多助力</a>
+            <a href="design/ai-culling.html">AI智能选图</a>
+            <a href="tools/index.html" class="active">智能工具中心</a>
+          </div>
         </div>
-        <div class="footer-info">
-          <h4>联系方式</h4>
-          <ul>
-            <li>微信：xcing888</li>
-            <li>QQ：738874448</li>
-            <li>邮箱：738874448@qq.com</li>
-          </ul>
+
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>常见问题</span>
+            <span class="footer-arrow">▸</span>
+          </div>
+          <div class="footer-group-content">
+            <a href="faq.html#design">设计服务FAQ</a>
+            <a href="faq.html#miniprogram">小程序开发FAQ</a>
+            <a href="faq.html#social">社媒运营FAQ</a>
+            <a href="faq.html#pdd">拼多多助力FAQ</a>
+          </div>
         </div>
-        <div class="footer-info">
-          <h4>智能工具</h4>
-          <ul>
-            <li><a href="image-convert.html">图片格式转换</a></li>
-            <li><a href="qrcode.html">二维码生成器</a></li>
-            <li><a href="image-compress.html">图片压缩工具</a></li>
-            <li><a href="price.html">设计报价计算器</a></li>
-            <li><a href="color.html">配色方案生成</a></li>
-            <li><a href="font.html">字体预览工具</a></li>
-          </ul>
+
+        <div class="footer-group">
+          <div class="footer-group-title">
+            <span>联系方式</span>
+          </div>
+          <div class="footer-group-content" style="max-height:none; padding:12px 0; overflow:visible;">
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">QQ：738874448</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">微信：xcing888</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">邮箱：738874448@qq.com</p>
+          </div>
         </div>
       </div>
+
+      <div class="footer-social-icons">
+        <a href="javascript:void(0)" class="social-icon" onclick="showQRCode('wechat')" data-tooltip="点击扫码添加微信">
+          <i class="fa-brands fa-weixin" style="font-size:20px;"></i>
+        </a>
+        <a href="https://qm.qq.com/q/ARPMUBOd5m" class="social-icon" target="_blank" rel="noopener" data-tooltip="点击跳转添加QQ">
+          <i class="fa-brands fa-qq" style="font-size:20px;"></i>
+        </a>
+        <a href="mailto:738874448@qq.com?subject=咨询合作&body=您好，我对贵公司的服务感兴趣，请与我联系。" class="social-icon" data-tooltip="点击发送邮件">
+          <i class="fa-solid fa-envelope" style="font-size:20px;"></i>
+        </a>
+      </div>
+
+      <div class="footer-divider"></div>
+
       <div class="footer-bottom">
-        <p>© 2026 <span>兴程网络</span> · 保留所有权利</p>
+        <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
       </div>
     </div>
   </footer>

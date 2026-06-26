@@ -7,9 +7,9 @@
   <title>字体预览工具 — 智能工具中心</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🔤</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062517" />
+  <link rel="stylesheet" href="../style.css?v=25062715" />
   <style>
-    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: 70vh; position:relative; z-index:1; }
+    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 780px; margin: 0 auto; padding: 0 20px; }
     .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
     .tool-back:hover { color: var(--c1); }
@@ -139,19 +139,18 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
-      <ul class="nav-menu" id="navMenu">
+            <ul class="nav-menu" id="navMenu">
         <li><a href="../index.html">首页</a></li>
         <li><a href="../design/index.html">广告设计</a></li>
         <li><a href="../miniprogram/index.html">小程序开发</a></li>
         <li><a href="../social-media.html">社交媒体运营</a></li>
         <li><a href="../pdd-assist.html">拼多多助力</a></li>
-        <li><a href="index.html">智能工具中心</a></li>
-        <li><a href="index.html">智能工具中心</a></li>
-        
+        <li><a href="../tools/index.html" class="active">智能工具中心</a></li>
+        <li><a href="../design/ai-culling.html">AI智能选图</a></li>
+
         <li class="nav-group">更多</li>
         <li><a href="../blog/index.html">博客文章</a></li>
         <li><a href="../faq.html">常见问题</a></li>
-        
       </ul>
       <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
     </div>
@@ -263,18 +262,11 @@
     </div>
   </section>
 
-  <footer class="footer"><div class="container"><div class="footer-grid">
-    <div class="footer-brand"><h3>兴程<span>网络</span></h3><p style="color:rgba(255,255,255,.35);font-size:13px;margin-top:8px;line-height:1.7;">微信：xcing888<br/>QQ：738874448<br/>邮箱：738874448@qq.com</p></div>
-    <div class="footer-info"><h4>智能工具</h4><ul>
-      <li><a href="index.html">工具中心</a></li>
-      <li><a href="image-convert.html">格式转换</a></li>
-      <li><a href="qrcode.html">二维码生成</a></li>
-      <li><a href="image-compress.html">图片压缩</a></li>
-      <li><a href="price.html">报价计算器</a></li>
-      <li><a href="color.html">配色方案</a></li>
-      <li><a href="font.html">字体预览</a></li>
-    </ul></div>
-  </div></div></footer>
+    <footer class="footer-simple">
+    <div class="container">
+      <p>Copyright &copy; 2020-2026 兴程网络 &middot; 保留所有权利</p>
+    </div>
+  </footer>
 
 <script>
 (function(){

@@ -544,7 +544,7 @@ function showQRCode(type) {
   
   if (type === 'wechat') {
     title.textContent = '微信扫码';
-    content.innerHTML = '<img src="wechat-qrcode.png" alt="微信二维码" style="width:220px;height:220px;border-radius:12px;display:block;margin:0 auto;" /><p style="margin-top:16px;font-size:13px;color:var(--text-dim);text-align:center;">微信扫一扫添加好友 / 打开小程序</p>';
+    content.innerHTML = '<img src="wechat-qrcode.png" alt="微信二维码" style="width:220px;height:220px;border-radius:12px;display:block;margin:0 auto;" /><p style="margin-top:16px;font-size:13px;color:var(--text-dim);text-align:center;">微信扫一扫添加好友</p>';
   } else if (type === 'qq') {
     title.textContent = 'QQ联系方式';
     content.innerHTML = '<p>QQ号：738874448</p><p style="margin-top:12px;font-size:12px;color:var(--text-dim);">请添加QQ号咨询</p>';

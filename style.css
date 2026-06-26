@@ -1061,6 +1061,43 @@ body::after {
   transform:translateX(-50%) translateY(0);
 }
 
+/* 简化页脚（博客/FAQ/社媒/拼多多） */
+.footer-simple {
+  padding:28px 24px;
+  text-align:center;
+  background:var(--bg-deep);
+  border-top:1px solid rgba(255,255,255,.06);
+  position:relative; z-index:1;
+}
+.footer-simple p {
+  color:rgba(255,255,255,.4);
+  font-size:13px;
+  letter-spacing:.3px;
+}
+.footer-simple span {
+  color:var(--c1); font-weight:700;
+}
+
+/* 返回首页浮动按钮 */
+.back-home-float {
+  position:fixed; bottom:90px; right:32px; z-index:999;
+  width:48px; height:48px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--c1), var(--c2));
+  color:#fff; font-size:20px; font-weight:700;
+  text-decoration:none;
+  box-shadow:0 4px 20px rgba(108,92,231,.35);
+  transition:.3s;
+}
+.back-home-float:hover {
+  transform:scale(1.1);
+  box-shadow:0 6px 28px rgba(108,92,231,.5);
+}
+@media(max-width:768px){
+  .back-home-float { bottom:80px; right:20px; width:42px; height:42px; font-size:18px; }
+}
+
 /* 分割线 */
 .footer-divider {
   height:1px;
@@ -2058,15 +2095,15 @@ body.js-loaded .reveal.visible { opacity:1; transform:translateY(0); }
 /* ========== 价格表（design 页）========== */
 .price-section {
   position:relative; z-index:1;
-  padding:100px 0 120px;
+  padding:70px 0 80px;
   background:var(--bg-mid);
   overflow:hidden;
 }
 .price-grid {
   display:grid;
   grid-template-columns:repeat(4, 1fr);
-  gap:24px;
-  max-width:1100px; margin:0 auto;
+  gap:18px;
+  max-width:1000px; margin:0 auto;
 }
 @media(max-width:1100px){ .price-grid{grid-template-columns:repeat(2,1fr);} }
 @media(max-width:600px){ .price-grid{grid-template-columns:repeat(2,1fr);} }
@@ -2075,56 +2112,56 @@ body.js-loaded .reveal.visible { opacity:1; transform:translateY(0); }
   position:relative;
   background:var(--card-bg);
   border:1px solid var(--card-border);
-  border-radius:18px;
-  padding:36px 28px 32px;
+  border-radius:16px;
+  padding:28px 20px 24px;
   text-align:center;
   transition:.4s;
   display:flex; flex-direction:column; align-items:center;
 }
 .price-card:hover {
-  transform:translateY(-8px);
+  transform:translateY(-6px);
   border-color:rgba(108,92,231,.3);
-  box-shadow:0 20px 60px rgba(108,92,231,.1);
+  box-shadow:0 16px 50px rgba(108,92,231,.1);
 }
 .price-card.featured {
   border-color:rgba(108,92,231,.35);
   background:linear-gradient(160deg, rgba(108,92,231,.1), rgba(0,206,201,.06));
-  box-shadow:0 8px 40px rgba(108,92,231,.12);
-  transform:scale(1.03);
+  box-shadow:0 6px 30px rgba(108,92,231,.12);
+  transform:scale(1.02);
 }
-.price-card.featured:hover { transform:scale(1.03) translateY(-8px); }
+.price-card.featured:hover { transform:scale(1.02) translateY(-6px); }
 .price-badge {
-  position:absolute; top:0; right:24px;
-  padding:4px 14px; border-radius:0 0 8px 8px;
+  position:absolute; top:0; right:18px;
+  padding:3px 10px; border-radius:0 0 8px 8px;
   background:linear-gradient(135deg, var(--c3), var(--c1));
-  color:#fff; font-size:11px; font-weight:700; letter-spacing:.5px;
+  color:#fff; font-size:10px; font-weight:700; letter-spacing:.5px;
 }
-.price-icon { font-size:40px; margin-bottom:16px; }
-.price-card h3 { font-size:17px; font-weight:700; margin-bottom:12px; }
+.price-icon { font-size:32px; margin-bottom:12px; }
+.price-card h3 { font-size:15px; font-weight:700; margin-bottom:8px; }
 .price-amount {
-  font-size:40px; font-weight:800; color:var(--c2);
-  margin-bottom:20px; line-height:1;
+  font-size:32px; font-weight:800; color:var(--c2);
+  margin-bottom:14px; line-height:1;
 }
-.price-amount small { font-size:14px; font-weight:400; color:var(--text-dim); }
-.price-features { list-style:none; text-align:left; margin-bottom:28px; flex:1; }
+.price-amount small { font-size:12px; font-weight:400; color:var(--text-dim); }
+.price-features { list-style:none; text-align:left; margin-bottom:20px; flex:1; }
 .price-features li {
-  padding:7px 0; font-size:13px; color:var(--text-dim);
+  padding:5px 0; font-size:12px; color:var(--text-dim);
   border-bottom:1px solid rgba(255,255,255,.04);
 }
 .price-features li:last-child { border-bottom:none; }
 .price-btn {
   display:inline-block;
-  padding:12px 32px; border-radius:50px;
+  padding:10px 24px; border-radius:50px;
   background:linear-gradient(135deg, var(--c1), var(--c3));
-  color:#fff; font-size:14px; font-weight:700;
+  color:#fff; font-size:13px; font-weight:700;
   letter-spacing:.5px;
   text-decoration:none;
   transition:.35s;
-  box-shadow:0 4px 20px rgba(108,92,231,.3);
+  box-shadow:0 4px 16px rgba(108,92,231,.3);
 }
 .price-btn:hover {
   transform:translateY(-2px);
-  box-shadow:0 8px 40px rgba(108,92,231,.5);
+  box-shadow:0 8px 30px rgba(108,92,231,.5);
 }
 
 /* ========== 实时订单动态（灵动迷你气泡）============ */
@@ -2495,92 +2532,6 @@ body.js-loaded .reveal.visible { opacity:1; transform:translateY(0); }
   padding: 60px 0;
   background: var(--bg-mid);
   z-index: 1;
-}
-
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-top: 40px;
-}
-
-.why-item {
-  background: var(--bg-deep);
-  border: 1px solid rgba(108, 92, 231, 0.15);
-  border-radius: 16px;
-  padding: 32px 24px;
-  text-align: center;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-  overflow: hidden;
-}
-
-.why-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--c1), var(--c2));
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.why-item:hover {
-  transform: translateY(-8px);
-  border-color: var(--c1);
-  box-shadow: 0 12px 40px rgba(108, 92, 231, 0.2);
-}
-
-.why-item:hover::before {
-  opacity: 1;
-}
-
-.why-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  display: block;
-  filter: grayscale(0.2);
-  transition: transform 0.3s, filter 0.3s;
-}
-
-.why-item:hover .why-icon {
-  transform: scale(1.15) rotate(-5deg);
-  filter: grayscale(0);
-}
-
-.why-item h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 8px;
-}
-
-.why-item p {
-  font-size: 13px;
-  color: var(--text-dim);
-  line-height: 1.6;
-}
-
-/* 响应式：平板 */
-@media (max-width: 900px) {
-  .why-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-}
-
-/* 响应式：手机 */
-@media (max-width: 600px) {
-  .why-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .why-item {
-    padding: 24px 16px;
-  }
 }
 
 /* ========== AI 智能选图介绍板块 ========== */
