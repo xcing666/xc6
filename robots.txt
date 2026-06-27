@@ -1,4 +1,4 @@
 User-agent: *
-Allow: /
+Allow: /xc6/
 
-Sitemap: https://xcxingcheng.github.io/sitemap.xml
+Sitemap: https://xcxing666.github.io/xc6/sitemap.xml
