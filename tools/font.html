@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="免费在线字体预览工具 — 输入文字，实时预览多种字体效果，支持字号与颜色调整。" />
+  <meta name="description" content="免费在线字体预览工具 — 支持20+中文字体实时预览，调整字号/字重/颜色/行高，复制CSS代码，获取字体搭配推荐。" />
   <title>字体预览工具 — 智能工具中心</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🔤</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062715" />
+  <link rel="stylesheet" href="../style.css?v=25062801" />
+  <!-- Google Fonts：免费可商用字体 -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Long+Cang&family=Liu+Jian+Mao+Cao&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 780px; margin: 0 auto; padding: 0 20px; }
@@ -17,7 +19,7 @@
     .tool-title span { color: var(--c1); }
     .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; }
 
-    /* 设置面板 */
+    /* 字体设置面板 */
     .font-panel {
       background: rgba(255,255,255,.04); border-radius: 16px;
       border: 1px solid rgba(255,255,255,.08); padding: 24px 22px; margin-bottom: 28px;
@@ -107,6 +109,20 @@
     .result-btn:hover { background: rgba(108,92,231,.15); color: var(--c1); border-color: rgba(108,92,231,.25); }
     .result-btn.copied { background: rgba(46,213,115,.12); color: #2ed573; border-color: rgba(46,213,115,.2); }
 
+    /* 字体搭配推荐 */
+    .pairing-section { display: none; margin-top: 28px; }
+    .pairing-section.show { display: block; }
+    .pairing-title { font-size: 15px; color: rgba(255,255,255,.7); margin-bottom: 14px; }
+    .pairing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .pairing-card {
+      background: rgba(255,255,255,.03); border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.06); padding: 16px;
+      cursor: pointer; transition: border-color .3s, transform .3s;
+    }
+    .pairing-card:hover { border-color: rgba(108,92,231,.3); transform: translateY(-2px); }
+    .pairing-fonts { font-size: 13px; color: #fff; margin-bottom: 8px; }
+    .pairing-desc { font-size: 11px; color: rgba(255,255,255,.4); line-height: 1.6; }
+
     /* 字体分类标签 */
     .font-cats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
     .font-cat {
@@ -139,7 +155,7 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
-            <ul class="nav-menu" id="navMenu">
+      <ul class="nav-menu" id="navMenu">
         <li><a href="../index.html">首页</a></li>
         <li><a href="../design/index.html">广告设计</a></li>
         <li><a href="../miniprogram/index.html">小程序开发</a></li>
@@ -147,7 +163,6 @@
         <li><a href="../pdd-assist.html">拼多多助力</a></li>
         <li><a href="../tools/index.html" class="active">智能工具中心</a></li>
         <li><a href="../design/ai-culling.html">AI智能选图</a></li>
-
         <li class="nav-group">更多</li>
         <li><a href="../blog/index.html">博客文章</a></li>
         <li><a href="../faq.html">常见问题</a></li>
@@ -160,8 +175,9 @@
     <div class="tool-container">
       <a class="tool-back" href="index.html">← 返回工具中心</a>
       <h1 class="tool-title">字体<span>预览工具</span></h1>
-      
-      <div class="tool-guide"><h4>📖 使用步骤</h4><ol><li>在输入框中输入要预览的文字</li><li>从字体列表中选择字体</li><li>调整字号、颜色、粗细等参数</li><li>实时预览效果，满意后截图保存</li></ol></div>
+      <p class="tool-desc">支持20+中文字体实时预览，调整字号/字重/颜色/行高，复制CSS代码。</p>
+
+      <div class="tool-guide"><h4>📖 使用步骤</h4><ol><li>输入要预览的文字，选择字体</li><li>调整字号、字重、颜色、行高参数</li><li>点击「生成预览」查看效果</li><li>复制字体名或CSS代码使用</li></ol></div>
 
       <!-- 商用声明 -->
       <div class="font-disclaimer">
@@ -190,35 +206,27 @@
               <optgroup label="—— 宋体类 ——">
                 <option value="song">宋体 / SimSun</option>
                 <option value="stsong">华文宋体 / STSong</option>
-                <option value="stzhongsong">华文中宋 / STZhongsong</option>
                 <option value="noto-serif">思源宋体 / Noto Serif SC</option>
                 <option value="simli">隶书 / LiSu</option>
               </optgroup>
               <optgroup label="—— 黑体类 ——">
-                <option value="msyh">微软雅黑 / Microsoft YaHei</option>
+                <option value="msyh" selected>微软雅黑 / Microsoft YaHei</option>
                 <option value="simhei">黑体 / SimHei</option>
                 <option value="noto-sans">思源黑体 / Noto Sans SC</option>
                 <option value="pingfang">苹方 / PingFang SC</option>
-                <option value="stxihei">华文细黑 / STXihei</option>
               </optgroup>
               <optgroup label="—— 楷体类 ——">
-                <option value="kaiti" selected>楷体 / KaiTi</option>
+                <option value="kaiti">楷体 / KaiTi</option>
                 <option value="stkaiti">华文楷体 / STKaiti</option>
-                <option value="stxingkai">华文行楷 / STXingkai</option>
               </optgroup>
               <optgroup label="—— 艺术创意 ——">
                 <option value="youyuan">幼圆 / YouYuan</option>
                 <option value="stcaiyun">华文彩云 / STCaiyun</option>
-                <option value="sthupo">华文琥珀 / STHupo</option>
-                <option value="stliti">华文隶书 / STLiti</option>
                 <option value="fzshuti">方正舒体 / FZShuTi</option>
-                <option value="fzyaoti">方正姚体 / FZYaoti</option>
               </optgroup>
-              <optgroup label="—— 书法手写 ——">
+              <optgroup label="—— 书法手写（免费可商用） ——">
                 <option value="ma-shan">马善政毛笔体</option>
                 <option value="zhi-mang">志忙行书</option>
-                <option value="long-cang">龙藏体</option>
-                <option value="liu-jian">刘建毛草</option>
                 <option value="zcool-kuaile">站酷快乐体</option>
                 <option value="zcool-huangyou">站酷庆科黄油体</option>
               </optgroup>
@@ -235,6 +243,21 @@
             <span class="font-label" style="margin-bottom:0;">字号：</span>
             <input type="range" id="fontSize" min="12" max="120" value="48" />
             <span class="font-range-val" id="fsVal">48px</span>
+          </div>
+          <div class="font-range">
+            <span class="font-label" style="margin-bottom:0;">字重：</span>
+            <select id="fontWeight" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);font-size:13px;cursor:pointer;">
+              <option value="300">细体 300</option>
+              <option value="400" selected>常规 400</option>
+              <option value="500">中等 500</option>
+              <option value="700">粗体 700</option>
+              <option value="900">特粗 900</option>
+            </select>
+          </div>
+          <div class="font-range">
+            <span class="font-label" style="margin-bottom:0;">行高：</span>
+            <input type="range" id="lineHeight" min="10" max="30" value="18" />
+            <span class="font-range-val" id="lhVal">1.8</span>
           </div>
           <div class="color-pick">
             <span class="font-label" style="margin-bottom:0;">颜色：</span>
@@ -259,12 +282,51 @@
         </div>
       </div>
 
+      <!-- 字体搭配推荐 -->
+      <div class="pairing-section" id="pairingSection">
+        <div class="pairing-title">🎯 推荐字体搭配</div>
+        <div class="pairing-cards" id="pairingCards"></div>
+      </div>
+
     </div>
   </section>
 
-    <footer class="footer-simple">
+  <footer class="footer" id="contact">
     <div class="container">
-      <p>Copyright &copy; 2020-2026 兴程网络 &middot; 保留所有权利</p>
+      <div class="footer-brand">
+        <h3>兴程<span>网络</span></h3>
+        <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>服务项目</span>
+            <span class="footer-arrow">▸</span>
+          </div>
+          <div class="footer-group-content">
+            <a href="../design/index.html">广告平面设计</a>
+            <a href="../miniprogram/index.html">微信小程序开发</a>
+            <a href="../social-media.html">社交媒体运营</a>
+            <a href="../pdd-assist.html">拼多多助力</a>
+            <a href="../design/ai-culling.html">AI智能选图</a>
+            <a href="../tools/index.html">智能工具中心</a>
+          </div>
+        </div>
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>联系方式</span>
+          </div>
+          <div class="footer-group-content" style="max-height:none; padding:12px 0; overflow:visible;">
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">QQ：738874448</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">微信：xcing888</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">邮箱：738874448@qq.com</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
+      </div>
     </div>
   </footer>
 
@@ -275,7 +337,6 @@
     // 宋体类
     'song':        { name:'宋体',           family:'SimSun, "宋体", "SimSun-ExtB", serif',                          tag:'宋体类', note:'Windows 系统字体' },
     'stsong':      { name:'华文宋体',       family:'"STSong", "华文宋体", SimSun, serif',                            tag:'宋体类', note:'华文系列' },
-    'stzhongsong': { name:'华文中宋',       family:'"STZhongsong", "华文中宋", SimSun, serif',                        tag:'宋体类', note:'华文系列' },
     'noto-serif':  { name:'思源宋体',       family:'"Noto Serif SC", "Source Han Serif CN", SimSun, serif',          tag:'宋体类', note:'Google/Adobe 开源免费' },
     'simli':       { name:'隶书',           family:'LiSu, "隶书", "STLiti", serif',                                 tag:'隶书类', note:'Windows 系统字体' },
     // 黑体类
@@ -283,51 +344,54 @@
     'simhei':      { name:'黑体',           family:'SimHei, "黑体", "Microsoft YaHei", sans-serif',                  tag:'黑体类', note:'Windows 系统字体' },
     'noto-sans':   { name:'思源黑体',       family:'"Noto Sans SC", "Source Han Sans CN", sans-serif',               tag:'黑体类', note:'Google/Adobe 开源免费' },
     'pingfang':    { name:'苹方',           family:'"PingFang SC", "PingFang TC", sans-serif',                        tag:'黑体类', note:'Apple 系统字体' },
-    'stxihei':     { name:'华文细黑',       family:'"STXihei", "华文细黑", "Microsoft YaHei", sans-serif',           tag:'黑体类', note:'华文系列' },
     // 楷体类
     'kaiti':       { name:'楷体',           family:'KaiTi, "楷体", "STKaiti", serif',                               tag:'楷体类', note:'Windows 系统字体' },
     'stkaiti':     { name:'华文楷体',       family:'"STKaiti", "华文楷体", KaiTi, serif',                            tag:'楷体类', note:'华文系列' },
-    'stxingkai':   { name:'华文行楷',       family:'"STXingkai", "华文行楷", KaiTi, serif',                          tag:'楷体类', note:'华文系列' },
     // 艺术创意
     'youyuan':     { name:'幼圆',           family:'YouYuan, "幼圆", sans-serif',                                     tag:'艺术创意', note:'Windows 系统字体' },
     'stcaiyun':    { name:'华文彩云',       family:'"STCaiyun", "华文彩云", sans-serif',                             tag:'艺术创意', note:'华文系列' },
-    'sthupo':      { name:'华文琥珀',       family:'"STHupo", "华文琥珀", sans-serif',                                tag:'艺术创意', note:'华文系列' },
-    'stliti':      { name:'华文隶书',       family:'"STLiti", "华文隶书", LiSu, serif',                              tag:'隶书类', note:'华文系列' },
     'fzshuti':     { name:'方正舒体',       family:'"FZShuTi", "方正舒体", KaiTi, serif',                            tag:'艺术创意', note:'方正字库' },
-    'fzyaoti':     { name:'方正姚体',       family:'"FZYaoti", "方正姚体", sans-serif',                               tag:'艺术创意', note:'方正字库' },
-    // 书法手写（Google Fonts / 站酷）
+    // 书法手写（Google Fonts / 站酷 · 免费可商用）
     'ma-shan':     { name:'马善政毛笔体',   family:'"Ma Shan Zheng", cursive',                                        tag:'书法手写', note:'Google Fonts · 免费' },
     'zhi-mang':    { name:'志忙行书',       family:'"Zhi Mang Xing", cursive',                                       tag:'书法手写', note:'Google Fonts · 免费' },
-    'long-cang':   { name:'龙藏体',         family:'"Long Cang", cursive',                                           tag:'书法手写', note:'Google Fonts · 免费' },
-    'liu-jian':    { name:'刘建毛草',       family:'"Liu Jian Mao Cao", cursive',                                    tag:'书法手写', note:'Google Fonts · 免费' },
     'zcool-kuaile':{ name:'站酷快乐体',     family:'"ZCOOL KuaiLe", cursive',                                        tag:'书法手写', note:'站酷 · 免费可商用' },
     'zcool-huangyou':{ name:'站酷庆科黄油体', family:'"ZCOOL QingKe HuangYou", cursive',                             tag:'书法手写', note:'站酷 · 免费可商用' },
   };
 
-  // 加载 Google Fonts 书法字体
-  var gfLink = document.createElement('link');
-  gfLink.rel = 'stylesheet';
-  gfLink.href = 'https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Long+Cang&family=Liu+Jian+Mao+Cao&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap';
-  document.head.appendChild(gfLink);
+  // 字体搭配推荐
+  var pairings = [
+    { title: '科技品牌', fonts: ['noto-sans', 'noto-serif'], desc: '思源黑体 + 思源宋体，现代简洁' },
+    { title: '餐饮美食', fonts: ['stkaiti', 'youyuan'], desc: '华文楷体 + 幼圆，亲和温馨' },
+    { title: '高端奢侈品', fonts: ['song', 'youyuan'], desc: '宋体 + 幼圆，经典优雅' },
+    { title: '时尚潮流', fonts: ['msyh', 'stcaiyun'], desc: '微软雅黑 + 华文彩云，现代吸睛' },
+    { title: '传统文化', fonts: ['kaiti', 'simli'], desc: '楷体 + 隶书，古典韵味' },
+    { title: '创意设计', fonts: ['zcool-kuaile', 'noto-sans'], desc: '站酷快乐体 + 思源黑体，活泼现代' },
+  ];
 
-  var fontSelect  = document.getElementById('fontSelect');
-  var previewText = document.getElementById('previewText');
-  var fontSize    = document.getElementById('fontSize');
-  var fsVal       = document.getElementById('fsVal');
-  var fontColor   = document.getElementById('fontColor');
-  var colorHex    = document.getElementById('colorHex');
-  var previewBtn  = document.getElementById('previewBtn');
+  var fontSelect   = document.getElementById('fontSelect');
+  var previewText  = document.getElementById('previewText');
+  var fontSize     = document.getElementById('fontSize');
+  var fsVal        = document.getElementById('fsVal');
+  var fontWeight   = document.getElementById('fontWeight');
+  var lineHeight   = document.getElementById('lineHeight');
+  var lhVal        = document.getElementById('lhVal');
+  var fontColor    = document.getElementById('fontColor');
+  var colorHex     = document.getElementById('colorHex');
+  var previewBtn   = document.getElementById('previewBtn');
   var resultSection = document.getElementById('resultSection');
-  var resultCard  = document.getElementById('resultCard');
+  var resultCard   = document.getElementById('resultCard');
   var resultFontName = document.getElementById('resultFontName');
-  var resultPreview = document.getElementById('resultPreview');
-  var copyNameBtn  = document.getElementById('copyNameBtn');
-  var copyCssBtn   = document.getElementById('copyCssBtn');
-  var tryOtherBtn  = document.getElementById('tryOtherBtn');
+  var resultPreview  = document.getElementById('resultPreview');
+  var copyNameBtn   = document.getElementById('copyNameBtn');
+  var copyCssBtn    = document.getElementById('copyCssBtn');
+  var tryOtherBtn   = document.getElementById('tryOtherBtn');
+  var pairingSection = document.getElementById('pairingSection');
+  var pairingCards   = document.getElementById('pairingCards');
 
   // 字号滑动
   fontSize.addEventListener('input', function(){ fsVal.textContent = fontSize.value + 'px'; });
-
+  // 行高滑动
+  lineHeight.addEventListener('input', function(){ lhVal.textContent = (lineHeight.value / 10).toFixed(1); });
   // 颜色显示
   fontColor.addEventListener('input', function(){ colorHex.textContent = fontColor.value; });
 
@@ -338,24 +402,23 @@
       cats.forEach(function(c){ c.classList.remove('active'); });
       cat.classList.add('active');
       var catType = cat.dataset.cat;
-      // 筛选出对应分类的 option 并选中第一个
-      var firstOpt = null;
+      // 找到该分类的第一个option并选中
+      var targetOpt = null;
       for (var i = 0; i < fontSelect.options.length; i++) {
         var opt = fontSelect.options[i];
-        if (opt.value === '') continue;
+        if (!opt.value) continue;
         var fm = fontMap[opt.value];
         if (!fm) continue;
-        if (catType === 'all' || fm.tag.indexOf(catType) !== -1 || 
-           (catType === 'song' && fm.tag === '宋体类') ||
-           (catType === 'hei' && fm.tag === '黑体类') ||
-           (catType === 'kai' && fm.tag === '楷体类') ||
-           (catType === 'li' && (fm.tag === '隶书类' || fm.name.indexOf('隶') !== -1)) ||
-           (catType === 'art' && fm.tag === '艺术创意') ||
-           (catType === 'brush' && fm.tag === '书法手写')) {
-          if (!firstOpt) firstOpt = opt;
-        }
+        var match = catType === 'all' ||
+          (catType === 'song'   && fm.tag === '宋体类') ||
+          (catType === 'hei'    && fm.tag === '黑体类') ||
+          (catType === 'kai'    && fm.tag === '楷体类') ||
+          (catType === 'li'     && (fm.tag === '隶书类' || fm.name.indexOf('隶') !== -1)) ||
+          (catType === 'art'    && fm.tag === '艺术创意') ||
+          (catType === 'brush'  && fm.tag === '书法手写');
+        if (match && !targetOpt) targetOpt = opt;
       }
-      if (firstOpt) firstOpt.selected = true;
+      if (targetOpt) { targetOpt.selected = true; doPreview(); }
     });
   });
 
@@ -366,6 +429,8 @@
     if (!fm) return;
     var text = previewText.value || '兴程网络';
     var size = fontSize.value + 'px';
+    var weight = fontWeight.value;
+    var lh = (lineHeight.value / 10).toFixed(1);
     var color = fontColor.value;
 
     resultFontName.innerHTML =
@@ -377,12 +442,12 @@
     resultPreview.innerHTML = '';
     // 大字预览
     var big = document.createElement('div');
-    big.style.cssText = 'font-family:' + fm.family + ';font-size:' + size + ';color:' + color + ';line-height:1.6;word-break:break-all;';
+    big.style.cssText = 'font-family:' + fm.family + ';font-size:' + size + ';font-weight:' + weight + ';color:' + color + ';line-height:' + lh + ';word-break:break-all;';
     big.textContent = text;
     resultPreview.appendChild(big);
     // 小字对比
     var small = document.createElement('div');
-    small.style.cssText = 'font-family:' + fm.family + ';font-size:16px;color:rgba(255,255,255,.35);margin-top:14px;line-height:1.7;';
+    small.style.cssText = 'font-family:' + fm.family + ';font-size:16px;color:rgba(255,255,255,.35);margin-top:14px;line-height:' + lh + ';';
     small.textContent = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ  abcdefghijklmnopqrstuvwxyz  0123456789  ' + text;
     resultPreview.appendChild(small);
 
@@ -391,6 +456,35 @@
 
     // 存当前字体 key 供复制用
     resultSection.dataset.key = key;
+
+    // 显示搭配推荐
+    showPairings(key);
+  }
+
+  function showPairings(key) {
+    var fm = fontMap[key];
+    if (!fm) return;
+    pairingCards.innerHTML = '';
+    pairings.forEach(function(p) {
+      var card = document.createElement('div');
+      card.className = 'pairing-card';
+      var fontsHTML = '';
+      p.fonts.forEach(function(fk) {
+        var f = fontMap[fk];
+        if (!f) return;
+        fontsHTML += '<span style="font-family:' + f.family + ';margin-right:8px;">' + f.name + '</span>';
+      });
+      card.innerHTML =
+        '<div class="pairing-fonts">' + fontsHTML + '</div>' +
+        '<div class="pairing-desc">' + p.title + '：' + p.desc + '</div>';
+      card.addEventListener('click', function() {
+        // 切换到推荐的第一个字体
+        fontSelect.value = p.fonts[0];
+        doPreview();
+      });
+      pairingCards.appendChild(card);
+    });
+    pairingSection.classList.add('show');
   }
 
   previewBtn.addEventListener('click', doPreview);
@@ -406,7 +500,7 @@
     navigator.clipboard.writeText(fm.name).then(function(){
       copyNameBtn.textContent = '✅ 已复制';
       copyNameBtn.classList.add('copied');
-      setTimeout(function(){ copyNameBtn.textContent = '📋 复制字体名'; copyNameBtn.classList.remove('copied'); }, 1500);
+      setTimeout(function() { copyNameBtn.textContent = '📋 复制字体名'; copyNameBtn.classList.remove('copied'); }, 1500);
     });
   });
 
@@ -415,11 +509,11 @@
     var key = resultSection.dataset.key;
     var fm  = fontMap[key];
     if (!fm) return;
-    var css = 'font-family: ' + fm.family + ';\nfont-size: ' + fontSize.value + 'px;\ncolor: ' + fontColor.value + ';';
+    var css = 'font-family: ' + fm.family + ';\nfont-size: ' + fontSize.value + 'px;\nfont-weight: ' + fontWeight.value + ';\ncolor: ' + fontColor.value + ';\nline-height: ' + (lineHeight.value / 10).toFixed(1) + ';';
     navigator.clipboard.writeText(css).then(function(){
       copyCssBtn.textContent = '✅ 已复制';
       copyCssBtn.classList.add('copied');
-      setTimeout(function(){ copyCssBtn.textContent = '🎨 复制CSS代码'; copyCssBtn.classList.remove('copied'); }, 1500);
+      setTimeout(function() { copyCssBtn.textContent = '🎨 复制CSS代码'; copyCssBtn.classList.remove('copied'); }, 1500);
     });
   });
 
@@ -436,7 +530,7 @@
   doPreview();
 })();
 </script>
-<script src="../script.js?v=25062517"></script>
+  <script src="../script.js?v=25062801"></script>
 
   <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
 </body>

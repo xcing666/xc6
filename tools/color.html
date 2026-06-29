@@ -3,255 +3,722 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="免费在线配色方案生成工具 — 输入关键词或选择风格，AI 生成品牌配色方案。" />
-  <title>配色方案生成 — 智能工具中心</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🎨</text></svg>" />
+  <meta name="description" content="AI图片智能美化 — 纯本地处理，一键滤镜、批量处理、前后对比、点击放大查看细节，免费下载。" />
+  <title>AI图片智能美化 — 兴程网络</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>&#x1F916;</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062715" />
+  <link rel="stylesheet" href="../style.css?v=25062812" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
-    .tool-container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+    .tool-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
     .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
     .tool-back:hover { color: var(--c1); }
     .tool-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
     .tool-title span { color: var(--c1); }
-    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; }
+    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 24px; line-height: 1.65; }
 
-    .color-form { margin-bottom: 28px; }
-    .color-field { margin-bottom: 16px; }
-    .color-label { font-size: 13px; color: rgba(255,255,255,.6); margin-bottom: 8px; display: block; }
-    .color-input {
-      width: 100%; padding: 12px 16px; border-radius: 10px;
-      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
-      color: #fff; font-size: 14px; outline: none; box-sizing: border-box;
-      transition: border-color .3s;
+    /* 上传区 */
+    .up-box {
+      max-width: 480px; margin: 0 auto 20px;
+      padding: 40px 24px;
+      border: 2px dashed rgba(0,212,255,0.35);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      cursor: pointer; text-align: center;
+      transition: all 0.25s;
     }
-    .color-input:focus { border-color: var(--c1); }
+    .up-box:hover { border-color: var(--c1); background: rgba(0,212,255,0.06); transform: translateY(-2px); }
+    .up-icon { font-size: 42px; margin-bottom: 10px; }
+    .up-text { color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 4px; }
+    .up-hint { font-size: 12px; color: rgba(255,255,255,0.3); }
 
-    .color-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 36px; border-radius: 28px;
-      background: linear-gradient(135deg, var(--c1), var(--c2));
-      color: #fff; font-size: 15px; font-weight: 600;
-      border: none; cursor: pointer; transition: transform .3s, box-shadow .3s;
+    /* 功能标签 */
+    .feat-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 700px; margin: 0 auto 18px; }
+    .feat-tag {
+      display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px;
+      border-radius: 20px; font-size: 12px; white-space: nowrap;
+      color: rgba(255,255,255,0.5);
+      background: rgba(0,212,255,0.07);
+      border: 1px solid rgba(0,212,255,0.12);
     }
-    .color-btn:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(108,92,231,.35); }
 
-    /* 结果 */
-    .color-result { margin-top: 32px; display: none; }
-    .color-result.show { display: block; }
-    .schemes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-    .scheme-card {
-      background: rgba(255,255,255,.03); border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.06); overflow: hidden;
-      transition: transform .3s, box-shadow .3s;
+    /* 隐私说明 */
+    .privacy-note {
+      max-width: 560px; margin: 0 auto 24px;
+      padding: 14px 18px; border-radius: 10px; font-size: 12.5px;
+      background: rgba(0,255,136,0.04); border: 1px solid rgba(0,255,136,0.1);
+      color: rgba(255,255,255,0.4); line-height: 1.7; text-align: left;
     }
-    .scheme-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
-    .scheme-colors { display: flex; height: 100px; }
-    .scheme-color { flex: 1; position: relative; cursor: pointer; transition: flex .3s; }
-    .scheme-color:hover { flex: 2; }
-    .scheme-color::after {
-      content: attr(data-hex); position: absolute; bottom: 6px; left: 0; right: 0;
-      text-align: center; font-size: 11px; color: #fff; font-weight: 600;
-      text-shadow: 0 1px 3px rgba(0,0,0,.6); opacity: 0; transition: opacity .3s;
-    }
-    .scheme-color:hover::after { opacity: 1; }
-    .scheme-info { padding: 14px 16px; }
-    .scheme-name { font-size: 14px; color: #fff; font-weight: 600; margin-bottom: 4px; }
-    .scheme-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.6; }
-    .copy-btn {
-      display: inline-block; margin-top: 8px; padding: 4px 12px; border-radius: 6px;
-      background: rgba(108,92,231,.12); color: var(--c1); font-size: 11px;
-      border: 1px solid rgba(108,92,231,.2); cursor: pointer; transition: background .3s;
-    }
-    .copy-btn:hover { background: rgba(108,92,231,.25); }
+    .privacy-note b { color: var(--c5); }
 
-    @media (max-width: 768px) {
-      .tool-page { padding: 70px 0 30px; }
-      .tool-title { font-size: 22px; }
-      .schemes { grid-template-columns: 1fr; gap: 14px; }
-      .scheme-colors { height: 80px; }
+    /* 编辑器（默认隐藏） */
+    #editorArea { display: none; }
+
+    /* 工具栏 */
+    .edit-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .eb-btn { padding: 7px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; border: none; transition: all 0.2s; }
+    .eb-pri { background: linear-gradient(135deg,var(--c1),var(--c2)); color:#fff; font-weight:700; }
+    .eb-pri:hover{transform:scale(1.04)}
+    .eb-sec { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.6); }
+    .eb-sec:hover { border-color:var(--c1); color:var(--c1); }
+
+    /* 缩略图条 */
+    .thumb-bar { display:flex; gap:8px; overflow-x:auto; padding:6px 0 14px; }
+    .th-item { width:70px; height:70px; border-radius:8px; overflow:hidden; cursor:pointer; border:2px solid transparent; flex-shrink:0; position:relative; }
+    .th-item.on { border-color:var(--c1); }
+    .th-item img { width:100%;height:100%;object-fit:cover;display:block; }
+    .th-item .tdel { position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(255,50,50,0.85);color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center; }
+
+    /* 对比画布 */
+    .cmp-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+    .cmp-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px; text-align:center; cursor:pointer; }
+    .cmp-card:hover { box-shadow:0 0 18px rgba(0,212,255,0.1); }
+    .cmp-card h4 { font-size:13px; color:rgba(255,255,255,0.45); margin-bottom:10px; }
+    .cmp-card canvas { max-width:100%; border-radius:8px; display:block; margin:0 auto; }
+
+    /* 滤镜按钮 */
+    .filt-section { margin-bottom:16px; }
+    .ft-title { font-size:14px; color:var(--c1); font-weight:700; margin-bottom:10px; }
+    .filt-grid { display:flex; flex-wrap:wrap; gap:8px; }
+    .filt-btn { padding:8px 18px; border-radius:22px; font-size:13px; cursor:pointer; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.65); transition:all 0.2s; }
+    .filt-btn:hover,.filt-btn.on { border-color:var(--c1); background:rgba(108,92,231,0.15); color:#fff; }
+
+    /* 滑块 */
+    .adj-section { margin-bottom:18px; }
+    .adj-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; }
+    .adj-item { padding:12px 14px; background:rgba(255,255,255,0.02); border-radius:10px; border:1px solid rgba(255,255,255,0.06); }
+    .adj-label { font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:6px; display:flex; justify-content:space-between; }
+    .adj-label span { color:var(--c2); }
+    .adj-slider { width:100%; accent-color:var(--c1); }
+
+    /* 操作按钮 */
+    .act-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+    .act-btn { padding:10px 28px; border-radius:26px; font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all 0.25s; }
+    .act-main { background:linear-gradient(135deg,var(--c1),var(--c2)); color:#fff; }
+    .act-main:hover{transform:scale(1.04);box-shadow:0 6px 24px rgba(108,92,231,0.3)}
+    .act-sub { background:transparent; border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); }
+    .act-sub:hover{border-color:var(--c1);color:var(--c1)}
+
+    /* AI提示 */
+    .ai-tip { padding:10px 16px; background:rgba(108,92,231,0.08); border:1px solid rgba(108,92,231,0.15); border-radius:8px; font-size:13px; color:rgba(255,255,255,0.6); margin-bottom:16px; }
+
+    /* 放大弹窗 */
+    .z-overlay { display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.92); cursor:grab; align-items:center; justify-content:center; }
+    .z-overlay.show { display:flex; }
+    .z-hint { position:absolute; top:16px;left:16px; padding:6px 14px; background:rgba(0,0,0,0.7); border-radius:8px; color:#fff; font-size:13px; pointer-events:none; }
+    .z-img { max-width:90vw;max-height:90vh; touch-action:none;user-select:none; }
+    .z-close { position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:18px;cursor:pointer;z-index:1; }
+    .z-close:hover{background:rgba(255,255,255,0.3)}
+
+    @media(max-width:768px){
+      .tool-page{padding:70px 0 30px}
+      .tool-title{font-size:22px}
+      .cmp-row{grid-template-columns:1fr}
     }
-    @media (max-width: 480px) {
-      .tool-page { padding: 60px 0 24px; }
-      .tool-title { font-size: 20px; }
-    }
-  .tool-guide { background:rgba(108,92,231,.06); border:1px solid rgba(108,92,231,.15); border-radius:12px; padding:16px 20px; margin-bottom:24px; } .tool-guide h4 { font-size:14px; color:var(--c1); margin-bottom:10px; } .tool-guide ol { color:var(--muted); font-size:13px; line-height:2; padding-left:20px; margin:0; } .tool-guide li { margin-bottom:2px; }
+    @media(max-width:480px){ .tool-page{padding:60px 0 24px} .tool-title{font-size:20px} }
   </style>
 </head>
 <body>
 
-  <nav class="nav" id="nav">
-    <div class="nav-inner">
-      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
-            <ul class="nav-menu" id="navMenu">
-        <li><a href="../index.html">首页</a></li>
-        <li><a href="../design/index.html">广告设计</a></li>
-        <li><a href="../miniprogram/index.html">小程序开发</a></li>
-        <li><a href="../social-media.html">社交媒体运营</a></li>
-        <li><a href="../pdd-assist.html">拼多多助力</a></li>
-        <li><a href="../tools/index.html" class="active">智能工具中心</a></li>
-        <li><a href="../design/ai-culling.html">AI智能选图</a></li>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="../index.html">首页</a></li>
+      <li><a href="../design/index.html">广告设计</a></li>
+      <li><a href="../miniprogram/index.html">小程序开发</a></li>
+      <li><a href="../social-media.html">社交媒体运营</a></li>
+      <li><a href="../pdd-assist.html">拼多多助力</a></li>
+      <li><a href="../tools/index.html" class="active">智能工具中心</a></li>
+      <li><a href="../design/ai-culling.html">AI智能选图</a></li>
+      <li class="nav-group">更多</li>
+      <li><a href="../blog/index.html">博客文章</a></li>
+      <li><a href="../faq.html">常见问题</a></li>
+    </ul>
+    <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-        <li class="nav-group">更多</li>
-        <li><a href="../blog/index.html">博客文章</a></li>
-        <li><a href="../faq.html">常见问题</a></li>
-      </ul>
-      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+<!-- ========== 上传页 ========== -->
+<section class="tool-page" id="uploadPage">
+  <div class="tool-container">
+    <a class="tool-back" href="index.html">&larr; 返回工具中心</a>
+    <h1 class="tool-title"><span>AI</span> 图片智能美化</h1>
+    <p class="tool-desc">上传图片，AI智能分析并一键应用专业滤镜风格。支持前后对比、批量处理、点击放大查看细节。</p>
+
+    <div class="up-box" id="upBox">
+      <div class="up-icon">&#x1F5BC;&#xFE0F;</div>
+      <div class="up-text">点击或拖拽图片到此处</div>
+      <div class="up-hint">支持 JPG / PNG / WebP / HEIC &middot; 单张最大 50MB &middot; 可批量上传</div>
+      <input type="file" id="fileInput" accept="image/*,.heic,.heif" multiple style="display:none" />
     </div>
-  </nav>
 
-  <section class="tool-page">
-    <div class="tool-container">
-      <a class="tool-back" href="index.html">← 返回工具中心</a>
-      <h1 class="tool-title">配色<span>方案生成</span></h1>
-      
-      <div class="tool-guide"><h4>📖 使用步骤</h4><ol><li>输入关键词（如科技温馨）或选择风格</li><li>点击「生成配色」按钮</li><li>查看推荐的多套配色方案</li><li>点击任意色块即可复制色值</li></ol></div>
+    <div class="feat-tags">
+      <span class="feat-tag">&#x1F512; 纯本地处理 &middot; 不上传数据</span>
+      <span class="feat-tag">&#x1F916; AI滤镜 &middot; 12种风格可选</span>
+      <span class="feat-tag">&#x1F4E6; 批量处理 &middot; 多张同时美化</span>
+      <span class="feat-tag">&#x1F441; 前后对比 &middot; 点击放大细节</span>
+      <span class="feat-tag">&#x2728; 特效滤镜 &middot; HDR/闪光灯等</span>
+      <span class="feat-tag">&#x2B07; 免费下载 &middot; PNG/JPG高清导出</span>
+    </div>
 
-      <div class="color-form">
-        <div class="color-field">
-          <label class="color-label">关键词（如：科技、餐饮、医疗、教育）</label>
-          <input class="color-input" id="keyword" type="text" placeholder="输入行业或风格关键词…" value="" />
+    <div class="privacy-note">
+      &#x1F512; <b>隐私声明</b>：所有图片处理均在您的浏览器本地完成，不会上传到任何服务器。<br/>
+      &#x1F4D6; <b>使用步骤</b>：上传图片 &rarr; 选择滤镜 &rarr; 调整参数 &rarr; 查看对比 &rarr; 下载美图。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 编辑器页 ========== -->
+<section class="tool-page" id="editorArea">
+  <div class="tool-container">
+    <!-- 工具栏 -->
+    <div class="edit-bar">
+      <button class="eb-btn eb-sec" onclick="doAddMore()">&#x1F4E6; 添加更多图片</button>
+      <button class="eb-btn eb-sec" onclick="doResetAll()">&#x1F504; 重新开始</button>
+      <div></div>
+      <button class="eb-btn eb-pri" onclick="dlCurrent()">&#x2B07; 下载当前</button>
+      <button class="eb-btn eb-pri" onclick="dlAll()">&#x2B07; 批量下载全部</button>
+    </div>
+
+    <!-- 缩略图 -->
+    <div class="thumb-bar" id="thumbBar"></div>
+
+    <!-- 对比 -->
+    <div class="cmp-row">
+      <div class="cmp-card" onclick="zoomShow('orig')">
+        <h4>&#x1F4F7; 原图（点击放大）</h4>
+        <canvas id="cvOrig"></canvas>
+      </div>
+      <div class="cmp-card" onclick="zoomShow('result')">
+        <h4>&#x2728; AI美化效果（点击放大）</h4>
+        <canvas id="cvResult"></canvas>
+      </div>
+    </div>
+
+    <!-- 滤镜 -->
+    <div class="filt-section">
+      <div class="ft-title">&#x1F3A8; 选择滤镜风格</div>
+      <div class="filt-grid" id="filtGrid"></div>
+    </div>
+
+    <!-- 参数 -->
+    <div class="adj-section">
+      <div class="ft-title">&#x1F39B; 手动微调</div>
+      <div class="adj-grid">
+        <div class="adj-item">
+          <div class="adj-label">&#x2600;&#xFE0F; 亮度 <span id="vBright">0</span></div>
+          <input type="range" class="adj-slider" id="slBright" min="-100" max="100" value="0" oninput="updVal(this,'vBright')" />
         </div>
-        <div class="color-field">
-          <label class="color-label">风格</label>
-          <select class="color-input" id="styleSelect" style="cursor:pointer; appearance:none; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;">
-            <option value="tech" style="background:#1a1f3a;color:#fff;">科技 · 未来感</option>
-            <option value="food" style="background:#1a1f3a;color:#fff;">餐饮 · 食欲感</option>
-            <option value="medical" style="background:#1a1f3a;color:#fff;">医疗 · 洁净感</option>
-            <option value="edu" style="background:#1a1f3a;color:#fff;">教育 · 信赖感</option>
-            <option value="fashion" style="background:#1a1f3a;color:#fff;">时尚 · 高级感</option>
-            <option value="nature" style="background:#1a1f3a;color:#fff;">自然 · 清新感</option>
-            <option value="festive" style="background:#1a1f3a;color:#fff;">节日 · 喜庆感</option>
-            <option value="minimal" style="background:#1a1f3a;color:#fff;">极简 · 性冷淡</option>
-          </select>
+        <div class="adj-item">
+          <div class="adj-label">&#x25C6; 对比度 <span id="vContrast">0</span></div>
+          <input type="range" class="adj-slider" id="slContrast" min="-100" max="100" value="0" oninput="updVal(this,'vContrast')" />
+        </div>
+        <div class="adj-item">
+          <div class="adj-label">&#x1F3A8; 饱和度 <span id="vSaturate">0</span></div>
+          <input type="range" class="adj-slider" id="slSaturate" min="-100" max="100" value="0" oninput="updVal(this,'vSaturate')" />
+        </div>
+        <div class="adj-item">
+          <div class="adj-label">&#x1F525; 锐化 <span id="vSharp">0</span></div>
+          <input type="range" class="adj-slider" id="slSharp" min="0" max="100" value="0" oninput="updVal(this,'vSharp')" />
         </div>
       </div>
+    </div>
 
-      <button class="color-btn" id="genBtn">🎨 生成配色方案</button>
+    <!-- AI提示 -->
+    <div class="ai-tip" id="aiTip">&#x1F916; AI正在分析...</div>
 
-      <div class="color-result" id="colorResult">
-        <h3 style="color:#fff;font-size:16px;margin-bottom:20px;">推荐配色方案</h3>
-        <div class="schemes" id="schemesBox"></div>
+    <!-- 操作 -->
+    <div class="act-row">
+      <button class="act-btn act-sub" onclick="doResetParams()">&#x21BB; 重置参数</button>
+    </div>
+  </div>
+</section>
+
+<!-- 放大弹窗 -->
+<div class="z-overlay" id="zOverlay" onclick="zoomClose(event)">
+  <div class="z-hint" id="zHint">100%</div>
+  <img class="z-img" id="zImg" draggable="false" />
+  <button class="z-close" onclick="zoomClose(event)">&#x2715;</button>
+</div>
+
+<!-- 底部（与qrcode完全一致） -->
+<footer class="footer" id="contact">
+  <div class="container">
+    <div class="footer-brand">
+      <h3>兴程<span>网络</span></h3>
+      <p>技术驱动创意 &middot; 专注数字服务<br/>为您的品牌提供一站式数字化解决方案</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-group">
+        <div class="footer-group-title" onclick="toggleFooterGroup(this)"><span>服务项目</span><span class="footer-arrow">&#x25B8;</span></div>
+        <div class="footer-group-content">
+          <a href="../design/index.html">广告平面图设计</a>
+          <a href="../miniprogram/index.html">微信小程序开发</a>
+          <a href="../social-media.html">社交媒体运营</a>
+          <a href="../pdd-assist.html">拼多多助力</a>
+          <a href="../design/ai-culling.html">AI智能选图</a>
+          <a href="../tools/index.html">智能工具中心</a>
+        </div>
+      </div>
+      <div class="footer-group">
+        <div class="footer-group-title" onclick="toggleFooterGroup(this)"><span>联系方式</span></div>
+        <div class="footer-group-content" style="max-height:none;padding:12px 0;overflow:visible;">
+          <p style="color:var(--text-dim);font-size:12px;padding:4px 0;line-height:1.6;">QQ&#xff1a;738874448</p>
+          <p style="color:var(--text-dim);font-size:12px;padding:4px 0;line-height:1.6;">微信&#xff1a;xcing888</p>
+          <p style="color:var(--text-dim);font-size:12px;padding:4px 0;line-height:1.6;">邮箱&#xff1a;738874448@qq.com</p>
+        </div>
       </div>
     </div>
-  </section>
-
-    <footer class="footer-simple">
-    <div class="container">
-      <p>Copyright &copy; 2020-2026 兴程网络 &middot; 保留所有权利</p>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <p>Copyright &copy; 2020-2026 <span>兴程网络</span> &middot; 保留所有权利</p>
     </div>
-  </footer>
+  </div>
+</footer>
 
+<script src="../script.js?v=25062811"></script>
 <script>
+/* ============================================================
+   AI 图片智能美化 — 纯前端实现 v=25062809
+   ============================================================ */
 (function(){
-  // 配色种子库
-  var palettes = {
-    tech: [
-      { name:'深空科技', colors:['#0f0c29','#302b63','#24243e','#6c5ce7','#00cec9'], desc:'适合科技、AI、互联网品牌' },
-      { name:'赛博朋克', colors:['#0d0221','#0d3b66','#ff2a6d','#05d9e8','#b000ff'], desc:'适合游戏、电竞、潮流品牌' },
-      { name:'极光冷调', colors:['#0b0e2a','#1a1f4e','#3b82f6','#06b6d4','#a78bfa'], desc:'适合SaaS、云计算、数据平台' },
-    ],
-    food: [
-      { name:'暖胃橙红', colors:['#d63031','#e17055','#fdcb6','#ffeaa7','#6ab04c'], desc:'适合餐饮、食品、外卖品牌' },
-      { name:'咖啡暖调', colors:['#3d2b1f','#6b4c3b','#a67c52','#d4a574','#f5e6ca'], desc:'适合咖啡、烘焙、轻食品牌' },
-      { name:'清新果蔬', colors:['#6ab04c','#badc58','#f9ca24','#f0932b','#eb4d4b'], desc:'适合健康餐、果蔬、有机品牌' },
-    ],
-    medical: [
-      { name:'洁净医疗', colors:['#0a3d62','#1e5f74','#3caea3','#e8f6f3','#ffffff'], desc:'适合医院、诊所、健康平台' },
-      { name:'安心蓝绿', colors:['#0984e3','#74b9ff','#00b894','#55efc4','#dfe6e9'], desc:'适合医疗App、健康管理品牌' },
-      { name:'温暖医护', colors:['#a29bfe','#6c5ce7','#fd79a8','#fab1a','#ffeaa7'], desc:'适合母婴、康复、护理品牌' },
-    ],
-    edu: [
-      { name:'书香墨韵', colors:['#2d3436','#636e72','#b2bec3','#dfe6e9','#fdcb6'], desc:'适合教育、培训、文化品牌' },
-      { name:'青春校园', colors:['#0984e3','#74b9ff','#a29bfe','#6c5ce7','#ffeaa7'], desc:'适合K12教育、兴趣培训品牌' },
-      { name:'智慧蓝黄', colors:['#0c2461','#1e3799','#f6b93a','#e58e26','#fdcb6'], desc:'适合在线教育、知识付费品牌' },
-    ],
-    fashion: [
-      { name:'高级黑金', colors:['#0a0a0a','#1a1a1a','#d4af37','#f5e6a3','#ffffff'], desc:'适合奢侈品、美容、高端品牌' },
-      { name:'莫兰迪', colors:['#8d8468','#b8a99d','#a2b9bc','#c6dabf','#f7d1cd'], desc:'适合服装、家居、生活方式品牌' },
-      { name:'极简白灰', colors:['#ffffff','#dfe6e9','#b2bec3','#636e72','#2d3436'], desc:'适合设计工作室、摄影、艺术品牌' },
-    ],
-    nature: [
-      { name:'森林氧吧', colors:['#1e3f20','#2d5a27','#4a7c3a','#7dbf6b','#c6f68e'], desc:'适合户外、运动、环保品牌' },
-      { name:'海洋清新', colors:['#0a3d62','#1e5f74','#4ecdc4','#a8e6cf','#ffeaa7'], desc:'适合旅游、海岛、水上运动品牌' },
-      { name:'大地暖调', colors:['#3d2b1f','#6b4c3b','#a67c52','#d4a574','#f5e6ca'], desc:'适合农产品、手工艺、民宿品牌' },
-    ],
-    festive: [
-      { name:'中国红金', colors:['#8b0000','#cc0000','#ff3333','#ffd700','#fff8dc'], desc:'适合节日、婚庆、活动策划品牌' },
-      { name:'喜庆彩灯', colors:['#cc0000','#ff6600','#ffcc00','#00cc66','#0066ff'], desc:'适合电商大促、年货、节庆品牌' },
-      { name:'新年福气', colors:['#b30000','#e60012','#ff6633','#ffcc00','#8b5a00'], desc:'适合新年营销、礼盒、食品品牌' },
-    ],
-    minimal: [
-      { name:'性冷淡', colors:['#ffffff','#f5f5f5','#e0e0e0','#a0a0a0','#404040'], desc:'适合设计师品牌、杂志、画廊' },
-      { name:'暖灰调', colors:['#fafafa','#f0ebe3','#d9cfc4','#b8a99d','#8d8468'], desc:'适合家居、香薰、生活方式品牌' },
-      { name:'冷灰调', colors:['#f8f9fa','#e9ecef','#adb5bd','#6c757d','#343a40'], desc:'适合科技周边、数码、极客品牌' },
-    ],
-  };
+  var imgs=[], curIdx=0, curFilter='smart';
+  var _renderTimer=null, _rafId=null;
+  var PREVIEW_MAX=360;  // 预览画布最大边长（越小越流畅）
+  var DL_QUALITY=0.92;   // 下载图片质量
 
-  // 关键词映射
-  var keywordMap = {
-    '科技': 'tech', 'AI': 'tech', '互联网': 'tech', '游戏': 'tech', '电竞': 'tech',
-    '餐饮': 'food', '食品': 'food', '美食': 'food', '咖啡': 'food', '烘焙': 'food',
-    '医疗': 'medical', '健康': 'medical', '医院': 'medical', '医药': 'medical',
-    '教育': 'edu', '培训': 'edu', '学校': 'edu', '学习': 'edu',
-    '时尚': 'fashion', '奢侈': 'fashion', '美容': 'fashion', '高端': 'fashion',
-    '自然': 'nature', '环保': 'nature', '户外': 'nature', '清新': 'nature',
-    '节日': 'festive', '喜庆': 'festive', '新年': 'festive', '婚礼': 'festive',
-    '简约': 'minimal', '极简': 'minimal', '冷淡': 'minimal', '极客': 'minimal',
-  };
+  var FILTS=[
+    {id:'smart',name:'&#x1F916; 智能增强'},
+    {id:'warm',name:'&#x1F31E; 暖色调'},
+    {id:'cool',name:'&#x2744;&#xFE0F; 冷色调'},
+    {id:'vintage',name:'&#x1F4DF; 复古胶片'},
+    {id:'japan',name:'&#x1F337; 日系清新'},
+    {id:'film',name:'&#x1F3AC; 电影感'},
+    {id:'bw',name:'&#x26AB; 黑白高对比'},
+    {id:'vivid',name:'&#x1F3A8; 鲜艳饱和'},
+    {id:'hdr',name:'&#x2604;&#xFE0F; HDR特效'},
+    {id:'flash',name:'&#x2728; 闪光灯特效'},
+    {id:'dream',name:'&#x1F338; 梦幻效果'},
+    {id:'sunset',name:'&#x1F307; 日落暖光'}
+  ];
 
-  document.getElementById('genBtn').addEventListener('click', function(){
-    var kw = document.getElementById('keyword').value.trim();
-    var style = document.getElementById('styleSelect').value;
+  function init(){
+    var up=document.getElementById('upBox'), inp=document.getElementById('fileInput');
+    if(!up||!inp) return;
+    up.addEventListener('click',function(){inp.click();});
+    inp.addEventListener('change',function(e){ handleFiles(e.target.files); });
+    up.addEventListener('dragover',function(e){e.preventDefault();e.stopPropagation();up.style.borderColor='var(--c1)';});
+    up.addEventListener('dragleave',function(e){e.preventDefault();e.stopPropagation();up.style.borderColor='';});
+    up.addEventListener('drop',function(e){ e.preventDefault();e.stopPropagation();up.style.borderColor='';handleFiles(e.dataTransfer.files); });
+    buildFilters();
+  }
 
-    // 尝试从关键词匹配风格
-    var matched = null;
-    for (var key in keywordMap) {
-      if (kw.indexOf(key) !== -1) { matched = keywordMap[key]; break; }
+  function buildFilters(){
+    var g=document.getElementById('filtGrid');
+    if(!g)return;
+    for(var i=0;i<FILTS.length;i++){
+      var b=document.createElement('button');
+      b.className='filt-btn'+(i===0?' on':'');
+      b.innerHTML=FILTS[i].name;
+      b.dataset.id=FILTS[i].id;
+      b.onclick=function(){
+        var bs=g.querySelectorAll('.filt-btn');for(var j=0;j<bs.length;j++)bs[j].classList.remove('on');
+        this.classList.add('on');curFilter=this.dataset.id;
+        // 同步到当前图片数据，并立即出图
+        if(imgs[curIdx]) imgs[curIdx].filt=curFilter;
+        if(typeof window.renderCur==='function') window.renderCur();
+        doAnalyze();
+      };
+      g.appendChild(b);
     }
-    var useStyle = matched || style;
-    var schemes = palettes[useStyle] || palettes.tech;
+  }
 
-    var box = document.getElementById('schemesBox');
-    box.innerHTML = '';
-    schemes.forEach(function(s){
-      var card = document.createElement('div');
-      card.className = 'scheme-card';
-      var colorsHTML = '';
-      s.colors.forEach(function(c){
-        colorsHTML += '<div class="scheme-color" style="background:'+c+'" data-hex="'+c+'"></div>';
-      });
-      card.innerHTML =
-        '<div class="scheme-colors">'+colorsHTML+'</div>' +
-        '<div class="scheme-info">' +
-          '<div class="scheme-name">'+s.name+'</div>' +
-          '<div class="scheme-desc">'+s.desc+'</div>' +
-          '<button class="copy-btn" onclick="copyScheme(this, \''+s.colors.join(',')+'\')">📋 复制色值</button>' +
-        '</div>';
-      box.appendChild(card);
-    });
+  function handleFiles(files){
+    if(!files||!files.length) return;
+    for(var i=0;i<files.length;i++) loadOne(files[i]);
+  }
 
-    document.getElementById('colorResult').classList.add('show');
-    document.getElementById('colorResult').scrollIntoView({behavior:'smooth', block:'center'});
-  });
+  function loadOne(file){
+    if(file.size>50*1024*1024){alert('文件过大，请选择50MB以内');return;}
+    var r=new FileReader();
+    r.onload=function(ev){
+      var im=new Image();
+      im.onload=function(){
+        imgs.push({url:ev.target.result,img:im,filt:curFilter,b:0,c:0,s:0,sh:0});
+        showEditor();
+      };im.src=ev.target.result;
+    };r.readAsDataURL(file);
+  }
 
-  // 复制色值
-  window.copyScheme = function(btn, colors) {
-    navigator.clipboard.writeText(colors).then(function(){
-      btn.textContent = '✅ 已复制';
-      setTimeout(function(){ btn.textContent = '📋 复制色值'; }, 1500);
+  function showEditor(){
+    var up=document.getElementById('uploadPage'),ed=document.getElementById('editorArea');
+    if(up) up.style.display='none';
+    if(ed) ed.style.display='block';
+    curIdx=imgs.length-1;
+    renderThumbs();
+    // 上传后延迟执行，确保DOM已渲染
+    setTimeout(function(){
+      if(typeof window.renderCur==='function') window.renderCur();
+      doAnalyze();
+    }, 80);
+  }
+
+  function renderThumbs(){
+    var bar=document.getElementById('thumbBar');
+    if(!bar) return;
+    bar.innerHTML='';
+    for(var i=0;i<imgs.length;i++){
+      var d=document.createElement('div');
+      d.className='th-item'+(i===curIdx?' on':'');
+      d.onclick=(function(idx){return function(){curIdx=idx;renderThumbs();renderCur()};})(i);
+      var im=document.createElement('img');im.src=imgs[i].url;d.appendChild(im);
+      var db=document.createElement('button');db.className='tdel';db.innerHTML='&#x2715;';
+      db.onclick=(function(idx){return function(evt){evt.stopPropagation();imgs.splice(idx,1);if(imgs.length===0){window.doResetAll();return;}if(curIdx>=imgs.length)curIdx=imgs.length-1;renderThumbs();renderCur();}})(i);
+      d.appendChild(db);bar.appendChild(d);
+    }
+  }
+
+  window.doAddMore=function(){ var i=document.getElementById('fileInput');if(i)i.click(); };
+
+  window.doResetAll=function(){
+    imgs=[];curIdx=0;
+    var u=document.getElementById('uploadPage'),e=document.getElementById('editorArea');
+    if(u)u.style.display='block';if(e)e.style.display='none';
+    doResetParams();
+  };
+
+  window.renderCur=function(){
+    if(_rafId) cancelAnimationFrame(_rafId);
+    _rafId=requestAnimationFrame(function(){_realRenderCur();});
+  };
+
+  function _realRenderCur(){
+    if(!imgs.length||!imgs[curIdx]) return;
+    var d=imgs[curIdx],co=document.getElementById('cvOrig'),cr=document.getElementById('cvResult');
+    if(!co||!cr) return;
+    drawCvs(co,d.img);
+    applyEff(cr,d.img,d.filt,d.b,d.c,d.s,d.sh);
+    syncSliders(d);
+  }
+
+  function drawCvs(cv,img){
+    var sc=Math.min(1,PREVIEW_MAX/img.width,PREVIEW_MAX/img.height);
+    cv.width=Math.max(1,Math.round(img.width*sc));
+    cv.height=Math.max(1,Math.round(img.height*sc));
+    cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+  }
+
+  /* ======== 滤镜核心（预览用，画布已缩小所以快）==== */
+  function applyEff(cv,img,fid,br,cont,sat,sharp){
+    var sc=Math.min(1,PREVIEW_MAX/img.width,PREVIEW_MAX/img.height);
+    var w=Math.max(1,Math.round(img.width*sc)),h=Math.max(1,Math.round(img.height*sc));
+    cv.width=w;cv.height=h;
+    var cx=cv.getContext('2d');cx.drawImage(img,0,0,w,h);
+    var dat=cx.getImageData(0,0,w,h),d=dat.data;
+    var aR=0,aG=0,aB=0,n=w*h;
+    for(var i=0;i<d.length;i+=4){aR+=d[i];aG+=d[i+1];aB+=d[i+2];}
+    aR/=n;aG/=n;aB/=n;
+    var aL=(aR+aG+aB)/3;
+
+    switch(fid){
+      case'smart':fxSmart(d,w,h,aL);break;
+      case'warm':fxWarm(d);break;
+      case'cool':fxCool(d);break;
+      case'vintage':fxVintage(d);break;
+      case'japan':fxJapan(d);break;
+      case'film':fxFilm(d);break;
+      case'bw':fxBW(d);break;
+      case'vivid':fxVivid(d);break;
+      case'hdr':fxHDR(d);break;
+      case'flash':fxFlash(d,w,h);break;
+      case'dream':fxDream(d);break;
+      case'sunset':fxSunset(d,w,h);break;
+    }
+    fxAdj(d,w,h,br,cont,sat);
+    if(sharp>0) fxSharpen(dat,sharp/100);
+    cx.putImageData(dat,0,0);
+  }
+
+  /* ======== 全分辨率渲染（仅用于下载/放大）==== */
+  window.applyEffFull=function(img,fid,br,cont,sat,sharp,cb){
+    var cv=document.createElement('canvas');
+    cv.width=img.width;cv.height=img.height;
+    var cx=cv.getContext('2d');cx.drawImage(img,0,0);
+    var dat=cx.getImageData(0,0,cv.width,cv.height),d=dat.data;
+    // 计算平均亮度，传给 fxSmart
+    var aR=0,aG=0,aB=0,n=d.length/4;
+    for(var i=0;i<d.length;i+=4){aR+=d[i];aG+=d[i+1];aB+=d[i+2];}
+    var avgL=(aR/n+aG/n+aB/n)/3;
+    switch(fid){
+      case'smart':fxSmart(d,cv.width,cv.height,avgL);break;
+      case'warm':fxWarm(d);break;
+      case'cool':fxCool(d);break;
+      case'vintage':fxVintage(d);break;
+      case'japan':fxJapan(d);break;
+      case'film':fxFilm(d);break;
+      case'bw':fxBW(d);break;
+      case'vivid':fxVivid(d);break;
+      case'hdr':fxHDR(d);break;
+      case'flash':fxFlash(d,cv.width,cv.height);break;
+      case'dream':fxDream(d);break;
+      case'sunset':fxSunset(d,cv.width,cv.height);break;
+    }
+    fxAdj(d,cv.width,cv.height,br,cont,sat);
+    if(sharp>0) fxSharpen(dat,sharp/100);
+    cx.putImageData(dat,0,0);
+    cb(cv.toDataURL('image/png',DL_QUALITY));
+  }
+
+  function fxSmart(d,w,h,L){
+    // 智能增强：根据图片平均亮度自动调整，效果更明显
+    if(L<90){
+      // 暗图：提亮+增饱和+加冷调补光
+      for(var i=0;i<d.length;i+=4){
+        d[i]=cl(d[i]*1.25+22);       // 红通道提亮更多
+        d[i+1]=cl(d[i+1]*1.18+14);   // 绿通道
+        d[i+2]=cl(d[i+2]*1.28+20);   // 蓝通道提亮最多（补冷光）
+      }
+    }else if(L>180){
+      // 亮图：降曝光+加饱和+暖调
+      for(var i=0;i<d.length;i+=4){
+        d[i]=cl(d[i]*0.92+12);       // 保留暖调
+        d[i+1]=cl(d[i+1]*0.96+8);
+        d[i+2]=cl(d[i+2]*0.88+6);    // 蓝通道压暗（去冷调）
+      }
+    }else{
+      // 正常亮度：增强对比+饱和+微暖
+      for(var i=0;i<d.length;i+=4){
+        var r=d[i],g=d[i+1],b=d[i+2];
+        // 增强对比度（S曲线）
+        r=cl(128+(r-128)*1.25);
+        g=cl(128+(g-128)*1.18);
+        b=cl(128+(b-128)*1.15);
+        // 微暖调
+        r=cl(r*1.06+4);
+        g=cl(g*1.02);
+        b=cl(b*0.96);
+        d[i]=r; d[i+1]=g; d[i+2]=b;
+      }
+    }
+  }
+  function fxWarm(d){for(var i=0;i<d.length;i+=4){d[i]=cl(d[i]*1.15+15);d[i+1]=cl(d[i+1]*1.05);d[i+2]=cl(d[i+2]*0.88);}}
+  function fxCool(d){for(var i=0;i<d.length;i+=4){d[i]=cl(d[i]*0.88);d[i+1]=cl(d[i+1]*1.02);d[i+2]=cl(d[i+2]*1.18+10);}}
+  function fxVintage(d){for(var i=0;i<d.length;i+=4){var g=d[i]*.299+d[i+1]*.587+d[i+2]*.114;d[i]=cl(g*1.1+20);d[i+1]=cl(g*.95+10);d[i+2]=cl(g*.75);}}
+  function fxJapan(d){for(var i=0;i<d.length;i+=4){d[i]=cl(d[i]*.94+8);d[i+1]=cl(d[i+1]*1.08+5);d[i+2]=cl(d[i+2]*1.04+8);}}
+  function fxFilm(d){for(var i=0;i<d.length;i+=4){var g=d[i]*.299+d[i+1]*.587+d[i+2]*.114;var f=1.15;d[i]=cl(g*f);d[i+1]=cl(g*f*.98);d[i+2]=cl(g*f*.9);}}
+  function fxBW(d){for(var i=0;i<d.length;i+=4){var g=d[i]*.299+d[i+1]*.587+d[i+2]*.114;var v=g>128?cl(g*1.25):cl(g*.7);d[i]=d[i+1]=d[i+2]=v;}}
+  function fxVivid(d){for(var i=0;i<d.length;i+=4){d[i]=cl((d[i]-128)*1.35+128);d[i+1]=cl((d[i+1]-128)*1.35+128);d[i+2]=cl((d[i+2]-128)*1.4+128);}}
+  function fxHDR(d){for(var i=0;i<d.length;i+=4){d[i]=cl(Math.pow(d[i]/255,0.7)*255);d[i+1]=cl(Math.pow(d[i+1]/255,0.72)*255);d[i+2]=cl(Math.pow(d[i+2]/255,0.68)*255);}}
+  function fxFlash(d,w,h){for(var i=0;i<d.length;i+=4){d[i]=cl(d[i]*1.2+20);d[i+1]=cl(d[i+1]*1.2+20);d[i+2]=cl(d[i+2]*1.15+18);}for(var j=0;j<Math.floor(w*h*.003);j++){var p=(Math.floor(Math.random()*w)+Math.floor(Math.random()*h)*w)*4;d[p]=255;d[p+1]=255;d[p+2]=255;}}
+  function fxDream(d){for(var i=0;i<d.length;i+=4){d[i]=cl(d[i]*1.05+12);d[i+1]=cl(d[i+1]*.95);d[i+2]=cl(d[i+2]*1.12+15);}for(var i=0;i<d.length;i+=4){var l=(d[i]+d[i+1]+d[i+2])/3;if(l<120){d[i]=cl(d[i]*1.08);d[i+1]=cl(d[i+1]*1.08);d[i+2]=cl(d[i+2]*1.1);}}}
+  function fxSunset(d,w,h){
+    // 优化：去掉 Math.sqrt，用平方距离代替（性能提升约 3倍）
+    for(var i=0;i<d.length;i+=4){d[i]=cl(d[i]*1.25+25);d[i+1]=cl(d[i+1]*1.02+8);d[i+2]=cl(d[i+2]*0.72);}
+    var cx=w/2,cy=h/2,mD2=cx*cx+cy*cy;  // 最大距离的平方
+    for(var y=0;y<h;y++){
+      for(var x=0;x<w;x++){
+        var dx=x-cx, dy=y-cy, dist2=dx*dx+dy*dy;
+        var v=Math.max(0.35, 1-dist2/mD2*0.7);  // 用平方距离比例，避免 sqrt
+        var idx=(y*w+x)*4;
+        d[idx]=cl(d[idx]*v);
+        d[idx+1]=cl(d[idx+1]*v);
+        d[idx+2]=cl(d[idx+2]*v);
+      }
+    }
+  }
+
+  function fxAdj(d,w,h,br,cont,sat){
+    for(var i=0;i<d.length;i+=4){
+      var r=d[i],g=d[i+1],b=d[i+2];
+      r+=br*2.55;g+=br*2.55;b+=br*2.55;
+      var f=(1+cont/100);r=((r-128)*f)+128;g=((g-128)*f)+128;b=((b-128)*f)+128;
+      var gr=.299*r+.587*g+.114*b,sf=1+sat/100;r=gr+(r-gr)*sf;g=gr+(g-gr)*sf;b=gr+(b-gr)*sf;
+      d[i]=cl(r);d[i+1]=cl(g);d[i+2]=cl(b);
+    }
+  }
+
+  function fxSharpen(dat,amt){
+    var w=dat.width,h=dat.height,d=dat.data,cp=new Uint8ClampedArray(d),kn=[0,-amt,0,-amt,1+4*amt,-amt,0,-amt,0];
+    for(var y=1;y<h-1;y++)for(var x=1;x<w-1;x++)for(var c=0;c<3;c++){var s=0,ki=0;for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++)s+=cp[((y+dy)*w+(x+dx))*4+c]*kn[ki++];d[(y*w+x)*4+c]=cl(s);}
+  }
+  function cl(v){return Math.max(0,Math.min(255,v));}
+
+  window.updVal=function(slider,lblId){document.getElementById(lblId).textContent=slider.value;if(imgs[curIdx]){var d=imgs[curIdx];switch(slider.id){case'slBright':d.b=parseInt(slider.value);break;case'slContrast':d.c=parseInt(slider.value);break;case'slSaturate':d.s=parseInt(slider.value);break;case'slSharp':d.sh=parseInt(slider.value);break;}} if(_renderTimer)clearTimeout(_renderTimer);_renderTimer=setTimeout(function(){if(typeof window.renderCur==='function')window.renderCur();},80);};
+
+  function syncSliders(d){
+    document.getElementById('slBright').value=d.b||0;document.getElementById('vBright').textContent=d.b||0;
+    document.getElementById('slContrast').value=d.c||0;document.getElementById('vContrast').textContent=d.c||0;
+    document.getElementById('slSaturate').value=d.s||0;document.getElementById('vSaturate').textContent=d.s||0;
+    document.getElementById('slSharp').value=d.sh||0;document.getElementById('vSharp').textContent=d.sh||0;
+  }
+
+  window.doApply=function(){
+    if(!imgs.length) return;
+    var d=imgs[curIdx];
+    d.b=parseInt(document.getElementById('slBright').value);
+    d.c=parseInt(document.getElementById('slContrast').value);
+    d.s=parseInt(document.getElementById('slSaturate').value);
+    d.sh=parseInt(document.getElementById('slSharp').value);
+    d.filt=curFilter;
+    renderCur();
+  };
+
+  window.doResetParams=function(){
+    var ids=['slBright','slContrast','slSaturate','slSharp'],vids=['vBright','vContrast','vSaturate','vSharp'];
+    for(var i=0;i<ids.length;i++){document.getElementById(ids[i]).value=0;document.getElementById(vids[i]).textContent='0';}
+    if(imgs[curIdx]){imgs[curIdx].b=0;imgs[curIdx].c=0;imgs[curIdx].s=0;imgs[curIdx].sh=0;}
+    renderCur();
+  };
+
+    /* AI分析动画 */
+  var _aiTimer=null, _aiStep=0;
+  var _aiMsgs=[
+    '🤖 AI正在分析图片构图...',
+    '🤖 检测光线与色彩分布...',
+    '🤖 识别图片主体与景深...',
+    '🤖 匹配最佳滤镜风格...',
+    '🤖 分析完成，已为您推荐最优方案 ✨'
+  ];
+
+  function doAnalyze(){
+    if(!imgs.length) return;
+    var tip=document.getElementById('aiTip');
+    if(!tip) return;
+    if(_aiTimer) clearInterval(_aiTimer);
+    _aiStep=0;
+    tip.style.transition='opacity .25s';
+    tip.innerHTML=_aiMsgs[0];
+    tip.style.opacity='1';
+    _aiTimer=setInterval(function(){
+      _aiStep++;
+      if(_aiStep>=_aiMsgs.length){
+        clearInterval(_aiTimer);_aiTimer=null;
+        showRealAnalysis(tip);
+        return;
+      }
+      tip.style.opacity='0';
+      setTimeout(function(){
+        tip.innerHTML=_aiMsgs[_aiStep];
+        tip.style.opacity='1';
+      },250);
+    },900);
+  }
+
+  function showRealAnalysis(tip){
+    var d=imgs[curIdx]; if(!d) return;
+    var cv=document.createElement('canvas');
+    cv.width=Math.min(d.img.width,200);cv.height=Math.min(d.img.height,200);
+    var cx=cv.getContext('2d');cx.drawImage(d.img,0,0,cv.width,cv.height);
+    var dt=cx.getImageData(0,0,cv.width,cv.height).data,tr=0,tg=0,tb=0,n=dt.length/4;
+    for(var i=0;i<dt.length;i+=4){tr+=dt[i];tg+=dt[i+1];tb+=dt[i+2];}
+    tr=Math.round(tr/n);tg=Math.round(tg/n);tb=Math.round(tb/n);
+    var lum=Math.round((tr+tg+tb)/3),adv=[];
+    
+    // 根据图片特征动态生成建议，不再固定说「智能增强效果最佳」
+    if(lum<60){
+      adv.push('图片较暗，建议用「智能增强」或「HDR特效」提亮');
+    }else if(lum<120){
+      adv.push('图片光线偏暗，「智能增强」或「冷色调」效果会不错');
+    }else if(lum>200){
+      adv.push('图片较亮，「复古胶片」或「日系清新」能营造柔和感');
+    }else{
+      adv.push('图片光线适中，多数滤镜都能呈现好效果');
+    }
+    
+    // 根据色温给建议
+    if(tr>tg+30 && tr>tb+30){
+      adv.push('画面偏暖色调，「日落暖光」或「暖色调」会强化氛围');
+    }else if(tb>tg+30 && tb>tr+30){
+      adv.push('画面偏冷色调，「冷色调」或「梦幻效果」很合适');
+    }else if(tg>tr+20 && tg>tb+20){
+      adv.push('画面偏绿调，「复古胶片」或「日系清新」能中和');
+    }
+    
+    // 根据对比度给建议（简单估算）
+    var contrast=0;
+    for(var i=0;i<dt.length;i+=4){
+      var pxLum=(dt[i]+dt[i+1]+dt[i+2])/3;
+      contrast+=Math.pow(pxLum-lum,2);
+    }
+    contrast=Math.sqrt(contrast/n);
+    if(contrast>50){
+      adv.push('图片对比度较高，「黑白高对比」或「电影感」会很出彩');
+    }else if(contrast<25){
+      adv.push('图片对比度较低，「鲜艳饱和」或「HDR特效」能增强视觉冲击');
+    }
+    
+    adv.push('💡 调整下方滑块可微调亮度、对比度等参数');
+    tip.innerHTML='🤖 <b>AI分析结果：</b>'+adv.join('；')+'。';
+    tip.style.opacity='1';
+  }
+
+
+  /* ======== 放大（用原始图片，不用预览画布）==== */
+  window.zoomShow=function(type){
+    var ov=document.getElementById('zOverlay'),zi=document.getElementById('zImg'),zh=document.getElementById('zHint');
+    if(!ov||!zi) return;
+    var d=imgs[curIdx]; if(!d) return;
+    ov.classList.add('show');
+    ov._sc=1; ov._tx=0; ov._ty=0;
+    if(zh) zh.textContent='100%';
+
+    if(type==='orig'){
+      // 原图：直接用原始DataURL，放大后清楚
+      zi.src=d.url;
+    }else{
+      // 效果图：用原图尺寸重新渲染（异步，避免阻塞UI）
+      zi.src='';
+      if(zh) zh.textContent='正在渲染高清效果图...';
+      setTimeout(function(){
+        window.applyEffFull(d.img, d.filt, d.b, d.c, d.s, d.sh, function(dataUrl){
+          zi.src=dataUrl;
+          if(zh) zh.textContent='100%';
+        });
+      }, 30);
+    }
+
+    zi.style.transform='scale(1)';
+    ov.onwheel=function(e){e.preventDefault();var d=e.deltaY>0?.9:1.1;ov._sc=Math.max(.1,Math.min(5,ov._sc*d));zi.style.transform='translate('+ov._tx+'px,'+ov._ty+'px) scale('+ov._sc+')';if(zh)zh.textContent=Math.round(ov._sc*100)+'%';};
+    ov.ontouchstart=function(e){if(e.touches.length===2){var tx=e.touches[0].clientX-e.touches[1].clientX,ty=e.touches[0].clientY-e.touches[1].clientY;ov._ld=Math.sqrt(tx*tx+ty*ty);}else if(e.touches.length===1){ov._lx=e.touches[0].clientX;ov._ly=e.touches[0].clientY;}};
+    ov.ontouchmove=function(e){e.preventDefault();if(e.touches.length===2){var tx=e.touches[0].clientX-e.touches[1].clientX,ty=e.touches[0].clientY-e.touches[1].clientY,d=Math.sqrt(tx*tx+ty*ty);if(ov._ld>0){ov._sc*=d/ov._ld;ov._sc=Math.max(.1,Math.min(5,ov._sc));zi.style.transform='translate('+ov._tx+'px,'+ov._ty+'px) scale('+ov._sc+')';if(zh)zh.textContent=Math.round(ov._sc*100)+'%';}ov._ld=d}else if(e.touches.length===1){ov._tx+=e.touches[0].clientX-ov._lx;ov._ty+=e.touches[0].clientY-ov._ly;zi.style.transform='translate('+ov._tx+'px,'+ov._ty+'px) scale('+ov._sc+')';ov._lx=e.touches[0].clientX;ov._ly=e.touches[0].clientY;}};
+  };
+  window.zoomClose=function(e){if(e)e.preventDefault();var o=document.getElementById('zOverlay');if(o)o.classList.remove('show');o.onwheel=null;o.ontouchstart=null;o.ontouchmove=null;};
+  (function(){var ov,zI,dk=false,sx,sy,stx,sty;document.addEventListener('mousedown',function(e){ov=document.getElementById('zOverlay');if(!ov||!ov.classList.contains('show'))return;zI=document.getElementById('zImg');dk=true;sx=e.clientX;sy=e.clientY;stx=ov._tx||0;sty=ov._ty||0;});document.addEventListener('mousemove',function(e){if(!dk||!zI)return;ov._tx=stx+(e.clientX-sx);ov._ty=sty+(e.clientY-sy);zI.style.transform='translate('+ov._tx+'px,'+ov._ty+'px) scale('+(ov._sc||1)+')';});document.addEventListener('mouseup',function(){dk=false;});})();
+
+  /* ======== 下载 ======== */
+  window.dlCurrent=function(){
+    var d=imgs[curIdx]; if(!d) return;
+    // 用原图尺寸重新渲染，确保下载的是高清图
+    applyEffFull(d.img, d.filt, d.b, d.c, d.s, d.sh, function(dataUrl){
+      var a=document.createElement('a');
+      a.download='beautified_'+ (d.origName||'photo') +'.png';
+      a.href=dataUrl; a.click();
     });
   };
 
-  // 关键词输入回车触发生成
-  document.getElementById('keyword').addEventListener('keydown', function(e){
-    if(e.key === 'Enter') document.getElementById('genBtn').click();
-  });
+  window.dlAll=function(){
+    if(!imgs.length) return;
+    imgs.forEach(function(d, idx){
+      setTimeout(function(){
+        applyEffFull(d.img, d.filt, d.b, d.c, d.s, d.sh, function(dataUrl){
+          var a=document.createElement('a');
+          a.download='beautified_'+(idx+1)+'.png';
+          a.href=dataUrl; a.click();
+        });
+      }, idx*800);
+    });
+  };
+
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')zoomClose();});
+
+  /* 启动 */
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}
+  else init();
+
 })();
 </script>
-<script src="../script.js?v=25062517"></script>
 
-  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+<button class="back-to-top" id="backToTop" title="回到顶部">&uarr;</button>
 </body>
 </html>

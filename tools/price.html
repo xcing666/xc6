@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="免费在线设计报价计算器 — 选择设计类型与需求，自动估算市场价格，方便报价参考。" />
+  <meta name="description" content="免费在线设计报价计算器 — 选择设计类型与需求，自动估算市场价格，支持复制报价单，方便报价参考。" />
   <title>设计报价计算器 — 智能工具中心</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>💰</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=25062715" />
+  <link rel="stylesheet" href="../style.css?v=25062801" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 640px; margin: 0 auto; padding: 0 20px; }
@@ -28,8 +28,11 @@
       background: rgba(255,255,255,.06); color: #fff;
       border: 1px solid rgba(255,255,255,.1); font-size: 14px;
       outline: none; cursor: pointer; box-sizing: border-box;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffffff55' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
     }
-    .calc-select option { background: #1a1f3a; }
+    .calc-select option { background: #1a1f3a; color: #fff; padding: 6px; }
     .calc-checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
     .calc-checkbox {
       display: flex; align-items: center; gap: 6px;
@@ -77,6 +80,14 @@
       margin-top: 16px; font-size: 12px; color: rgba(255,255,255,.3);
       line-height: 1.7; text-align: left;
     }
+    .price-actions { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+    .price-action-btn {
+      padding: 8px 22px; border-radius: 8px;
+      background: rgba(108,92,231,.15); color: var(--c1);
+      font-size: 13px; text-decoration: none; border: 1px solid rgba(108,92,231,.25);
+      transition: background .3s; cursor: pointer;
+    }
+    .price-action-btn:hover { background: rgba(108,92,231,.3); }
 
     @media (max-width: 768px) {
       .tool-page { padding: 70px 0 30px; }
@@ -97,7 +108,7 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
-            <ul class="nav-menu" id="navMenu">
+      <ul class="nav-menu" id="navMenu">
         <li><a href="../index.html">首页</a></li>
         <li><a href="../design/index.html">广告设计</a></li>
         <li><a href="../miniprogram/index.html">小程序开发</a></li>
@@ -105,7 +116,6 @@
         <li><a href="../pdd-assist.html">拼多多助力</a></li>
         <li><a href="../tools/index.html" class="active">智能工具中心</a></li>
         <li><a href="../design/ai-culling.html">AI智能选图</a></li>
-
         <li class="nav-group">更多</li>
         <li><a href="../blog/index.html">博客文章</a></li>
         <li><a href="../faq.html">常见问题</a></li>
@@ -118,8 +128,9 @@
     <div class="tool-container">
       <a class="tool-back" href="index.html">← 返回工具中心</a>
       <h1 class="tool-title">设计<span>报价计算器</span></h1>
-      
-      <div class="tool-guide"><h4>📖 使用步骤</h4><ol><li>选择设计类型（海报 / Logo / 包装 / VI）</li><li>根据需求选择级别和复杂度</li><li>查看自动估算的参考价格</li><li>点击「免费咨询」获取准确报价</li></ol></div>
+      <p class="tool-desc">选择设计类型与需求，自动估算参考价格，一键复制报价单。</p>
+
+      <div class="tool-guide"><h4>📖 使用步骤</h4><ol><li>选择设计类型（Logo / 海报 / 包装 / 社交媒体等）</li><li>根据需求选择复杂度、数量、交付速度</li><li>点击「估算报价」查看参考价格</li><li>点击「复制报价单」发送给客户</li></ol></div>
 
       <div class="calc-box">
         <div class="calc-group">
@@ -131,13 +142,15 @@
             <option value="package">包装设计</option>
             <option value="social">社交媒体配图</option>
             <option value="mini">小程序界面设计</option>
+            <option value="video">短视频封面 / 字幕</option>
+            <option value="brand">品牌全案设计</option>
           </select>
         </div>
 
         <div class="calc-group">
           <label class="calc-label">需求复杂度</label>
           <div class="calc-checkbox-group" id="complexGroup">
-            <label class="calc-checkbox active"><input type="radio" name="complex" value="simple" checked /> 简单（参考模板）</label>
+            <label class="calc-checkbox active"><input type="radio" name="complex" value="simple" checked /> 简单（模板改编）</label>
             <label class="calc-checkbox"><input type="radio" name="complex" value="normal" /> 中等（原创设计）</label>
             <label class="calc-checkbox"><input type="radio" name="complex" value="complex" /> 复杂（品牌全案）</label>
           </div>
@@ -165,29 +178,78 @@
         <div class="price-label">预估报价（参考价）</div>
         <div><span class="price-amount" id="priceAmount">0</span><span class="price-unit">元 起</span></div>
         <div class="price-detail" id="priceDetail"></div>
+        <div class="price-actions">
+          <button class="price-action-btn" id="copyQuoteBtn">📋 复制报价单</button>
+          <a class="price-action-btn" href="mailto:738874448@qq.com?subject=设计报价咨询&body=您好，我对贵公司的设计服务感兴趣，请与我联系。">📧 邮件咨询</a>
+        </div>
         <div class="price-note">* 此为市场参考价，实际价格根据需求细节、修改次数、版权归属等因素调整。兴程网络承诺：免费修改直到满意！</div>
       </div>
     </div>
   </section>
 
-    <footer class="footer-simple">
+  <footer class="footer" id="contact">
     <div class="container">
-      <p>Copyright &copy; 2020-2026 兴程网络 &middot; 保留所有权利</p>
+      <div class="footer-brand">
+        <h3>兴程<span>网络</span></h3>
+        <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>服务项目</span>
+            <span class="footer-arrow">▸</span>
+          </div>
+          <div class="footer-group-content">
+            <a href="../design/index.html">广告平面设计</a>
+            <a href="../miniprogram/index.html">微信小程序开发</a>
+            <a href="../social-media.html">社交媒体运营</a>
+            <a href="../pdd-assist.html">拼多多助力</a>
+            <a href="../design/ai-culling.html">AI智能选图</a>
+            <a href="../tools/index.html">智能工具中心</a>
+          </div>
+        </div>
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>联系方式</span>
+          </div>
+          <div class="footer-group-content" style="max-height:none; padding:12px 0; overflow:visible;">
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">QQ：738874448</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">微信：xcing888</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">邮箱：738874448@qq.com</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
+      </div>
     </div>
   </footer>
 
 <script>
 (function(){
-  // 价格表（元）
+  // ===== 价格表（元）=====
   var prices = {
-    logo:    { simple:80,  normal:200, complex:500 },
-    poster:  { simple:50,  normal:120, complex:300 },
-    flyer:   { simple:80,  normal:200, complex:500 },
-    package: { simple:150, normal:400, complex:1000 },
-    social:  { simple:30,  normal:80,  complex:200 },
-    mini:    { simple:300, normal:800, complex:2000 },
+    logo:    { simple:100, normal:300,  complex:800  },
+    poster:  { simple:60,  normal:150,  complex:400  },
+    flyer:   { simple:100, normal:250,  complex:600  },
+    package: { simple:200, normal:500,  complex:1200 },
+    social:  { simple:40,  normal:100,  complex:300  },
+    mini:    { simple:400, normal:1000, complex:3000 },
+    video:   { simple:80,  normal:200,  complex:500  },
+    brand:   { simple:500, normal:1500, complex:5000 },
   };
-  var names = { logo:'Logo/VI', poster:'海报/宣传单', flyer:'折页/画册', package:'包装设计', social:'社交媒体配图', mini:'小程序界面' };
+  var names = {
+    logo:'Logo / VI 设计', poster:'海报 / 宣传单', flyer:'折页 / 画册',
+    package:'包装设计', social:'社交媒体配图', mini:'小程序界面设计',
+    video:'短视频封面 / 字幕', brand:'品牌全案设计'
+  };
+  var typeDesc = {
+    logo:'适合初创品牌、小微企业，含源文件', poster:'单张海报或宣传单，含1-2次修改',
+    flyer:'多页折页或画册，含排版设计', package:'产品包装盒 / 袋设计，含刀模图',
+    social:'朋友圈 / 小红书 / 抖音配图', mini:'小程序页面设计，含交互原型',
+    video:'短视频封面图、字幕样式设计', brand:'含Logo+VI+海报+社交媒体全套'
+  };
   var speedMul = { normal:1, fast:1.5 };
 
   // 单选高亮
@@ -202,37 +264,68 @@
 
   // 数量滑块
   var qtyRange = document.getElementById('qtyRange');
-  var qtyVal = document.getElementById('qtyVal');
+  var qtyVal   = document.getElementById('qtyVal');
   qtyRange.addEventListener('input', function(){ qtyVal.textContent = qtyRange.value; });
 
   // 计算
   document.getElementById('calcBtn').addEventListener('click', function(){
-    var type = document.getElementById('typeSelect').value;
+    var type    = document.getElementById('typeSelect').value;
     var complex = document.querySelector('input[name=complex]:checked').value;
-    var speed = document.querySelector('input[name=speed]:checked').value;
-    var qty = parseInt(qtyRange.value);
+    var speed   = document.querySelector('input[name=speed]:checked').value;
+    var qty     = parseInt(qtyRange.value);
 
-    var base = prices[type][complex];
-    var mul = speedMul[speed];
+    var base  = prices[type][complex];
+    var mul   = speedMul[speed];
     // 数量折扣
-    var discount = qty >= 10 ? 0.8 : qty >= 5 ? 0.9 : qty >= 3 ? 0.95 : 1;
+    var discount = qty >= 10 ? 0.8 : qty >= 5 ? 0.85 : qty >= 3 ? 0.95 : 1;
     var total = Math.round(base * mul * qty * discount);
 
     document.getElementById('priceAmount').textContent = total;
     var detail = document.getElementById('priceDetail');
+    var unitPrice = Math.round(base * mul * discount);
     detail.innerHTML =
       '<div class="price-row"><span class="pr-label">设计类型</span><span class="pr-val">' + names[type] + '</span></div>' +
-      '<div class="price-row"><span class="pr-label">复杂度</span><span class="pr-val">' + ({simple:'简单',normal:'中等',complex:'复杂'})[complex] + '</span></div>' +
+      '<div class="price-row"><span class="pr-label">类型说明</span><span class="pr-val" style="color:rgba(255,255,255,.6);font-size:12px;">' + typeDesc[type] + '</span></div>' +
+      '<div class="price-row"><span class="pr-label">复杂度</span><span class="pr-val">' + ({simple:'简单（模板改编）',normal:'中等（原创设计）',complex:'复杂（品牌全案）'})[complex] + '</span></div>' +
       '<div class="price-row"><span class="pr-label">数量</span><span class="pr-val">' + qty + ' 款</span></div>' +
-      '<div class="price-row"><span class="pr-label">单款价格</span><span class="pr-val">' + Math.round(base*mul*discount) + ' 元</span></div>' +
-      (speed==='fast' ? '<div class="price-row"><span class="pr-label">加急费</span><span class="pr-val">×1.5</span></div>' : '') +
-      (discount<1 ? '<div class="price-row"><span class="pr-label">数量优惠</span><span class="pr-val">' + (discount*10).toFixed(1) + ' 折</span></div>' : '');
+      '<div class="price-row"><span class="pr-label">单款价格</span><span class="pr-val">' + unitPrice + ' 元</span></div>' +
+      (speed==='fast' ? '<div class="price-row"><span class="pr-label">加急费</span><span class="pr-val">×1.5 倍</span></div>' : '') +
+      (discount<1 ? '<div class="price-row"><span class="pr-label">数量优惠</span><span class="pr-val">' + (discount*10).toFixed(1) + ' 折</span></div>' : '') +
+      '<div class="price-row"><span class="pr-label">预计交付</span><span class="pr-val">' + (speed==='fast' ? '24小时内' : '3-5个工作日') + '</span></div>';
+
+    // 存报价信息供复制
+    var quote = '【兴程网络】设计报价单\n' +
+      '━━━━━━━━━━\n' +
+      '设计类型：' + names[type] + '\n' +
+      '复杂度：' + ({simple:'简单',normal:'中等',complex:'复杂'})[complex] + '\n' +
+      '数量：' + qty + ' 款\n' +
+      '交付速度：' + (speed==='fast' ? '加急（24小时内）' : '标准（3-5天）') + '\n' +
+      '━━━━━━━━━━\n' +
+      '预估报价：' + total + ' 元 起\n' +
+      '（含' + (qty > 1 ? qty + '款设计' : '设计') + '，免费修改至满意）\n' +
+      '━━━━━━━━━━\n' +
+      '联系 QQ：738874448\n' +
+      '联系微信：xcing888\n' +
+      '邮箱：738874448@qq.com';
+    document.getElementById('priceResult').dataset.quote = quote;
+
     document.getElementById('priceResult').classList.add('show');
     document.getElementById('priceResult').scrollIntoView({behavior:'smooth', block:'center'});
   });
+
+  // 复制报价单
+  document.getElementById('copyQuoteBtn').addEventListener('click', function(){
+    var quote = document.getElementById('priceResult').dataset.quote;
+    if (!quote) return;
+    navigator.clipboard.writeText(quote).then(function(){
+      var btn = document.getElementById('copyQuoteBtn');
+      btn.textContent = '✅ 已复制';
+      setTimeout(function(){ btn.textContent = '📋 复制报价单'; }, 1500);
+    });
+  });
 })();
 </script>
-<script src="../script.js?v=25062517"></script>
+  <script src="../script.js?v=25062801"></script>
 
   <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
 </body>
