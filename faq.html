@@ -7,7 +7,7 @@
   <title>常见问题 — 兴程网络</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css?v=25062715" />
+  <link rel="stylesheet" href="style.css?v=20260816" />
   <style>
     body::before, body::after { z-index: -1 !important; }
     body { position: relative; }
@@ -16,7 +16,7 @@
     .faq-hero h1 { font-size:clamp(28px,5vw,40px); font-weight:800; color:#f0f2ff; margin-bottom:12px; }
     .faq-hero p { color:var(--muted); font-size:16px; max-width:560px; margin:0 auto; line-height:1.8; }
     .faq-section { padding:40px 24px 60px; max-width:900px; margin:0 auto; }
-    .faq-category { margin-bottom:48px; }
+    .faq-category { margin-bottom:48px; scroll-margin-top:80px; }
     .faq-category h2 { font-size:20px; font-weight:700; color:var(--c1); margin-bottom:24px; display:flex; align-items:center; gap:10px; }
     .faq-category h2 .icon { font-size:24px; }
     .faq-item { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:16px; margin-bottom:12px; overflow:hidden; transition:.3s; }
@@ -63,7 +63,7 @@
   </section>
 
   <section class="faq-section">
-    <div class="faq-category">
+    <div class="faq-category" id="design">
       <h2><span class="icon">🎨</span> 广告设计</h2>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">设计不满意可以修改吗？修改几次？</div>
@@ -83,7 +83,7 @@
       </div>
     </div>
 
-    <div class="faq-category">
+    <div class="faq-category" id="miniprogram">
       <h2><span class="icon">📱</span> 小程序开发</h2>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">开发一个小程序需要多久？</div>
@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <div class="faq-category">
+    <div class="faq-category" id="social">
       <h2><span class="icon">📱</span> 社交媒体运营</h2>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">粉丝增长服务安全吗？会被封号吗？</div>
@@ -119,7 +119,7 @@
       </div>
     </div>
 
-    <div class="faq-category">
+    <div class="faq-category" id="pdd">
       <h2><span class="icon">🎯</span> 拼多多助力</h2>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">助力失败可以退款吗？</div>

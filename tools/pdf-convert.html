@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="免费在线 PDF 转换工具 — 支持 PDF 转 Word(.docx) 与 PDF 转 Excel(.xlsx)，纯前端本地处理，文件不上传服务器，保护您的隐私。" />
+  <title>PDF 转换工具 — 智能工具中心</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>📄</text></svg>" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="stylesheet" href="../style.css?v=20260816" />
+  <style>
+    /* ===== 工具页通用样式（与站内其它工具页一致） ===== */
+    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
+    .tool-container { max-width: 660px; margin: 0 auto; padding: 0 20px; }
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
+    .tool-back:hover { color: var(--c1); }
+    .tool-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .tool-title span { color: var(--c1); }
+    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; }
+    .tool-guide { background:rgba(108,92,231,.06); border:1px solid rgba(108,92,231,.15); border-radius:12px; padding:16px 20px; margin-bottom:24px; }
+    .tool-guide h4 { font-size:14px; color:var(--c1); margin-bottom:10px; }
+    .tool-guide ol { color:var(--muted); font-size:13px; line-height:2; padding-left:20px; margin:0; }
+    .tool-guide li { margin-bottom:2px; }
+
+    /* ===== PDF 工具专属 ===== */
+    .pdf-upload {
+      position: relative;
+      border: 2px dashed rgba(108,92,231,.35);
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      padding: 38px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .3s, background .3s;
+      margin-bottom: 24px;
+    }
+    .pdf-upload:hover, .pdf-upload.dragover {
+      border-color: var(--c1);
+      background: rgba(108,92,231,.07);
+    }
+    .pdf-upload-icon { font-size: 42px; margin-bottom: 12px; }
+    .pdf-upload-text { color: #fff; font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .pdf-upload-hint { color: rgba(255,255,255,.4); font-size: 12px; }
+    .pdf-file-name { display:inline-block; margin-top:14px; padding:6px 14px; border-radius:10px; background:rgba(108,92,231,.15); color:var(--c1); font-size:13px; }
+
+    .pdf-modes { display:flex; gap:14px; margin-bottom:22px; }
+    .pdf-mode-btn {
+      flex:1; padding:14px; border-radius:12px; cursor:pointer; text-align:center;
+      background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.6); font-size:14px; transition:.3s;
+    }
+    .pdf-mode-btn .m-ico { font-size:22px; display:block; margin-bottom:6px; }
+    .pdf-mode-btn.active { background:rgba(108,92,231,.18); border-color:var(--c1); color:#fff; }
+
+    .pdf-btn {
+      display:inline-flex; align-items:center; gap:8px; padding:12px 36px; border-radius:28px;
+      background: linear-gradient(135deg, var(--c1), var(--c2)); color:#fff; font-size:15px; font-weight:600;
+      border:none; cursor:pointer; transition:transform .3s, box-shadow .3s;
+    }
+    .pdf-btn:hover { transform:scale(1.04); box-shadow:0 6px 24px rgba(108,92,231,.35); }
+    .pdf-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    .pdf-status { margin-top:20px; font-size:13px; color:rgba(255,255,255,.6); min-height:20px; }
+    .pdf-status.error {
+      color:#fff;
+      background:rgba(255,71,87,.16);
+      border:1px solid rgba(255,71,87,.55);
+      border-radius:10px;
+      padding:12px 16px;
+      line-height:1.8;
+      font-weight:500;
+    }
+    .pdf-status.ok {
+      color:#5fe3a1;
+      background:rgba(95,227,161,.12);
+      border:1px solid rgba(95,227,161,.4);
+      border-radius:10px;
+      padding:10px 14px;
+    }
+
+    .pdf-result {
+      margin-top:24px; text-align:center; padding:26px 20px;
+      background: rgba(255,255,255,.03); border-radius:16px; border:1px solid rgba(255,255,255,.06);
+      display:none;
+    }
+    .pdf-result.show { display:block; }
+    .pdf-dl-btn {
+      display:inline-flex; align-items:center; gap:8px; padding:10px 26px; border-radius:10px;
+      background:rgba(108,92,231,.15); color:var(--c1); font-size:14px; text-decoration:none;
+      border:1px solid rgba(108,92,231,.25); transition:background .3s;
+    }
+    .pdf-dl-btn:hover { background:rgba(108,92,231,.3); }
+
+    .pdf-note { margin-top:28px; font-size:12px; color:rgba(255,255,255,.35); line-height:1.8; }
+    .pdf-note b { color:rgba(255,255,255,.5); }
+
+    @media (max-width:768px) {
+      .tool-page { padding:70px 0 30px; }
+      .tool-title { font-size:22px; }
+      .pdf-modes { flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="../tools/index.html" class="active">智能工具中心</a></li>
+        <li><a href="../design/ai-culling.html">AI智能选图</a></li>
+
+        <li class="nav-group">更多</li>
+        <li><a href="../blog/index.html">博客文章</a></li>
+        <li><a href="../faq.html">常见问题</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="tool-page">
+    <div class="tool-container">
+      <a class="tool-back" href="index.html">← 返回工具中心</a>
+      <h1 class="tool-title">PDF <span>转换工具</span></h1>
+      <p class="tool-desc">选择 PDF 文件，一键转为 Word 或 Excel。全程在浏览器本地处理，文件不会上传任何服务器。</p>
+
+      <div class="tool-guide">
+        <h4>📖 使用步骤</h4>
+        <ol>
+          <li>拖入或点击选择要转换的 PDF 文件</li>
+          <li>选择转换目标：<b>Word 文档</b> 或 <b>Excel 表格</b></li>
+          <li>点击「开始转换」，等待处理完成</li>
+          <li>点击下载生成的文件</li>
+        </ol>
+      </div>
+
+      <!-- 上传区 -->
+      <div class="pdf-upload" id="dropArea">
+        <div class="pdf-upload-icon">📄</div>
+        <div class="pdf-upload-text">点击选择，或将 PDF 文件拖到这里</div>
+        <div class="pdf-upload-hint">仅支持 .pdf 格式，文件大小建议 ≤ 30MB</div>
+        <div id="fileNameWrap"></div>
+        <input type="file" id="fileInput" accept="application/pdf,.pdf" style="display:none" />
+      </div>
+
+      <!-- 模式选择 -->
+      <div class="pdf-modes">
+        <div class="pdf-mode-btn active" data-mode="word">
+          <span class="m-ico">📝</span>转 Word (.docx)
+        </div>
+        <div class="pdf-mode-btn" data-mode="excel">
+          <span class="m-ico">📊</span>转 Excel (.xlsx)
+        </div>
+      </div>
+
+      <button class="pdf-btn" id="convertBtn" disabled>⚙️ 开始转换</button>
+
+      <div class="pdf-status" id="status"></div>
+
+      <div class="pdf-result" id="result">
+        <a class="pdf-dl-btn" id="dlBtn">⬇ 下载转换结果</a>
+      </div>
+
+      <div class="pdf-note">
+        <b>说明：</b>本工具采用文字/表格提取方案，最适合<b>文字型、表格型 PDF</b>。
+        扫描件（图片型 PDF）、复杂图文混排、数学公式等可能无法识别或会丢失原始排版。
+        转换结果仅供编辑参考，重要文档请核对后再使用。
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 底部 ======== -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-brand">
+        <h3>兴程<span>网络</span></h3>
+        <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>服务项目</span>
+            <span class="footer-arrow">▸</span>
+          </div>
+          <div class="footer-group-content">
+            <a href="../design/index.html">广告平面图设计</a>
+            <a href="../miniprogram/index.html">微信小程序开发</a>
+            <a href="../social-media.html">社交媒体运营</a>
+            <a href="../pdd-assist.html">拼多多助力</a>
+            <a href="../design/ai-culling.html">AI智能选图</a>
+            <a href="../tools/index.html">智能工具中心</a>
+          </div>
+        </div>
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>联系方式</span>
+          </div>
+          <div class="footer-group-content" style="max-height:none; padding:12px 0; overflow:visible;">
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">QQ：738874448</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">微信：xcing888</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">邮箱：738874448@qq.com</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== 功能库（jsDelivr CDN）===== -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/legacy/build/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.1/build/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var statusEl = document.getElementById('status');
+    var convertBtn = document.getElementById('convertBtn');
+    var dropArea = document.getElementById('dropArea');
+    var fileInput = document.getElementById('fileInput');
+    var fileNameWrap = document.getElementById('fileNameWrap');
+    var resultEl = document.getElementById('result');
+    var dlBtn = document.getElementById('dlBtn');
+    var modeBtns = document.querySelectorAll('.pdf-mode-btn');
+
+    var currentFile = null;
+    var currentMode = 'word';
+
+    // 初始化按钮状态：等待库加载，避免 CDN 失败时点了没反应
+    convertBtn.disabled = true;
+    convertBtn.textContent = '⏳ 转换库加载中…';
+
+    // 库加载校验
+    function libsReady() {
+      return window.pdfjsLib && window.docx && window.XLSX;
+    }
+    if (!libsReady()) {
+      statusEl.className = 'pdf-status error';
+      statusEl.textContent = '⚠ 转换功能库加载失败，请检查网络后刷新页面（本工具依赖 pdf.js / docx / xlsx）。';
+      dropArea.style.opacity = .5;
+    } else {
+      // 配置 pdf.js worker
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/legacy/build/pdf.worker.min.js';
+    }
+
+    // 模式切换
+    modeBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        modeBtns.forEach(function (x) { x.classList.remove('active'); });
+        b.classList.add('active');
+        currentMode = b.getAttribute('data-mode');
+      });
+    });
+
+    // 文件选择
+    dropArea.addEventListener('click', function () { fileInput.click(); });
+    fileInput.addEventListener('change', function (e) {
+      if (e.target.files && e.target.files[0]) setFile(e.target.files[0]);
+    });
+    // 拖拽
+    ['dragenter', 'dragover'].forEach(function (ev) {
+      dropArea.addEventListener(ev, function (e) {
+        e.preventDefault(); e.stopPropagation();
+        dropArea.classList.add('dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(function (ev) {
+      dropArea.addEventListener(ev, function (e) {
+        e.preventDefault(); e.stopPropagation();
+        dropArea.classList.remove('dragover');
+      });
+    });
+    dropArea.addEventListener('drop', function (e) {
+      var dt = e.dataTransfer;
+      if (dt && dt.files && dt.files[0]) setFile(dt.files[0]);
+    });
+
+    function setFile(file) {
+      if (file.type !== 'application/pdf' && !/\.pdf$/i.test(file.name)) {
+        statusEl.className = 'pdf-status error';
+        statusEl.textContent = '请选择 PDF 文件。';
+        return;
+      }
+      if (file.size > 30 * 1024 * 1024) {
+        statusEl.className = 'pdf-status error';
+        statusEl.textContent = '文件过大（>30MB），请压缩后重试。';
+        return;
+      }
+      currentFile = file;
+      fileNameWrap.innerHTML = '<span class="pdf-file-name">✓ ' + file.name + '</span>';
+      convertBtn.disabled = !libsReady();
+      resultEl.classList.remove('show');
+      statusEl.className = 'pdf-status';
+      if (libsReady()) {
+        statusEl.textContent = '已选择文件，点击「开始转换」。';
+      } else {
+        statusEl.textContent = '文件已选择，转换库加载完成后即可点击「开始转换」。';
+      }
+    }
+
+    // 转换
+    convertBtn.addEventListener('click', function () {
+      if (!currentFile) { statusEl.textContent = '请先选择 PDF 文件。'; return; }
+      if (!libsReady()) {
+        statusEl.className = 'pdf-status error';
+        statusEl.textContent = '功能库未加载，请刷新页面后重试。';
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function () {
+        var data = new Uint8Array(reader.result);
+        if (currentMode === 'word') convertToWord(data, currentFile.name);
+        else convertToExcel(data, currentFile.name);
+      };
+      reader.readAsArrayBuffer(currentFile);
+    });
+
+    function setBusy(busy, msg) {
+      convertBtn.disabled = busy;
+      convertBtn.textContent = busy ? '⏳ 处理中…' : '⚙️ 开始转换';
+      if (msg) { statusEl.className = 'pdf-status'; statusEl.textContent = msg; }
+    }
+
+    // ===== PDF -> Word =====
+    async function convertToWord(data, name) {
+      setBusy(true, '正在解析 PDF（提取文字）…');
+      try {
+        var pdf = await pdfjsLib.getDocument({ data: data }).promise;
+        var children = [];
+        var avgSize = 0, sizes = [];
+        // 先收集字号用于识别标题
+        for (var p = 1; p <= pdf.numPages; p++) {
+          var page = await pdf.getPage(p);
+          var tc = await page.getTextContent();
+          tc.items.forEach(function (it) {
+            var s = it.height || (it.transform ? Math.abs(it.transform[3]) : 0);
+            if (s) sizes.push(s);
+          });
+        }
+        if (sizes.length) avgSize = sizes.reduce(function (a, b) { return a + b; }, 0) / sizes.length;
+
+        for (var i = 1; i <= pdf.numPages; i++) {
+          var pg = await pdf.getPage(i);
+          var content = await pg.getTextContent();
+          var lines = groupByLine(content.items);
+          lines.forEach(function (ln) {
+            var txt = ln.text.replace(/\s+$/, '');
+            if (!txt) return;
+            var isTitle = ln.size > avgSize * 1.35 && txt.length < 50;
+            var para = new docx.Paragraph({
+              children: [new docx.TextRun({ text: txt, bold: isTitle })],
+              heading: isTitle ? docx.HeadingLevel.HEADING_1 : undefined
+            });
+            children.push(para);
+          });
+          if (i < pdf.numPages) {
+            children.push(new docx.Paragraph({ text: '', pageBreakBefore: true }));
+          }
+        }
+
+        setBusy(true, '正在生成 Word 文档…');
+        var doc = new docx.Document({ sections: [{ children: children }] });
+        var blob = await docx.Packer.toBlob(doc);
+        offerDownload(blob, name.replace(/\.pdf$/i, '') + '.docx');
+        statusEl.className = 'pdf-status ok';
+        statusEl.textContent = '✓ 转换完成，点击下载。';
+      } catch (err) {
+        console.error(err);
+        statusEl.className = 'pdf-status error';
+        statusEl.textContent = '转换失败：' + (err && err.message ? err.message : '未知错误');
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    // ===== PDF -> Excel =====
+    async function convertToExcel(data, name) {
+      setBusy(true, '正在解析 PDF（重建表格）…');
+      try {
+        var pdf = await pdfjsLib.getDocument({ data: data }).promise;
+        var aoa = [];
+        for (var i = 1; i <= pdf.numPages; i++) {
+          var pg = await pdf.getPage(i);
+          var content = await pg.getTextContent();
+          var rows = buildTable(content.items);
+          rows.forEach(function (r) { aoa.push(r); });
+          aoa.push([]); // 页间空行
+        }
+        var ws = XLSX.utils.aoa_to_sheet(aoa);
+        // 自适应列宽
+        ws['!cols'] = autoCols(aoa);
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'PDF数据');
+        setBusy(true, '正在生成 Excel 表格…');
+        var out = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        var blob = new Blob([out], { type: 'application/octet-stream' });
+        offerDownload(blob, name.replace(/\.pdf$/i, '') + '.xlsx');
+        statusEl.className = 'pdf-status ok';
+        statusEl.textContent = '✓ 转换完成，点击下载。';
+      } catch (err) {
+        console.error(err);
+        statusEl.className = 'pdf-status error';
+        statusEl.textContent = '转换失败：' + (err && err.message ? err.message : '未知错误');
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function offerDownload(blob, filename) {
+      var url = URL.createObjectURL(blob);
+      dlBtn.href = url;
+      dlBtn.setAttribute('download', filename);
+      dlBtn.onclick = function () { setTimeout(function () { URL.revokeObjectURL(url); }, 3000); };
+      resultEl.classList.add('show');
+    }
+
+    // 按 y 坐标（基线）分组为行
+    function groupByLine(items) {
+      var arr = items
+        .filter(function (it) { return it.str && it.str.trim() !== ''; })
+        .map(function (it) {
+          var y = it.transform ? it.transform[5] : 0;
+          var x = it.transform ? it.transform[4] : 0;
+          var size = it.height || (it.transform ? Math.abs(it.transform[3]) : 10);
+          return { str: it.str, x: x, y: y, size: size };
+        });
+      arr.sort(function (a, b) { return b.y - a.y || a.x - b.x; });
+      var lines = [], cur = null, lastY = null;
+      arr.forEach(function (it) {
+        if (lastY === null || Math.abs(it.y - lastY) <= Math.max(it.size, 6) * 0.6) {
+          if (!cur) { cur = { text: '', size: 0, maxY: it.y }; lines.push(cur); }
+          cur.text += it.str;
+          cur.size = Math.max(cur.size, it.size);
+        } else {
+          cur = { text: it.str, size: it.size, maxY: it.y };
+          lines.push(cur);
+        }
+        lastY = it.y;
+      });
+      return lines;
+    }
+
+    // 基于坐标重建二维表格
+    function buildTable(items) {
+      var arr = items
+        .filter(function (it) { return it.str && it.str.trim() !== ''; })
+        .map(function (it) {
+          var y = it.transform ? it.transform[5] : 0;
+          var x = it.transform ? it.transform[4] : 0;
+          var w = it.width || (it.str.length * (it.height || 10) * 0.5);
+          var size = it.height || (it.transform ? Math.abs(it.transform[3]) : 10);
+          return { str: it.str.replace(/\s+$/, ''), x: x, y: y, w: w, size: size };
+        });
+      arr.sort(function (a, b) { return b.y - a.y || a.x - b.x; });
+
+      var rows = [], cur = null, lastY = null, rowMax = 0;
+      arr.forEach(function (it) {
+        if (lastY === null || Math.abs(it.y - lastY) <= Math.max(it.size, 6) * 0.6) {
+          if (!cur) { cur = []; rows.push(cur); }
+          addCell(cur, it);
+        } else {
+          cur = []; rows.push(cur);
+          addCell(cur, it);
+        }
+        lastY = it.y;
+        rowMax = Math.max(rowMax, it.size);
+      });
+
+      function addCell(row, it) {
+        var placed = false;
+        for (var c = 0; c < row.length; c++) {
+          var cell = row[c];
+          if (it.x >= cell.xStart - Math.max(it.size, 6) * 0.4 &&
+              it.x <= cell.xEnd + Math.max(it.size, 6) * 0.4) {
+            cell.text += (cell.text ? ' ' : '') + it.str;
+            cell.xEnd = Math.max(cell.xEnd, it.x + it.w);
+            placed = true;
+            break;
+          }
+        }
+        if (!placed) row.push({ text: it.str, xStart: it.x, xEnd: it.x + it.w });
+      }
+
+      // 每行列按 xStart 排序，取 text
+      return rows.map(function (r) {
+        r.sort(function (a, b) { return a.xStart - b.xStart; });
+        return r.map(function (c) { return c.text; });
+      });
+    }
+
+    function autoCols(aoa) {
+      var max = 0;
+      aoa.forEach(function (r) { if (r.length > max) max = r.length; });
+      var cols = [];
+      for (var c = 0; c < max; c++) {
+        var w = 10;
+        aoa.forEach(function (r) {
+          var v = r[c] ? String(r[c]) : '';
+          if (v.length > w) w = Math.min(v.length, 60);
+        });
+        cols.push({ wch: w + 2 });
+      }
+      return cols;
+    }
+
+    // 监听三个 CDN 脚本加载失败
+    var cdnFailed = false;
+    document.querySelectorAll('script[src*="jsdelivr"]').forEach(function (s) {
+      s.addEventListener('error', function () { cdnFailed = true; });
+    });
+
+    // 轮询等待外部库加载完成
+    var libCheckCount = 0;
+    function waitForLibs() {
+      if (cdnFailed) {
+        statusEl.className = 'pdf-status error';
+        statusEl.innerHTML = '转换库加载失败（jsDelivr CDN 访问受限）。<br>请检查网络后点击「刷新页面重试」，或稍后再试。';
+        convertBtn.textContent = '🔄 刷新页面重试';
+        convertBtn.disabled = false;
+        convertBtn.onclick = function () { location.reload(); };
+        return;
+      }
+      if (libsReady()) {
+        convertBtn.disabled = !currentFile;
+        convertBtn.textContent = '⚙️ 开始转换';
+        statusEl.className = 'pdf-status';
+        statusEl.textContent = currentFile ? '已选择文件，点击「开始转换」。' : '请选择 PDF 文件。';
+        return;
+      }
+      if (++libCheckCount > 40) { // 最多等 20 秒
+        statusEl.className = 'pdf-status error';
+        statusEl.innerHTML = '转换库加载超时（可能是网络较慢或 jsDelivr 受限）。<br>请检查网络后点击「刷新页面重试」。';
+        convertBtn.textContent = '🔄 刷新页面重试';
+        convertBtn.disabled = false;
+        convertBtn.onclick = function () { location.reload(); };
+        return;
+      }
+      statusEl.className = 'pdf-status';
+      statusEl.textContent = '正在加载转换库（pdf.js / docx / xlsx）… ' + libCheckCount + '/40';
+      setTimeout(waitForLibs, 500);
+    }
+    waitForLibs();
+  })();
+  </script>
+
+  <script src="../script.js?v=20260816"></script>
+  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+</body>
+</html>

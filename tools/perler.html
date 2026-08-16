@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="免费在线拼豆图纸生成器 — 上传图片一键抠出主体并转为标准拼豆色号（MARD 体系 A–H、M 系列 221 色）图纸。每个格子标注色号、四周带坐标、底部附色号图例与用量，方便直接对照买珠和拼豆。纯前端本地处理，文件不上传。" />
+  <title>拼豆图纸生成器 — 智能工具中心</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🟡</text></svg>" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="stylesheet" href="../style.css?v=20260816" />
+  <style>
+    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
+    .tool-container { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
+    .tool-back:hover { color: var(--c1); }
+    .tool-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .tool-title span { color: var(--c1); }
+    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; line-height:1.6; }
+
+    .pl-upload {
+      position:relative; border:2px dashed rgba(108,92,231,.35); border-radius:16px;
+      background:rgba(255,255,255,.03); padding:34px 20px; text-align:center; cursor:pointer;
+      transition:border-color .3s, background .3s; margin-bottom:22px;
+    }
+    .pl-upload:hover, .pl-upload.dragover { border-color:var(--c1); background:rgba(108,92,231,.07); }
+    .pl-upload-icon { font-size:40px; margin-bottom:10px; }
+    .pl-upload-text { color:#fff; font-size:15px; font-weight:600; margin-bottom:6px; }
+    .pl-upload-hint { color:rgba(255,255,255,.4); font-size:12px; }
+    .pl-file-name { display:inline-block; margin-top:12px; padding:6px 14px; border-radius:10px; background:rgba(108,92,231,.15); color:var(--c1); font-size:13px; }
+
+    .pl-panel { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:18px 20px; margin-bottom:20px; }
+    .pl-panel-title { font-size:13px; color:var(--c1); font-weight:600; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+    .pl-row { display:flex; flex-wrap:wrap; gap:18px 26px; align-items:center; }
+    .pl-row + .pl-row { margin-top:16px; }
+    .pl-field { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .pl-field > label { font-size:13px; color:rgba(255,255,255,.65); white-space:nowrap; }
+    .pl-field select {
+      background:rgba(255,255,255,.06); color:#fff; border:1px solid rgba(255,255,255,.14);
+      border-radius:8px; padding:7px 12px; font-size:13px; outline:none; cursor:pointer;
+    }
+    .pl-field select option { background:#222; color:#fff; }
+    .pl-range { width:130px; accent-color:var(--c1); }
+    .pl-range-val { font-size:12px; color:var(--c1); min-width:62px; }
+    .pl-toggle { display:inline-flex; border:1px solid rgba(255,255,255,.12); border-radius:8px; overflow:hidden; }
+    .pl-toggle button {
+      background:rgba(255,255,255,.04); color:rgba(255,255,255,.6); border:none; padding:7px 13px;
+      font-size:13px; cursor:pointer; transition:.3s;
+    }
+    .pl-toggle button.active { background:rgba(108,92,231,.22); color:#fff; }
+    .pl-check { display:inline-flex; align-items:center; gap:7px; font-size:13px; color:rgba(255,255,255,.7); cursor:pointer; user-select:none; }
+    .pl-check input { width:16px; height:16px; accent-color:var(--c1); cursor:pointer; }
+
+    .pl-btn {
+      display:inline-flex; align-items:center; gap:8px; padding:12px 34px; border-radius:28px;
+      background:linear-gradient(135deg,var(--c1),var(--c2)); color:#fff; font-size:15px; font-weight:600;
+      border:none; cursor:pointer; transition:transform .3s, box-shadow .3s;
+    }
+    .pl-btn:hover { transform:scale(1.04); box-shadow:0 6px 24px rgba(108,92,231,.35); }
+    .pl-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+    .pl-btn.ghost { background:rgba(255,255,255,.06); color:rgba(255,255,255,.75); border:1px solid rgba(255,255,255,.14); }
+    .pl-btn.ghost.active { background:rgba(108,92,231,.22); color:#fff; border-color:rgba(108,92,231,.4); }
+
+    .pl-status { margin-top:16px; font-size:13px; color:rgba(255,255,255,.6); min-height:18px; transition:color .3s; }
+    .pl-status.error { color:#ff7676; }
+    .pl-status.ok { color:#5fe3a1; }
+
+    /* 抠图区 */
+    .pl-bg { display:none; }
+    .pl-bg.show { display:block; }
+    .pl-src-wrap { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+    .pl-src-box { position:relative; }
+    .pl-src-preview { display:block; max-width:240px; max-height:240px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:
+      repeating-conic-gradient(#3a3a3a 0% 25%, #2c2c2c 0% 50%) 50%/18px 18px; cursor:crosshair; }
+    .pl-src-preview.eyedrop { box-shadow:0 0 0 2px var(--c1); }
+    .pl-bg-btns { display:flex; flex-direction:column; gap:10px; }
+    .pl-bg-btns .pl-btn { padding:10px 18px; font-size:13px; border-radius:10px; }
+    .pl-bg-state { font-size:12px; color:rgba(255,255,255,.45); margin-top:6px; line-height:1.6; }
+    .pl-bg-note {
+      margin-top:14px; padding:12px 14px; border-radius:10px;
+      background:rgba(255,170,60,.08); border:1px solid rgba(255,170,60,.28);
+      font-size:12px; color:rgba(255,255,255,.62); line-height:1.75;
+    }
+    .pl-bg-note b { color:#ffc06b; }
+    .pl-bg-note ul { margin:7px 0 0; padding-left:18px; }
+    .pl-bg-note li { margin:4px 0; }
+
+    .pl-result { margin-top:24px; display:none; }
+    .pl-result.show { display:block; }
+    .pl-canvas-wrap { text-align:center; background:#fff; border-radius:12px; padding:14px; display:inline-block; max-width:100%; }
+    .pl-canvas-wrap canvas { max-width:100%; height:auto; image-rendering:auto; border-radius:6px; }
+    .pl-dl { margin-top:14px; text-align:center; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .pl-dl-btn {
+      display:inline-flex; align-items:center; gap:8px; padding:10px 24px; border-radius:10px;
+      background:rgba(108,92,231,.15); color:var(--c1); font-size:14px; text-decoration:none;
+      border:1px solid rgba(108,92,231,.25); cursor:pointer; transition:background .3s;
+    }
+    .pl-dl-btn:hover { background:rgba(108,92,231,.3); }
+
+    .pl-summary { margin:18px 0 10px; font-size:14px; color:#fff; }
+    .pl-summary span { color:var(--c1); font-weight:700; }
+    .pl-bead-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
+    .pl-bead {
+      display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:10px;
+      background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+    }
+    .pl-bead .dot { width:20px; height:20px; border-radius:4px; flex:none; box-shadow:inset 0 0 0 1px rgba(0,0,0,.1); }
+    .pl-bead .info { font-size:12px; color:rgba(255,255,255,.7); line-height:1.45; }
+    .pl-bead .info b { color:#fff; font-size:13px; letter-spacing:.5px; }
+    .pl-bead .info .hex { color:rgba(255,255,255,.4); font-size:11px; }
+    .pl-note { margin-top:26px; font-size:12px; color:rgba(255,255,255,.35); line-height:1.8; }
+    .pl-note b { color:rgba(255,255,255,.6); }
+
+    @media (max-width:768px) {
+      .tool-page { padding:70px 0 30px; }
+      .tool-title { font-size:22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../design/index.html">广告设计</a></li>
+        <li><a href="../miniprogram/index.html">小程序开发</a></li>
+        <li><a href="../social-media.html">社交媒体运营</a></li>
+        <li><a href="../pdd-assist.html">拼多多助力</a></li>
+        <li><a href="../tools/index.html" class="active">智能工具中心</a></li>
+        <li><a href="../design/ai-culling.html">AI智能选图</a></li>
+        <li class="nav-group">更多</li>
+        <li><a href="../blog/index.html">博客文章</a></li>
+        <li><a href="../faq.html">常见问题</a></li>
+      </ul>
+      <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="tool-page">
+    <div class="tool-container">
+      <a class="tool-back" href="index.html">← 返回工具中心</a>
+      <h1 class="tool-title">拼豆图纸<span>生成器</span></h1>
+      <p class="tool-desc">上传一张图片，先<b>抠出主体</b>再转成标准拼豆色号（MARD 体系 A–H、M 系列共 221 色）图纸。输出格式为<b>方格图纸</b>：每个格子标注色号、四周带坐标、底部附色号图例与用量，方便直接对照买珠和拼豆。全程浏览器本地处理，文件不上传。</p>
+
+      <div class="pl-upload" id="dropArea">
+        <div class="pl-upload-icon">🖼️</div>
+        <div class="pl-upload-text">点击选择，或将图片拖到这里</div>
+        <div class="pl-upload-hint">支持 JPG / PNG / WEBP；透明 PNG 会自动识别主体，无需抠图</div>
+        <div id="fileNameWrap"></div>
+        <input type="file" id="fileInput" accept="image/*" style="display:none" />
+      </div>
+
+      <!-- 抠图区 -->
+      <div class="pl-panel pl-bg" id="bgPanel">
+        <div class="pl-panel-title">✂️ 第一步 · 抠出主体（背景区域不拼珠）</div>
+        <div class="pl-src-wrap">
+          <div class="pl-src-box">
+            <img class="pl-src-preview" id="srcPreview" alt="原图预览（点击可吸管去背景）" title="开启「吸管去背景」后，点击图片上的背景色即可抠除" />
+          </div>
+          <div class="pl-bg-btns">
+            <button class="pl-btn ghost" id="eyedropBtn">🎯 吸管去背景</button>
+            <button class="pl-btn ghost" id="autoBtn">🌅 自动去背景（四角）</button>
+            <button class="pl-btn ghost" id="aiBtn">🪄 智能抠图</button>
+            <button class="pl-btn ghost" id="resetBtn">↺ 恢复原图</button>
+            <div class="pl-field" style="margin-top:4px;">
+              <label>容差</label>
+              <input class="pl-range" id="tolRange" type="range" min="10" max="160" step="2" value="60" />
+              <span class="pl-range-val" id="tolVal">60</span>
+            </div>
+            <div class="pl-bg-state" id="bgState">尚未抠图，整张图都会拼珠。</div>
+          </div>
+        </div>
+        <div class="pl-bg-note">
+          <b>⚠️ 抠图效果说明：</b>「智能抠图 / 自动去背景 / 吸管去背景」都是按<b>颜色相似度</b>识别并消除背景的。如果背景是白色、而主体（如人脸、白衣服）也有大面积的白色区域，这些算法会把<b>相连的白色区域一并消除</b>，导致主体上的白色部分被误抠掉、拼豆图出现缺口。
+          <ul>
+            <li>遇到这种情况，先用「吸管去背景」<b>只点选背景空白处的白色</b>，并把<b>容差调小</b>，避免误伤主体。</li>
+            <li>或先在其他工具里把图处理好、上传<b>已抠好透明背景的 PNG</b>，本工具会自动识别透明区域、不拼珠。</li>
+            <li>复杂图可用「容差」滑块反复微调（容差越小、只去掉越接近背景色的像素）。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pl-panel">
+        <div class="pl-panel-title">🧩 第二步 · 网格与配色</div>
+        <div class="pl-row">
+          <div class="pl-field">
+            <label>色板范围</label>
+            <select id="rangeSel">
+              <option value="std">标准拼豆色号（221 色，常用套装均有）</option>
+              <option value="ext">含扩展色（291 色，含荧光/特殊色）</option>
+            </select>
+          </div>
+          <div class="pl-field">
+            <label>宽边格子数</label>
+            <input class="pl-range" id="gridRange" type="range" min="10" max="120" step="1" value="45" />
+            <span class="pl-range-val" id="gridVal">45 × 45</span>
+          </div>
+        </div>
+        <div class="pl-row">
+          <div class="pl-field">
+            <label>仿色抖动</label>
+            <div class="pl-toggle" id="ditherToggle">
+              <button data-on="1" class="active">开启</button>
+              <button data-on="0">关闭</button>
+            </div>
+          </div>
+          <div class="pl-field">
+            <label>最少使用颗数</label>
+            <input class="pl-range" id="thrRange" type="range" min="0" max="40" step="1" value="0" />
+            <span class="pl-range-val" id="thrVal">0（不合并）</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="pl-btn" id="genBtn" disabled>⚙️ 生成拼豆图纸</button>
+      <div class="pl-status" id="status"></div>
+
+      <div class="pl-result" id="result">
+        <div style="text-align:center;">
+          <div class="pl-canvas-wrap"><canvas id="canvas"></canvas></div>
+          <div class="pl-dl">
+            <a class="pl-dl-btn" id="dlBtn">⬇ 下载图纸 PNG</a>
+            <a class="pl-dl-btn" id="csvBtn">📋 下载用珠清单 CSV</a>
+          </div>
+        </div>
+        <div class="pl-summary">📦 共 <span id="totalBeads">0</span> 颗 · <span id="colorKinds">0</span> 种色号</div>
+        <div class="pl-bead-list" id="beadList"></div>
+      </div>
+
+      <div class="pl-note">
+        <b>关于色号：</b>图案中每个格子都映射到拼豆通用标准色号（MARD 体系，如 A1、B20、C5）。这是拼豆圈通用色卡编号，买珠时直接对照色号采购，与成品一致。默认 221 个标准色（常见商家套装均可买到）；勾选「含扩展色」可加入荧光、特殊色，部分需单独采购。<br>
+        <b>抠出主体：</b>背景区域会留空（不拼珠）。「🪄 智能抠图」会从图片四边自动识别并抠除相连的背景（纯本地运算，无需联网，点下立即生效）；也可用「吸管去背景」点选背景色、「自动去背景」按四角识别，或直接上传透明 PNG。<br>
+        <b>图纸格式：</b>固定输出<b>标准拼豆方格图纸</b>——每个方格填充对应色号并印有色号文字，四周标有行/列坐标，底部附色号图例与用量。下载 PNG 后可直接打印或对照屏幕拼豆。<b>仿色抖动</b>用相邻色号交错模拟中间色（肤色、渐变），关掉更接近纯像素风。<b>最少使用颗数</b>把稀有色并入最接近常用色，减少买珠种类。<br>
+        每个格子固定输出 32px（打印级清晰度），宽边格子数越大图纸尺寸越大，建议下载后在 A4 纸上按 5mm/格缩放打印。
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-brand">
+        <h3>兴程<span>网络</span></h3>
+        <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+            <span>服务项目</span><span class="footer-arrow">▸</span>
+          </div>
+          <div class="footer-group-content">
+            <a href="../design/index.html">广告平面图设计</a>
+            <a href="../miniprogram/index.html">微信小程序开发</a>
+            <a href="../social-media.html">社交媒体运营</a>
+            <a href="../pdd-assist.html">拼多多助力</a>
+            <a href="../design/ai-culling.html">AI智能选图</a>
+            <a href="../tools/index.html">智能工具中心</a>
+          </div>
+        </div>
+        <div class="footer-group">
+          <div class="footer-group-title" onclick="toggleFooterGroup(this)"><span>联系方式</span></div>
+          <div class="footer-group-content" style="max-height:none; padding:12px 0; overflow:visible;">
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">QQ：738874448</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">微信：xcing888</p>
+            <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">邮箱：738874448@qq.com</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ===== 拼豆通用标准色号（MARD 体系，2026 修订版）=====
+    var STD = [
+      {code:'A1',h:'#F9F0CD'},{code:'A2',h:'#FBFBD4'},{code:'A3',h:'#FAFC9F'},{code:'A4',h:'#FFE953'},{code:'A5',h:'#F4D738'},{code:'A6',h:'#FDAD49'},{code:'A7',h:'#FF7C2F'},{code:'A8',h:'#EACA49'},{code:'A9',h:'#FF995A'},{code:'A10',h:'#FF9D55'},{code:'A11',h:'#FFDD99'},{code:'A12',h:'#FCB58F'},{code:'A13',h:'#FFBB59'},{code:'A14',h:'#FF6D40'},{code:'A15',h:'#FDFF44'},{code:'A16',h:'#FEF9AE'},{code:'A17',h:'#FFE36E'},{code:'A18',h:'#FECF98'},{code:'A19',h:'#FD7B72'},{code:'A20',h:'#EFCD67'},{code:'A21',h:'#FFE395'},{code:'A22',h:'#FFF3A4'},{code:'A23',h:'#F3D5BF'},{code:'A24',h:'#FBF8C9'},{code:'A25',h:'#FFD67D'},{code:'A26',h:'#FFBB27'},
+      {code:'B1',h:'#E6EE32'},{code:'B2',h:'#5BE419'},{code:'B3',h:'#7CEE9D'},{code:'B4',h:'#1EF942'},{code:'B5',h:'#00BD35'},{code:'B6',h:'#5AE8BA'},{code:'B7',h:'#03AC88'},{code:'B8',h:'#029D26'},{code:'B9',h:'#26523A'},{code:'B10',h:'#95D3C2'},{code:'B11',h:'#5D722A'},{code:'B12',h:'#156F40'},{code:'B13',h:'#D9F794'},{code:'B14',h:'#ADE945'},{code:'B15',h:'#2E5132'},{code:'B16',h:'#C6ED9C'},{code:'B17',h:'#9BB13A'},{code:'B18',h:'#E6EE49'},{code:'B19',h:'#25B88C'},{code:'B20',h:'#C2F0CC'},{code:'B21',h:'#146A6B'},{code:'B22',h:'#0B3C43'},{code:'B23',h:'#303921'},{code:'B24',h:'#EEFCA5'},{code:'B25',h:'#4E846D'},{code:'B26',h:'#8C7A36'},{code:'B27',h:'#D1DCC1'},{code:'B28',h:'#9EE5B9'},{code:'B29',h:'#C5E254'},{code:'B30',h:'#ECFBD0'},{code:'B31',h:'#C4E6B5'},{code:'B32',h:'#9BAB5A'},
+      {code:'C1',h:'#E8FFE7'},{code:'C2',h:'#BCF9F6'},{code:'C3',h:'#A0E2FB'},{code:'C4',h:'#42CCFF'},{code:'C5',h:'#01ACEB'},{code:'C6',h:'#50A9F0'},{code:'C7',h:'#0188D3'},{code:'C8',h:'#1054C0'},{code:'C9',h:'#314BCA'},{code:'C10',h:'#3EBCE2'},{code:'C11',h:'#03B9B9'},{code:'C12',h:'#1C334D'},{code:'C13',h:'#CDE8FF'},{code:'C14',h:'#D5FDFF'},{code:'C15',h:'#23C4C6'},{code:'C16',h:'#1757A8'},{code:'C17',h:'#50D3EC'},{code:'C18',h:'#1C3344'},{code:'C19',h:'#1787A2'},{code:'C20',h:'#0082BE'},{code:'C21',h:'#BEDDFF'},{code:'C22',h:'#67B4BE'},{code:'C23',h:'#C2DCEB'},{code:'C24',h:'#7DC4FF'},{code:'C25',h:'#A9E5E5'},{code:'C26',h:'#2F99B3'},{code:'C27',h:'#EBF5FC'},{code:'C28',h:'#BBCFED'},{code:'C29',h:'#4B5BA3'},
+      {code:'D1',h:'#AEB4F2'},{code:'D2',h:'#858EDD'},{code:'D3',h:'#3054AF'},{code:'D4',h:'#182A84'},{code:'D5',h:'#B843C5'},{code:'D6',h:'#AC7BDE'},{code:'D7',h:'#6E399A'},{code:'D8',h:'#E2D3FF'},{code:'D9',h:'#D5B9F8'},{code:'D10',h:'#361B50'},{code:'D11',h:'#B9BAE1'},{code:'D12',h:'#DE9AD4'},{code:'D13',h:'#B90295'},{code:'D14',h:'#8B279B'},{code:'D15',h:'#2F1F90'},{code:'D16',h:'#E2E1EE'},{code:'D17',h:'#C4D4F6'},{code:'D18',h:'#A45EC7'},{code:'D19',h:'#D8C3D7'},{code:'D20',h:'#9C32B2'},{code:'D21',h:'#9A009B'},{code:'D22',h:'#333995'},{code:'D23',h:'#EADAFC'},{code:'D24',h:'#7786E5'},{code:'D25',h:'#484FC7'},{code:'D26',h:'#E9C3F6'},
+      {code:'E1',h:'#FDD3CC'},{code:'E2',h:'#FECDDF'},{code:'E3',h:'#FF97C3'},{code:'E4',h:'#E8649E'},{code:'E5',h:'#F551A2'},{code:'E6',h:'#FF346B'},{code:'E7',h:'#C63578'},{code:'E8',h:'#FFDBE9'},{code:'E9',h:'#E970CC'},{code:'E10',h:'#D33893'},{code:'E11',h:'#FCDDD2'},{code:'E12',h:'#FFA1C5'},{code:'E13',h:'#B6006D'},{code:'E14',h:'#FFD1BA'},{code:'E15',h:'#F2CFD0'},{code:'E16',h:'#FFECDE'},{code:'E17',h:'#FFE2EA'},{code:'E18',h:'#FFC9D6'},{code:'E19',h:'#FFD2E7'},{code:'E20',h:'#D8C7D1'},{code:'E21',h:'#BD9DA1'},{code:'E22',h:'#CC78A7'},{code:'E23',h:'#937A8D'},{code:'E24',h:'#F6E4F9'},
+      {code:'F1',h:'#FD957B'},{code:'F2',h:'#FC3D45'},{code:'F3',h:'#F74941'},{code:'F4',h:'#FC283C'},{code:'F5',h:'#D80127'},{code:'F6',h:'#B0443D'},{code:'F7',h:'#971937'},{code:'F8',h:'#BC0127'},{code:'F9',h:'#E2677A'},{code:'F10',h:'#A74D22'},{code:'F11',h:'#6F201F'},{code:'F12',h:'#FD4D6A'},{code:'F13',h:'#DD422F'},{code:'F14',h:'#FFA9AD'},{code:'F15',h:'#C80020'},{code:'F16',h:'#FFD9C8'},{code:'F17',h:'#F79B71'},{code:'F18',h:'#D37C46'},{code:'F19',h:'#C1444A'},{code:'F20',h:'#CD9391'},{code:'F21',h:'#F4B1B4'},{code:'F22',h:'#FFD0CB'},{code:'F23',h:'#F57E66'},{code:'F24',h:'#FCC1C4'},{code:'F25',h:'#E54B4F'},
+      {code:'G1',h:'#FFE2CE'},{code:'G2',h:'#FFCAAA'},{code:'G3',h:'#F4C3A5'},{code:'G4',h:'#E1B383'},{code:'G5',h:'#ED9435'},{code:'G6',h:'#F59734'},{code:'G7',h:'#9D5B3E'},{code:'G8',h:'#592A21'},{code:'G9',h:'#E6B483'},{code:'G10',h:'#C88135'},{code:'G11',h:'#E0C593'},{code:'G12',h:'#EBBB83'},{code:'G13',h:'#B7714A'},{code:'G14',h:'#8D614C'},{code:'G15',h:'#FCF9E0'},{code:'G16',h:'#F2D9BA'},{code:'G17',h:'#56403C'},{code:'G18',h:'#FFE4CC'},{code:'G19',h:'#E1943A'},{code:'G20',h:'#A94023'},{code:'G21',h:'#CB8E77'},
+      {code:'H1',h:'#E2E2E2'},{code:'H2',h:'#FFFFFF'},{code:'H3',h:'#B3B3B3'},{code:'H4',h:'#868686'},{code:'H5',h:'#474747'},{code:'H6',h:'#2C2C2C'},{code:'H7',h:'#000000'},{code:'H8',h:'#E7D6DB'},{code:'H9',h:'#E4E7E3'},{code:'H10',h:'#EEE9EA'},{code:'H11',h:'#CECDD5'},{code:'H12',h:'#FFF5ED'},{code:'H13',h:'#F3E1C9'},{code:'H14',h:'#CFD7D3'},{code:'H15',h:'#98A6A8'},{code:'H16',h:'#3B2F23'},{code:'H17',h:'#F1EDED'},{code:'H18',h:'#FFFDF0'},{code:'H19',h:'#F6EFE2'},{code:'H20',h:'#949FA3'},{code:'H21',h:'#F7F3E4'},{code:'H22',h:'#CACAD5'},{code:'H23',h:'#9A9D94'},
+      {code:'M1',h:'#BCC6B8'},{code:'M2',h:'#8AA385'},{code:'M3',h:'#697D80'},{code:'M4',h:'#DACEBE'},{code:'M5',h:'#D0CCAA'},{code:'M6',h:'#B0A782'},{code:'M7',h:'#B4A497'},{code:'M8',h:'#B38281'},{code:'M9',h:'#A58767'},{code:'M10',h:'#C5B1BC'},{code:'M11',h:'#9F7494'},{code:'M12',h:'#644749'},{code:'M13',h:'#D19066'},{code:'M14',h:'#C77361'},{code:'M15',h:'#757D7B'}
+    ];
+    var EXT = [
+      {code:'P1',h:'#FCF8F9'},{code:'P2',h:'#BDA9AB'},{code:'P3',h:'#AEDDA9'},{code:'P4',h:'#FDA49E'},{code:'P5',h:'#EC8D3D'},{code:'P6',h:'#60CFA8'},{code:'P7',h:'#EB9271'},{code:'P8',h:'#F0D958'},{code:'P9',h:'#D9D9D9'},{code:'P10',h:'#D5C8E9'},{code:'P11',h:'#F3ECC8'},{code:'P12',h:'#E6EEF1'},{code:'P13',h:'#A9CBF1'},{code:'P14',h:'#3177B0'},{code:'P15',h:'#668575'},{code:'P16',h:'#FFBE46'},{code:'P17',h:'#FFA324'},{code:'P18',h:'#FEB89F'},{code:'P19',h:'#FFE0E8'},{code:'P20',h:'#FEBECF'},{code:'P21',h:'#ECBEC0'},{code:'P22',h:'#E4A89E'},{code:'P23',h:'#A56269'},
+      {code:'Q1',h:'#F2A5E8'},{code:'Q2',h:'#73B29E'},{code:'Q3',h:'#FFFF00'},{code:'Q4',h:'#FFEBFA'},{code:'Q5',h:'#4F5E5B'},
+      {code:'R1',h:'#D50E21'},{code:'R2',h:'#F92E83'},{code:'R3',h:'#FD8225'},{code:'R4',h:'#F8EC31'},{code:'R5',h:'#34C75B'},{code:'R6',h:'#25B891'},{code:'R7',h:'#17779D'},{code:'R8',h:'#1B60C3'},{code:'R9',h:'#9A56B4'},{code:'R10',h:'#FFDB4D'},{code:'R11',h:'#FFEBFA'},{code:'R12',h:'#D8D5CE'},{code:'R13',h:'#55514C'},{code:'R14',h:'#9EE4DF'},{code:'R15',h:'#77CEE9'},{code:'R16',h:'#3DCFCA'},{code:'R17',h:'#4A867A'},{code:'R18',h:'#7FCD9D'},{code:'R19',h:'#CDE55D'},{code:'R20',h:'#E8C7B4'},{code:'R21',h:'#AD6F3C'},{code:'R22',h:'#6C372F'},{code:'R23',h:'#FEB872'},{code:'R24',h:'#F2C1C0'},{code:'R25',h:'#C9675D'},{code:'R26',h:'#D293BE'},{code:'R27',h:'#EA8CB1'},{code:'R28',h:'#9C87D6'},
+      {code:'T1',h:'#E2DFD7'},
+      {code:'Y1',h:'#FD6FB4'},{code:'Y2',h:'#FEB481'},{code:'Y3',h:'#D7FAA0'},{code:'Y4',h:'#8BDBFA'},{code:'Y5',h:'#E987EA'},
+      {code:'ZG1',h:'#DAABB3'},{code:'ZG2',h:'#D6AA87'},{code:'ZG3',h:'#C1BD8D'},{code:'ZG4',h:'#96869F'},{code:'ZG5',h:'#8490A6'},{code:'ZG6',h:'#94BFE2'},{code:'ZG7',h:'#E2A9D2'},{code:'ZG8',h:'#AB91C0'}
+    ];
+
+    function hexToRgb(h){ return { r:parseInt(h.slice(1,3),16), g:parseInt(h.slice(3,5),16), b:parseInt(h.slice(5,7),16) }; }
+
+    function rgbToLab(r,g,b){
+      r/=255; g/=255; b/=255;
+      r = r>0.04045 ? Math.pow((r+0.055)/1.055,2.4) : r/12.92;
+      g = g>0.04045 ? Math.pow((g+0.055)/1.055,2.4) : g/12.92;
+      b = b>0.04045 ? Math.pow((b+0.055)/1.055,2.4) : b/12.92;
+      var X = r*0.4124 + g*0.3576 + b*0.1805;
+      var Y = r*0.2126 + g*0.7152 + b*0.0722;
+      var Z = r*0.0193 + g*0.1192 + b*0.9505;
+      X/=0.95047; Y/=1.0; Z/=1.08883;
+      var f = function(t){ return t>0.008856 ? Math.cbrt(t) : (7.787*t + 16/116); };
+      var fx=f(X), fy=f(Y), fz=f(Z);
+      return [116*fy-16, 500*(fx-fy), 200*(fy-fz)];
+    }
+
+    function prepPalette(list){
+      list.forEach(function(c){
+        var rgb = hexToRgb(c.h);
+        c.r = rgb.r; c.g = rgb.g; c.b = rgb.b;
+        c.lab = rgbToLab(rgb.r, rgb.g, rgb.b);
+      });
+      return list;
+    }
+
+    function labDist(a, b){
+      var dl=a[0]-b[0], da=a[1]-b[1], db=a[2]-b[2];
+      return dl*dl + da*da + db*db;
+    }
+
+    function nearestIdx(r,g,b, pal){
+      var lab = rgbToLab(r,g,b);
+      var best=0, bd=Infinity;
+      for (var i=0;i<pal.length;i++){
+        var d = labDist(lab, pal[i].lab);
+        if (d<bd){ bd=d; best=i; }
+      }
+      return best;
+    }
+
+    function lum(hex){ var c=hexToRgb(hex); return 0.299*c.r + 0.587*c.g + 0.114*c.b; }
+
+    // ===== DOM =====
+    var statusEl=document.getElementById('status');
+    var genBtn=document.getElementById('genBtn');
+    var dropArea=document.getElementById('dropArea');
+    var fileInput=document.getElementById('fileInput');
+    var fileNameWrap=document.getElementById('fileNameWrap');
+    var bgPanel=document.getElementById('bgPanel');
+    var srcPreview=document.getElementById('srcPreview');
+    var eyedropBtn=document.getElementById('eyedropBtn');
+    var autoBtn=document.getElementById('autoBtn');
+    var aiBtn=document.getElementById('aiBtn');
+    var resetBtn=document.getElementById('resetBtn');
+    var tolRange=document.getElementById('tolRange');
+    var tolVal=document.getElementById('tolVal');
+    var bgState=document.getElementById('bgState');
+    var rangeSel=document.getElementById('rangeSel');
+    var gridRange=document.getElementById('gridRange');
+    var gridVal=document.getElementById('gridVal');
+    var ditherToggle=document.getElementById('ditherToggle');
+    var thrRange=document.getElementById('thrRange');
+    var thrVal=document.getElementById('thrVal');
+    var resultEl=document.getElementById('result');
+    var canvas=document.getElementById('canvas');
+    var dlBtn=document.getElementById('dlBtn');
+    var csvBtn=document.getElementById('csvBtn');
+    var beadList=document.getElementById('beadList');
+    var totalBeads=document.getElementById('totalBeads');
+    var colorKinds=document.getElementById('colorKinds');
+
+    var originalCanvas=null;
+    var procCanvas=null;
+    var ditherOn=true;
+    var eyedropOn=false;
+
+    function setStatus(msg, cls){ statusEl.className='pl-status'+(cls?(' '+cls):''); statusEl.textContent=msg; }
+
+    // —— 滑块 ——
+    gridRange.addEventListener('input', function(){ var v=parseInt(gridRange.value); gridVal.textContent = v + ' × ' + v; });
+    thrRange.addEventListener('input', function(){ var v=parseInt(thrRange.value); thrVal.textContent = v===0 ? '0（不合并）' : v; });
+    tolRange.addEventListener('input', function(){ tolVal.textContent = tolRange.value; });
+    ditherToggle.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        ditherToggle.querySelectorAll('button').forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        ditherOn = b.getAttribute('data-on')==='1';
+      });
+    });
+
+    // —— 上传 ——
+    dropArea.addEventListener('click', function(){ fileInput.click(); });
+    fileInput.addEventListener('change', function(e){ if(e.target.files&&e.target.files[0]) setFile(e.target.files[0]); });
+    ['dragenter','dragover'].forEach(function(ev){ dropArea.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dropArea.classList.add('dragover'); }); });
+    ['dragleave','drop'].forEach(function(ev){ dropArea.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dropArea.classList.remove('dragover'); }); });
+    dropArea.addEventListener('drop', function(e){
+      var dt=e.dataTransfer; if(dt&&dt.files&&dt.files[0]) setFile(dt.files[0]);
+    });
+
+    function setFile(file){
+      if(!/^image\//.test(file.type)){ setStatus('请选择图片文件。','error'); return; }
+      var reader=new FileReader();
+      reader.onload=function(){
+        var img=new Image();
+        img.onload=function(){
+          var cap=1200;
+          var w=img.width, h=img.height;
+          if(Math.max(w,h)>cap){ var s=cap/Math.max(w,h); w=Math.round(w*s); h=Math.round(h*s); }
+          originalCanvas=document.createElement('canvas'); originalCanvas.width=w; originalCanvas.height=h;
+          originalCanvas.getContext('2d').drawImage(img,0,0,w,h);
+          procCanvas=cloneCanvas(originalCanvas);
+          updatePreview();
+          bgPanel.classList.add('show');
+          fileNameWrap.innerHTML='<span class="pl-file-name">✓ '+file.name+'</span>';
+          genBtn.disabled=false;
+          resultEl.classList.remove('show');
+          setStatus('已加载。先在上方「抠出主体」，再点「生成拼豆图纸」。');
+          bgState.textContent='尚未抠图，整张图都会拼珠。';
+        };
+        img.onerror=function(){ setStatus('图片读取失败。','error'); };
+        img.src=reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function cloneCanvas(c){
+      var n=document.createElement('canvas'); n.width=c.width; n.height=c.height;
+      n.getContext('2d').drawImage(c,0,0);
+      return n;
+    }
+
+    function updatePreview(){
+      srcPreview.src=procCanvas.toDataURL();
+      srcPreview.classList.toggle('eyedrop', eyedropOn);
+    }
+
+    function applyKey(r0,g0,b0,tol){
+      var x=procCanvas.getContext('2d');
+      var d=x.getImageData(0,0,procCanvas.width,procCanvas.height); var px=d.data;
+      var t2=tol*tol*3;
+      var removed=0, total=px.length/4;
+      for(var i=0;i<px.length;i+=4){
+        if(px[i+3]<8) continue;
+        var dr=px[i]-r0, dg=px[i+1]-g0, db=px[i+2]-b0;
+        if(dr*dr+dg*dg+db*db <= t2){ px[i+3]=0; removed++; }
+      }
+      x.putImageData(d,0,0);
+      updatePreview();
+      return removed;
+    }
+
+    function sampleAt(nx,ny){
+      var x=procCanvas.getContext('2d');
+      var d=x.getImageData(nx,ny,1,1).data;
+      return [d[0],d[1],d[2]];
+    }
+
+    function autoRemoveBg(){
+      if(!procCanvas) return;
+      var w=procCanvas.width, h=procCanvas.height;
+      var x=procCanvas.getContext('2d');
+      var d=x.getImageData(0,0,w,h).data;
+      var samples=[];
+      var step=Math.max(1, Math.floor(w/10));
+      for(var i=0;i<w;i+=step){ samples.push([d[(0*w+i)*4],d[(0*w+i)*4+1],d[(0*w+i)*4+2]]); samples.push([d[((h-1)*w+i)*4],d[((h-1)*w+i)*4+1],d[((h-1)*w+i)*4+2]]); }
+      var stepy=Math.max(1, Math.floor(h/10));
+      for(var j=0;j<h;j+=stepy){ samples.push([d[(j*w+0)*4],d[(j*w+0)*4+1],d[(j*w+0)*4+2]]); samples.push([d[(j*w+w-1)*4],d[(j*w+w-1)*4+1],d[(j*w+w-1)*4+2]]); }
+      var ar=0,ag=0,ab=0; samples.forEach(function(s){ar+=s[0];ag+=s[1];ab+=s[2];});
+      ar/=samples.length; ag/=samples.length; ab/=samples.length;
+      var n=applyKey(ar,ag,ab, parseInt(tolRange.value));
+      bgState.textContent='已按四角背景色抠图，去除约 '+n+' 个像素。也可再用「吸管去背景」补抠。';
+      setStatus('✓ 已自动抠出背景。','ok');
+      redrawIfShown();
+    }
+
+    srcPreview.addEventListener('click', function(e){
+      if(!eyedropOn || !procCanvas) return;
+      var rect=srcPreview.getBoundingClientRect();
+      var nx=Math.round((e.clientX-rect.left)/rect.width*procCanvas.width);
+      var ny=Math.round((e.clientY-rect.top)/rect.height*procCanvas.height);
+      nx=Math.max(0,Math.min(procCanvas.width-1,nx));
+      ny=Math.max(0,Math.min(procCanvas.height-1,ny));
+      var c=sampleAt(nx,ny);
+      var n=applyKey(c[0],c[1],c[2], parseInt(tolRange.value));
+      bgState.textContent='已用吸管抠除所选背景色，去除约 '+n+' 个像素。可继续点选其他背景色。';
+      setStatus('✓ 已抠除所选背景色。','ok');
+      redrawIfShown();
+    });
+
+    eyedropBtn.addEventListener('click', function(){
+      eyedropOn=!eyedropOn;
+      eyedropBtn.classList.toggle('active', eyedropOn);
+      updatePreview();
+      if(eyedropOn) setStatus('吸管已开启：点击左侧图片上的背景色即可抠除。');
+    });
+    autoBtn.addEventListener('click', autoRemoveBg);
+    resetBtn.addEventListener('click', function(){
+      if(!originalCanvas) return;
+      procCanvas=cloneCanvas(originalCanvas);
+      updatePreview();
+      bgState.textContent='已恢复原图，整张图都会拼珠。';
+      setStatus('已恢复原图。');
+      redrawIfShown();
+    });
+
+    // 智能抠图（纯本地算法：从图像四边做连通区域漫水填充，自动识别并抠除相连背景，无需联网）
+    aiBtn.addEventListener('click', function(){
+      if(!procCanvas) return;
+      aiRemoveBg();
+    });
+
+    function aiRemoveBg(){
+      var w=procCanvas.width, h=procCanvas.height;
+      var ctx=procCanvas.getContext('2d');
+      var img=ctx.getImageData(0,0,w,h);
+      var d=img.data;
+      var N=w*h;
+      var bg=new Uint8Array(N);
+      var sr=0,sg=0,sb=0,sc=0;
+      function acc(x,y){ var i=(y*w+x)*4; if(d[i+3]<8) return; sr+=d[i]; sg+=d[i+1]; sb+=d[i+2]; sc++; }
+      for(var x=0;x<w;x++){ acc(x,0); acc(x,h-1); }
+      for(var y=0;y<h;y++){ acc(0,y); acc(w-1,y); }
+      if(sc===0){ setStatus('无法识别背景，请先上传图片。','error'); return; }
+      var br=sr/sc, bgc=sg/sc, bbc=sb/sc;
+      var tol=parseInt(tolRange.value); var t2=tol*tol*3;
+      var stack=[];
+      function seed(x,y){
+        var i=(y*w+x)*4; if(d[i+3]<8) return;
+        var dr=d[i]-br, dg=d[i+1]-bgc, db=d[i+2]-bbc;
+        if(dr*dr+dg*dg+db*db<=t2){ var k=y*w+x; if(!bg[k]){ bg[k]=1; stack.push(k); } }
+      }
+      for(var x=0;x<w;x++){ seed(x,0); seed(x,h-1); }
+      for(var y=0;y<h;y++){ seed(0,y); seed(w-1,y); }
+      while(stack.length){
+        var cur=stack.pop(); var cx=cur%w, cy=(cur/w)|0;
+        var nb=[[cx+1,cy],[cx-1,cy],[cx,cy+1],[cx,cy-1]];
+        for(var q=0;q<4;q++){
+          var nx=nb[q][0], ny=nb[q][1];
+          if(nx<0||ny<0||nx>=w||ny>=h) continue;
+          var ni=ny*w+nx; if(bg[ni]) continue;
+          var i=ni*4; if(d[i+3]<8) continue;
+          var dr=d[i]-br, dg=d[i+1]-bgc, db=d[i+2]-bbc;
+          if(dr*dr+dg*dg+db*db<=t2){ bg[ni]=1; stack.push(ni); }
+        }
+      }
+      var removed=0;
+      for(var p=0;p<N;p++){ if(bg[p]){ d[p*4+3]=0; removed++; } }
+      ctx.putImageData(img,0,0);
+      updatePreview();
+      bgState.textContent='已智能识别并抠出背景（去除约 '+removed+' 个像素）。可再点「吸管去背景」补抠残留。';
+      setStatus('✓ 智能抠图完成（纯本地运算，无需联网）。','ok');
+      redrawIfShown();
+    }
+
+    genBtn.addEventListener('click', function(){ if(procCanvas) draw(procCanvas); });
+
+    function redrawIfShown(){ if(resultEl.classList.contains('show') && procCanvas) draw(procCanvas); }
+
+    function draw(srcCanvas){
+      var W=parseInt(gridRange.value);
+      var H=Math.max(1, Math.round(W * srcCanvas.height / srcCanvas.width));
+      if(H>300) H=300; if(W>300) W=300;
+
+      var base = rangeSel.value==='ext' ? STD.concat(EXT) : STD;
+      var pal = prepPalette(base.slice());
+
+      var off=document.createElement('canvas');
+      off.width=W; off.height=H;
+      var octx=off.getContext('2d');
+      octx.drawImage(srcCanvas,0,0,W,H);
+      var data=octx.getImageData(0,0,W,H).data;
+      var N=W*H;
+      var rgbBuf=new Float64Array(N*3);
+      var empty=new Uint8Array(N);
+      for(var i=0;i<N;i++){
+        if(data[i*4+3]<100){ empty[i]=1; }
+        else { rgbBuf[i*3]=data[i*4]; rgbBuf[i*3+1]=data[i*4+1]; rgbBuf[i*3+2]=data[i*4+2]; }
+      }
+
+      var idx=new Int32Array(N);
+      if(ditherOn){
+        for(var y=0;y<H;y++){
+          for(var x=0;x<W;x++){
+            var p=y*W+x;
+            if(empty[p]){ idx[p]=-1; continue; }
+            var r=rgbBuf[p*3], g=rgbBuf[p*3+1], b=rgbBuf[p*3+2];
+            var best=nearestIdx(r,g,b,pal);
+            idx[p]=best;
+            var er=r-pal[best].r, eg=g-pal[best].g, eb=b-pal[best].b;
+            var add=function(nx,ny,w2){
+              if(nx<0||nx>=W||ny<0||ny>=H) return;
+              var j=ny*W+nx; if(empty[j]) return;
+              rgbBuf[j*3]+=er*w2; rgbBuf[j*3+1]+=eg*w2; rgbBuf[j*3+2]+=eb*w2;
+            };
+            add(x+1,y,7/16); add(x-1,y+1,3/16); add(x,y+1,5/16); add(x+1,y+1,1/16);
+          }
+        }
+      } else {
+        for(var k=0;k<N;k++){
+          if(empty[k]){ idx[k]=-1; continue; }
+          idx[k]=nearestIdx(rgbBuf[k*3],rgbBuf[k*3+1],rgbBuf[k*3+2],pal);
+        }
+      }
+
+      var thr=parseInt(thrRange.value);
+      if(thr>0){
+        var counts={};
+        for(var c2=0;c2<N;c2++){ if(idx[c2]>=0) counts[idx[c2]]=(counts[idx[c2]]||0)+1; }
+        var keep={};
+        for(var key in counts){ if(counts[key]>=thr) keep[key]=1; }
+        var keepArr=Object.keys(keep).map(Number);
+        if(keepArr.length>0){
+          for(var c3=0;c3<N;c3++){
+            if(idx[c3]>=0 && !keep[idx[c3]]){
+              var cur=pal[idx[c3]].lab, bk=-1, bd=Infinity;
+              keepArr.forEach(function(kk){
+                var d=labDist(cur, pal[kk].lab);
+                if(d<bd){ bd=d; bk=kk; }
+              });
+              idx[c3]=bk;
+            }
+          }
+        }
+      }
+
+      var counts2={}; var total=0;
+      for(var c4=0;c4<N;c4++){ if(idx[c4]>=0){ counts2[idx[c4]]=(counts2[idx[c4]]||0)+1; total++; } }
+
+      function codeSort(a,b){
+        var pa=a.code.match(/^([A-Z]+)(\d+)$/), pb=b.code.match(/^([A-Z]+)(\d+)$/);
+        if(pa&&pb){ if(pa[1]!==pb[1]) return pa[1]<pb[1]?-1:1; return parseInt(pa[2])-parseInt(pb[2]); }
+        return a.code<b.code?-1:1;
+      }
+      var entries=Object.keys(counts2).map(function(k){ return {c:pal[k], n:counts2[k]}; }).sort(function(a,b){
+        return codeSort(a.c,b.c);
+      });
+
+      // ===== 标准拼豆图纸渲染：方格 + 坐标 + 色号文字 + 底部图例 =====
+      // 固定打印尺寸：每格 32px，字号约 13px，确保 W 调大时只是图纸变大、字号仍清晰
+      var cell = 32;
+      var marginTop = 54, marginLeft = 48, marginRight = 48, marginBottom = 44;
+      var fontSize = Math.max(10, Math.min(14, Math.floor(cell * 0.42)));
+      var legendItemW = 96, legendItemH = 26, legendGapX = 10, legendGapY = 10;
+      var legendPerRow = Math.max(1, Math.floor((W * cell + marginLeft + marginRight - 20) / legendItemW));
+      var legendRows = Math.ceil(entries.length / legendPerRow);
+      var legendHeight = legendRows > 0 ? legendRows * (legendItemH + legendGapY) + 34 : 0;
+
+      canvas.width = marginLeft + W * cell + marginRight;
+      canvas.height = marginTop + H * cell + marginBottom + legendHeight;
+      var ctx = canvas.getContext('2d');
+
+      // 白色图纸背景
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 标题
+      ctx.fillStyle = '#222';
+      ctx.font = 'bold 18px "Microsoft YaHei", "PingFang SC", sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText('拼豆图纸 / Mard (' + total + ' 颗)', 12, 12);
+
+      // 坐标数字（上下左右四边）
+      ctx.fillStyle = '#444';
+      ctx.font = 'bold 12px "Microsoft YaHei", "PingFang SC", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      for (var ax = 0; ax < W; ax++) {
+        ctx.fillText(ax + 1, marginLeft + ax * cell + cell / 2, marginTop - 18);
+        ctx.fillText(ax + 1, marginLeft + ax * cell + cell / 2, marginTop + H * cell + 18);
+      }
+      for (var ay = 0; ay < H; ay++) {
+        ctx.fillText(ay + 1, marginLeft - 18, marginTop + ay * cell + cell / 2);
+        ctx.fillText(ay + 1, marginLeft + W * cell + 18, marginTop + ay * cell + cell / 2);
+      }
+
+      // 网格：外框实线 + 内部虚线，背景纯白
+      ctx.strokeStyle = '#222';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(marginLeft, marginTop, W * cell, H * cell);
+
+      ctx.strokeStyle = '#D5D5D5';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 2]);
+      for (var gx = 1; gx < W; gx++) {
+        ctx.beginPath();
+        ctx.moveTo(marginLeft + gx * cell, marginTop);
+        ctx.lineTo(marginLeft + gx * cell, marginTop + H * cell);
+        ctx.stroke();
+      }
+      for (var gy = 1; gy < H; gy++) {
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, marginTop + gy * cell);
+        ctx.lineTo(marginLeft + W * cell, marginTop + gy * cell);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+
+      // 填充格子 + 色号文字
+      for (var yy = 0; yy < H; yy++) {
+        for (var xx = 0; xx < W; xx++) {
+          var ci = idx[yy * W + xx];
+          var x = marginLeft + xx * cell, y = marginTop + yy * cell;
+          if (ci < 0) continue; // 背景留白
+          var hex = pal[ci].h;
+          ctx.fillStyle = hex;
+          ctx.fillRect(x + 1, y + 1, cell - 2, cell - 2);
+
+          ctx.font = 'bold ' + fontSize + 'px "Microsoft YaHei", "PingFang SC", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          // 浅色格用黑字，深色格用白字；加轻微阴影/描边增强可读性
+          var isLight = lum(hex) > 165;
+          ctx.fillStyle = isLight ? 'rgba(0,0,0,.82)' : '#fff';
+          if (isLight) {
+            ctx.strokeStyle = 'rgba(255,255,255,.55)';
+            ctx.lineWidth = 2;
+            ctx.strokeText(pal[ci].code, x + cell / 2, y + cell / 2 + 0.5);
+          }
+          ctx.fillText(pal[ci].code, x + cell / 2, y + cell / 2 + 0.5);
+        }
+      }
+
+      // 底部色号图例
+      if (entries.length > 0) {
+        var legendY = marginTop + H * cell + marginBottom + 4;
+        ctx.fillStyle = '#222';
+        ctx.font = 'bold 14px "Microsoft YaHei", "PingFang SC", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillText('色号图例（共 ' + entries.length + ' 种，按色号排序）', 12, legendY - 28);
+        entries.forEach(function (e, i) {
+          var row = Math.floor(i / legendPerRow), col = i % legendPerRow;
+          var lx = marginLeft + col * (legendItemW + legendGapX);
+          var ly = legendY + row * (legendItemH + legendGapY);
+          ctx.fillStyle = e.c.h;
+          ctx.strokeStyle = '#999';
+          ctx.lineWidth = 1;
+          ctx.fillRect(lx, ly, 22, 22);
+          ctx.strokeRect(lx, ly, 22, 22);
+          ctx.fillStyle = '#222';
+          ctx.font = 'bold 12px "Microsoft YaHei", "PingFang SC", sans-serif';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(e.c.code + ' (' + e.n + ')', lx + 28, ly + 11);
+        });
+      }
+
+      // HTML 辅助清单
+      beadList.innerHTML='';
+      entries.forEach(function(e){
+        var el=document.createElement('div'); el.className='pl-bead';
+        el.innerHTML='<span class="dot" style="background:'+e.c.h+'"></span>'+
+          '<span class="info"><b>'+e.c.code+'</b> <span class="hex">'+e.c.h+'</span><br>× '+e.n+' 颗</span>';
+        beadList.appendChild(el);
+      });
+      totalBeads.textContent=total;
+      colorKinds.textContent=entries.length;
+      resultEl.classList.add('show');
+      var bgNote = (function(){ var e=0; for(var i=0;i<N;i++) if(idx[i]<0) e++; return e; })();
+      setStatus('✓ 已生成 '+W+'×'+H+' 标准拼豆图纸，共 '+total+' 颗 / '+entries.length+' 种色号'+(bgNote>0?('，背景留空 '+bgNote+' 格'):'。'),'ok');
+
+      var url=canvas.toDataURL('image/png');
+      dlBtn.href=url; dlBtn.setAttribute('download','bead-pattern-'+W+'x'+H+'.png');
+
+      var csv='色号,HEX,数量\n';
+      entries.forEach(function(e){ csv+=e.c.code+','+e.c.h+','+e.n+'\n'; });
+      csv+='总计,,'+total+'\n';
+      csvBtn.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+      csvBtn.setAttribute('download','bead-list-'+W+'x'+H+'.csv');
+    }
+  })();
+  </script>
+
+  <script src="../script.js?v=20260816"></script>
+  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+</body>
+</html>
