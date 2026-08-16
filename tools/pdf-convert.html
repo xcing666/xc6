@@ -214,10 +214,10 @@
     </div>
   </footer>
 
-  <!-- ===== 功能库（jsDelivr CDN）===== -->
-  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/legacy/build/pdf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.1/build/index.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- ===== 功能库（已本地化，无需外部 CDN）===== -->
+  <script src="./lib/pdf.min.js"></script>
+  <script src="./lib/docx.min.js"></script>
+  <script src="./lib/xlsx.min.js"></script>
 
   <script>
   (function () {
@@ -245,12 +245,11 @@
     }
     if (!libsReady()) {
       statusEl.className = 'pdf-status error';
-      statusEl.textContent = '⚠ 转换功能库加载失败，请检查网络后刷新页面（本工具依赖 pdf.js / docx / xlsx）。';
+      statusEl.textContent = '⚠ 转换功能库加载失败，请刷新页面重试。';
       dropArea.style.opacity = .5;
     } else {
       // 配置 pdf.js worker
-      pdfjsLib.GlobalWorkerOptions.workerSrc =
-        'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/legacy/build/pdf.worker.min.js';
+      pdfjsLib.GlobalWorkerOptions.workerSrc = './lib/pdf.worker.min.js';
     }
 
     // 模式切换
@@ -513,18 +512,18 @@
       return cols;
     }
 
-    // 监听三个 CDN 脚本加载失败
-    var cdnFailed = false;
-    document.querySelectorAll('script[src*="jsdelivr"]').forEach(function (s) {
-      s.addEventListener('error', function () { cdnFailed = true; });
+    // 监听本地库脚本加载失败
+    var libFailed = false;
+    document.querySelectorAll('script[src*="./lib/"]').forEach(function (s) {
+      s.addEventListener('error', function () { libFailed = true; });
     });
 
-    // 轮询等待外部库加载完成
+    // 轮询等待库加载完成
     var libCheckCount = 0;
     function waitForLibs() {
-      if (cdnFailed) {
+      if (libFailed) {
         statusEl.className = 'pdf-status error';
-        statusEl.innerHTML = '转换库加载失败（jsDelivr CDN 访问受限）。<br>请检查网络后点击「刷新页面重试」，或稍后再试。';
+        statusEl.innerHTML = '转换库加载失败。<br>请点击「刷新页面重试」，或稍后重试。';
         convertBtn.textContent = '🔄 刷新页面重试';
         convertBtn.disabled = false;
         convertBtn.onclick = function () { location.reload(); };
@@ -539,7 +538,7 @@
       }
       if (++libCheckCount > 40) { // 最多等 20 秒
         statusEl.className = 'pdf-status error';
-        statusEl.innerHTML = '转换库加载超时（可能是网络较慢或 jsDelivr 受限）。<br>请检查网络后点击「刷新页面重试」。';
+        statusEl.innerHTML = '转换库加载超时。<br>请点击「刷新页面重试」。';
         convertBtn.textContent = '🔄 刷新页面重试';
         convertBtn.disabled = false;
         convertBtn.onclick = function () { location.reload(); };
