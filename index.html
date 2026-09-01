@@ -158,19 +158,8 @@
     <div class="wx-header-content">
       <div class="wx-tip">
         微信内无法直接打开本站<br>
-        <span class="wx-safari-row">
-          <span class="wx-safari-icon">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" stroke="#00b0ff" stroke-width="2"/>
-              <path d="M12 3V21" stroke="#00b0ff" stroke-width="1.5"/>
-              <path d="M3 12H21" stroke="#00b0ff" stroke-width="1.5"/>
-              <path d="M12 12L17 7" stroke="#00b0ff" stroke-width="1.5"/>
-              <path d="M12 12L7 17" stroke="#00b0ff" stroke-width="1.5"/>
-            </svg>
-          </span>
-          Safari打开
-        </span><br>
-        可以继续浏览本站内容
+        请点击右上角 <b style="font-size:18px">···</b><br>
+        选择「在手机浏览器打开」
       </div>
       <svg class="wx-finger" viewBox="0 0 100 100" fill="none">
         <path d="M55 35 C55 28 62 24 68 28 C72 31 73 37 70 42 L68 45 L70 46 C74 44 79 45 81 49 C83 53 81 58 77 60 L75 62 C79 63 82 67 82 71 C82 76 78 79 74 80 L72 81 C75 83 76 87 74 90 C72 93 68 94 64 92 L45 82 C38 78 34 72 34 65 L34 50 C34 44 38 40 43 40 C48 40 52 43 53 48 L55 35Z" fill="#ffe0bd"/>
@@ -188,14 +177,14 @@
   </div>
   <div class="wx-body">
     <p class="wx-reason">
-      <b>为什么需要跳转到浏览器？</b><br>
-      微信内置浏览器对 GitHub Pages 等外部链接存在访问限制，部分功能（如下载、跳转、在线工具调用）可能不可用或显示异常。使用手机自带的浏览器（Safari / Chrome / 系统浏览器）打开，可获得完整、稳定的访问体验。
+      <b>为什么要去手机浏览器打开？</b><br>
+      你当前用的是微信内置浏览器，它限制访问 GitHub Pages 类外部网站，页面功能（如下载、跳转、在线工具）会打不开或显示异常。点击右上角「···」，选择「在浏览器打开 / 用默认浏览器打开 / 手机浏览器打开」即可正常访问本站全部内容。
     </p>
   </div>
   <div class="wx-footer">
-    <button class="wx-copy" id="wxCopyBtn">您也可以复制本站网址，到其它浏览器打开</button>
+    <button class="wx-copy" id="wxCopyBtn">复制本站网址，到手机浏览器打开</button>
     <br>
-    <button class="wx-continue" id="wxContinueBtn">点此继续访问</button>
+    <button class="wx-continue" id="wxContinueBtn">点此复制并在浏览器打开</button>
     <div class="wx-domain-tip">主站地址：<span id="wxTargetText">https://xcing666.github.io/xc6/</span></div>
   </div>
   <div class="wx-toast" id="wxToast"></div>
@@ -234,7 +223,20 @@
       }
     });
     if (contBtn) contBtn.addEventListener('click', function () {
-      window.location.href = target;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(target).then(function(){
+          toast('已复制网址，请打开手机浏览器粘贴访问');
+          setTimeout(function(){ window.location.href = target; }, 900);
+        }, function(){ fb(); });
+      } else { fb(); }
+      function fb() {
+        var ta = document.createElement('textarea');
+        ta.value = target; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); toast('已复制网址，请打开手机浏览器粘贴访问'); }
+        catch (err) { toast('复制失败，请手动复制地址栏链接'); }
+        document.body.removeChild(ta);
+      }
     });
   })();
 </script>
