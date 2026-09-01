@@ -2,6 +2,18 @@
    兴程网络 — 交互脚本（含粒子画布系统）
    ============================================= */
 
+/* =========== 微信环境检测（兜底） ===========
+   GitHub Pages 主站(xcing666.github.io/xc6)在微信内常被拦截，
+   统一跳转到未被封的入口域名 xcing.ldt3.top 的引导页。
+   引导页再提示客户用外部浏览器打开 GitHub Pages 主站。 =========== */
+(function () {
+  var ua = navigator.userAgent || '';
+  var isWeixin = /MicroMessenger|WeChat/i.test(ua);
+  if (!isWeixin || /weixin-guide\.html/.test(location.pathname)) return;
+  var entry = 'https://xcing.ldt3.top/weixin-guide.html?target=' + encodeURIComponent(location.href);
+  location.replace(entry);
+})();
+
 /* =========== 节流函数 =========== */
 function throttle(fn, delay) {
   var last = 0, timer = null;

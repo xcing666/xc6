@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="请使用手机浏览器继续访问兴程网络官网。" />
+  <title>请使用浏览器打开 — 兴程网络</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #0c0f24;
+      color: #fff;
+      overflow: hidden;
+    }
+    .wrap {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px;
+      text-align: center;
+    }
+    .top-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(12,15,36,.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      z-index: 10;
+    }
+    .top-bar span { font-size: 15px; color: rgba(255,255,255,.9); }
+    .icon-hint {
+      width: 92px; height: 92px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6c5ce7, #00cec9);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 26px;
+      box-shadow: 0 10px 40px rgba(108,92,231,.35);
+      animation: float 3s ease-in-out infinite;
+    }
+    .icon-hint svg { width: 46px; height: 46px; fill: #fff; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+    .domain {
+      display: inline-block;
+      margin-bottom: 28px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.55);
+      font-size: 13px;
+      word-break: break-all;
+    }
+    .card {
+      width: 100%; max-width: 360px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 22px;
+    }
+    .card p {
+      font-size: 14px;
+      color: rgba(255,255,255,.75);
+      line-height: 1.9;
+      margin-bottom: 14px;
+    }
+    .card p:last-child { margin-bottom: 0; }
+    .card strong { color: #fff; }
+    .arrow-hand {
+      width: 90px; height: 80px;
+      margin: 0 auto 18px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 100%; max-width: 360px; height: 50px;
+      border-radius: 25px;
+      border: none;
+      background: linear-gradient(135deg, #6c5ce7, #00cec9);
+      color: #fff;
+      font-size: 15px; font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 24px rgba(108,92,231,.35);
+    }
+    .btn.secondary {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: none;
+    }
+    .tips {
+      margin-top: 24px;
+      font-size: 12px;
+      color: rgba(255,255,255,.4);
+      line-height: 1.8;
+    }
+    .tips a { color: #00cec9; text-decoration: underline; }
+    /* 背景装饰 */
+    body::before {
+      content: "";
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 80% 10%, rgba(108,92,231,.18), transparent 70%),
+        radial-gradient(ellipse 500px 350px at 10% 90%, rgba(0,206,201,.12), transparent 70%);
+      pointer-events: none;
+    }
+    .toast {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,.8);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"><span>请使用浏览器打开</span></div>
+
+  <div class="wrap">
+    <div class="icon-hint">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6zm0-8h2V7h-2v2z"/></svg>
+    </div>
+
+    <h1>微信内请用浏览器打开</h1>
+    <div class="domain" id="domainText">xcing666.github.io/xc6</div>
+
+    <div class="card">
+      <p>请点击右上角 <strong>···</strong>，<br>选择 <strong>“在浏览器打开”</strong>，<br>即可正常访问主站</p>
+      <svg class="arrow-hand" viewBox="0 0 100 80" fill="none">
+        <path d="M30 65 Q55 45 75 25" stroke="url(#grad1)" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path d="M65 15 L78 28 L62 35" fill="#fd79a8"/>
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6c5ce7"/>
+            <stop offset="100%" stop-color="#00cec9"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <p style="font-size:12px;color:rgba(255,255,255,.45);">如浏览器中仍无法打开，说明 GitHub 域名已被微信风控，请稍后再试。</p>
+    </div>
+
+    <button class="btn" id="copyBtn">复制主站网址，到浏览器打开</button>
+    <button class="btn secondary" id="continueBtn">点此继续访问主站</button>
+
+    <div class="tips">
+      微信入口页地址（可发给客户）：<br>
+      <a href="#" id="entryLink">https://xcing.ldt3.top/weixin-guide.html</a><br>
+      主站地址：<a href="https://xcing666.github.io/xc6" id="homeLink">https://xcing666.github.io/xc6</a>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (function () {
+    'use strict';
+    var target = 'https://xcing666.github.io/xc6/';
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('target')) target = decodeURIComponent(params.get('target'));
+    } catch (e) {}
+
+    var domainEl = document.getElementById('domainText');
+    var homeLink = document.getElementById('homeLink');
+    var entryLink = document.getElementById('entryLink');
+    try {
+      var u = new URL(target);
+      domainEl.textContent = u.hostname;
+      homeLink.href = 'https://xcing666.github.io/xc6/';
+      if (entryLink) {
+        entryLink.href = location.href;
+        entryLink.textContent = location.origin + location.pathname;
+      }
+    } catch (e) {
+      domainEl.textContent = target;
+    }
+
+    function toast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function () { t.classList.remove('show'); }, 2000);
+    }
+
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(target).then(function () {
+          toast('网址已复制，请切换到浏览器粘贴打开');
+        }, function () {
+          fallbackCopy();
+        });
+      } else {
+        fallbackCopy();
+      }
+      function fallbackCopy() {
+        var ta = document.createElement('textarea');
+        ta.value = target;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          toast('网址已复制，请切换到浏览器粘贴打开');
+        } catch (err) {
+          toast('复制失败，请手动复制地址栏链接');
+        }
+        document.body.removeChild(ta);
+      }
+    });
+
+    document.getElementById('continueBtn').addEventListener('click', function () {
+      // 尝试继续访问，若域名已被拦截则仍会失败
+      window.location.href = target;
+    });
+
+    // 若用户已经在非微信浏览器中，直接跳转到目标页
+    var isWeixin = /MicroMessenger|WeChat/i.test(navigator.userAgent);
+    if (!isWeixin) {
+      window.location.replace(target);
+    }
+  })();
+  </script>
+</body>
+</html>

@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- 微信环境检测：GitHub Pages 主站在微信内常被拦截，跳转到未被封的入口域名引导页 -->
+  <script>
+  (function () {
+    var ua = navigator.userAgent || '';
+    var isWeixin = /MicroMessenger|WeChat/i.test(ua);
+    if (isWeixin && !/weixin-guide\.html/.test(location.pathname)) {
+      var entry = 'https://xcing.ldt3.top/weixin-guide.html?target=' + encodeURIComponent(location.href);
+      location.replace(entry);
+    }
+  })();
+  </script>
   <meta name="description" content="兴程网络智能工具中心 — 免费在线工具：图片格式转换、AI图片智能美化、二维码生成、图片压缩、设计报价计算、字体预览" />
   <title>智能工具中心 — 兴程网络</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🛠️</text></svg>" />

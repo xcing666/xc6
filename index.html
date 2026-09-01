@@ -7,6 +7,17 @@
   <meta name="keywords" content="短视频涨粉,二维码生成,图片格式转换,直播人气,兴程网络,数字服务,平面设计,小程序开发" />
   <meta name="author" content="兴程网络" />
   <meta name="robots" content="index,follow" />
+  <!-- 微信环境检测：GitHub Pages 主站在微信内常被拦截，跳转到未被封的入口域名引导页 -->
+  <script>
+  (function () {
+    var ua = navigator.userAgent || '';
+    var isWeixin = /MicroMessenger|WeChat/i.test(ua);
+    if (isWeixin && !/weixin-guide\.html/.test(location.pathname)) {
+      var entry = 'https://xcing.ldt3.top/weixin-guide.html?target=' + encodeURIComponent(location.href);
+      location.replace(entry);
+    }
+  })();
+  </script>
   <!-- Open Graph / 微信分享 -->
   <meta property="og:title" content="兴程网络 — 短视频涨粉·二维码生成·图片转换·直播人气" />
   <meta property="og:description" content="技术驱动创意，专注数字服务，为您的品牌提供一站式数字化解决方案。" />

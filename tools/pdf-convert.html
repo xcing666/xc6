@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="免费在线 PDF 转换工具 — 支持 PDF 转 Word(.docx) 与 PDF 转 Excel(.xlsx)，纯前端本地处理，文件不上传服务器，保护您的隐私。" />
+  <meta name="description" content="免费在线 PDF 转换工具 — 支持 PDF 转 Word(.docx，版式1:1保真) 与 PDF 转 Excel(.xlsx)，纯前端本地处理，文件不上传服务器，保护您的隐私。" />
   <title>PDF 转换工具 — 智能工具中心</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>📄</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
@@ -43,14 +43,22 @@
     .pdf-upload-hint { color: rgba(255,255,255,.4); font-size: 12px; }
     .pdf-file-name { display:inline-block; margin-top:14px; padding:6px 14px; border-radius:10px; background:rgba(108,92,231,.15); color:var(--c1); font-size:13px; }
 
-    .pdf-modes { display:flex; gap:14px; margin-bottom:22px; }
+    .pdf-modes { display:flex; gap:12px; margin-bottom:14px; }
     .pdf-mode-btn {
-      flex:1; padding:14px; border-radius:12px; cursor:pointer; text-align:center;
+      flex:1; padding:14px 6px; border-radius:12px; cursor:pointer; text-align:center;
       background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-      color: rgba(255,255,255,.6); font-size:14px; transition:.3s;
+      color: rgba(255,255,255,.6); font-size:13px; transition:.3s;
     }
     .pdf-mode-btn .m-ico { font-size:22px; display:block; margin-bottom:6px; }
     .pdf-mode-btn.active { background:rgba(108,92,231,.18); border-color:var(--c1); color:#fff; }
+
+    .pdf-opts { margin-bottom:22px; padding:14px 16px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:12px; }
+    .pdf-opts.hidden { display:none; }
+    .pdf-opts label { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.75); font-size:13px; margin-bottom:12px; }
+    .pdf-opts label:last-child { margin-bottom:0; }
+    .pdf-opts select { background:rgba(0,0,0,.35); color:#fff; border:1px solid rgba(255,255,255,.25); border-radius:6px; padding:4px 8px; font-size:13px; }
+    .pdf-opts input[type=checkbox] { width:16px; height:16px; accent-color: var(--c1); }
+    .pdf-opt-note { font-size:11px; color:rgba(255,255,255,.42); line-height:1.7; margin-top:10px; }
 
     .pdf-btn {
       display:inline-flex; align-items:center; gap:8px; padding:12px 36px; border-radius:28px;
@@ -94,6 +102,10 @@
     .pdf-note { margin-top:28px; font-size:12px; color:rgba(255,255,255,.35); line-height:1.8; }
     .pdf-note b { color:rgba(255,255,255,.5); }
 
+    /* 进度条 */
+    .pdf-progress { display:none; height:8px; border-radius:6px; background:rgba(255,255,255,.08); overflow:hidden; margin-top:16px; }
+    .pdf-progress-fill { height:100%; width:0; border-radius:6px; background:linear-gradient(90deg, var(--c1), var(--c2)); transition:width .25s; }
+
     @media (max-width:768px) {
       .tool-page { padding:70px 0 30px; }
       .tool-title { font-size:22px; }
@@ -133,7 +145,7 @@
         <h4>📖 使用步骤</h4>
         <ol>
           <li>拖入或点击选择要转换的 PDF 文件</li>
-          <li>选择转换目标：<b>Word 文档</b> 或 <b>Excel 表格</b></li>
+          <li>选择转换目标：<b>Word·保真版</b> / <b>Word·文字版</b> / <b>Excel 表格</b></li>
           <li>点击「开始转换」，等待处理完成</li>
           <li>点击下载生成的文件</li>
         </ol>
@@ -150,16 +162,37 @@
 
       <!-- 模式选择 -->
       <div class="pdf-modes">
-        <div class="pdf-mode-btn active" data-mode="word">
-          <span class="m-ico">📝</span>转 Word (.docx)
+        <div class="pdf-mode-btn active" data-mode="word-faithful">
+          <span class="m-ico">🖼️</span>转 Word·保真
+        </div>
+        <div class="pdf-mode-btn" data-mode="word-text">
+          <span class="m-ico">📝</span>转 Word·文字
         </div>
         <div class="pdf-mode-btn" data-mode="excel">
-          <span class="m-ico">📊</span>转 Excel (.xlsx)
+          <span class="m-ico">📊</span>转 Excel
+        </div>
+      </div>
+
+      <!-- 保真版选项 -->
+      <div class="pdf-opts" id="faithfulOpts">
+        <label>清晰度：
+          <select id="pdfScale">
+            <option value="2">高清（推荐，更清晰）</option>
+            <option value="1.3">标准（体积小）</option>
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" id="pdfTextLayer" />
+          叠加可编辑文字层（开启后 Word 内文字可复制；若中文显示异常，请关闭此项）
+        </label>
+        <div class="pdf-opt-note">
+          保真版会将每一页按原排版<b>完整渲染成图片</b>再嵌入 Word，因此 PDF 里的图片位置、素材、配色、表格、图表都会与原文 1:1 一致。文件体积会随页数增加而变大（页数多时建议选「标准」清晰度）。
         </div>
       </div>
 
       <button class="pdf-btn" id="convertBtn" disabled>⚙️ 开始转换</button>
 
+      <div class="pdf-progress" id="progressBar"><div class="pdf-progress-fill" id="progressFill"></div></div>
       <div class="pdf-status" id="status"></div>
 
       <div class="pdf-result" id="result">
@@ -167,9 +200,11 @@
       </div>
 
       <div class="pdf-note">
-        <b>说明：</b>本工具采用文字/表格提取方案，最适合<b>文字型、表格型 PDF</b>。
-        扫描件（图片型 PDF）、复杂图文混排、数学公式等可能无法识别或会丢失原始排版。
-        转换结果仅供编辑参考，重要文档请核对后再使用。
+        <b>三种模式说明：</b><br>
+        • <b>Word·保真版</b>：版式 1:1 还原，最适合<b>含图片、图表、复杂排版的 PDF</b>，但文字默认以图片形式存在（可在选项中开启「可编辑文字层」）。<br>
+        • <b>Word·文字版</b>：提取文字并按段落/标题还原，<b>文字可直接编辑</b>，但会丢失原始排版与图片，适合纯文字文档。<br>
+        • <b>Excel 表格</b>：按坐标重建二维表格，适合<b>表格型 PDF</b>。<br>
+        扫描件（纯图片 PDF）请使用「保真版」。转换结果仅供编辑参考，重要文档请核对后再使用。
       </div>
     </div>
   </section>
@@ -231,9 +266,14 @@
     var resultEl = document.getElementById('result');
     var dlBtn = document.getElementById('dlBtn');
     var modeBtns = document.querySelectorAll('.pdf-mode-btn');
+    var faithfulOpts = document.getElementById('faithfulOpts');
+    var scaleSel = document.getElementById('pdfScale');
+    var textLayerChk = document.getElementById('pdfTextLayer');
+    var progressBar = document.getElementById('progressBar');
+    var progressFill = document.getElementById('progressFill');
 
     var currentFile = null;
-    var currentMode = 'word';
+    var currentMode = 'word-faithful';
 
     // 初始化按钮状态：等待库加载，避免 CDN 失败时点了没反应
     convertBtn.disabled = true;
@@ -243,23 +283,30 @@
     function libsReady() {
       return window.pdfjsLib && window.docx && window.XLSX;
     }
+    function ensureWorker() {
+      if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = './lib/pdf.worker.min.js';
+    }
     if (!libsReady()) {
       statusEl.className = 'pdf-status error';
       statusEl.textContent = '⚠ 转换功能库加载失败，请刷新页面重试。';
       dropArea.style.opacity = .5;
     } else {
-      // 配置 pdf.js worker
-      pdfjsLib.GlobalWorkerOptions.workerSrc = './lib/pdf.worker.min.js';
+      ensureWorker();
     }
 
     // 模式切换
+    function syncOpts() {
+      faithfulOpts.classList.toggle('hidden', currentMode !== 'word-faithful');
+    }
     modeBtns.forEach(function (b) {
       b.addEventListener('click', function () {
         modeBtns.forEach(function (x) { x.classList.remove('active'); });
         b.classList.add('active');
         currentMode = b.getAttribute('data-mode');
+        syncOpts();
       });
     });
+    syncOpts();
 
     // 文件选择
     dropArea.addEventListener('click', function () { fileInput.click(); });
@@ -309,6 +356,7 @@
 
     // 转换
     convertBtn.addEventListener('click', function () {
+      ensureWorker();
       if (!currentFile) { statusEl.textContent = '请先选择 PDF 文件。'; return; }
       if (!libsReady()) {
         statusEl.className = 'pdf-status error';
@@ -318,7 +366,8 @@
       var reader = new FileReader();
       reader.onload = function () {
         var data = new Uint8Array(reader.result);
-        if (currentMode === 'word') convertToWord(data, currentFile.name);
+        if (currentMode === 'word-faithful') convertToWordFaithful(data, currentFile.name);
+        else if (currentMode === 'word-text') convertToWordText(data, currentFile.name);
         else convertToExcel(data, currentFile.name);
       };
       reader.readAsArrayBuffer(currentFile);
@@ -327,17 +376,130 @@
     function setBusy(busy, msg) {
       convertBtn.disabled = busy;
       convertBtn.textContent = busy ? '⏳ 处理中…' : '⚙️ 开始转换';
+      modeBtns.forEach(function (b) { b.style.pointerEvents = busy ? 'none' : ''; b.style.opacity = busy ? '.5' : ''; });
+      dropArea.style.pointerEvents = busy ? 'none' : '';
+      dropArea.style.opacity = busy ? '.55' : '';
+      if (busy) setProgress(0); else setProgress(-1);
       if (msg) { statusEl.className = 'pdf-status'; statusEl.textContent = msg; }
     }
+    function setProgress(p) {
+      progressBar.style.display = p >= 0 ? 'block' : 'none';
+      progressFill.style.width = (Math.max(0, Math.min(100, p))) + '%';
+    }
 
-    // ===== PDF -> Word =====
-    async function convertToWord(data, name) {
+    // ===== PDF -> Word（版式 1:1 保真：逐页渲染成图作为满页底图）=====
+    async function convertToWordFaithful(data, name) {
+      setBusy(true, '正在逐页渲染 PDF（保留完整版式与图片）…');
+      try {
+        var pdf = await pdfjsLib.getDocument({ data: data }).promise;
+        var scale = parseFloat(scaleSel.value) || 1.3;
+        var withText = textLayerChk.checked;
+        var sections = [];
+
+        for (var p = 1; p <= pdf.numPages; p++) {
+          var page = await pdf.getPage(p);
+          var vp = page.getViewport({ scale: 1 });
+          var rvp = page.getViewport({ scale: scale });
+
+          // 渲染整页到 canvas
+          var canvas = document.createElement('canvas');
+          canvas.width = Math.ceil(rvp.width);
+          canvas.height = Math.ceil(rvp.height);
+          var ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          await page.render({ canvasContext: ctx, viewport: rvp }).promise;
+          var blob = await new Promise(function (res) { canvas.toBlob(res, 'image/png'); });
+          var buf = new Uint8Array(await blob.arrayBuffer());
+
+          // 页面尺寸（twips = pt * 20，1pt=1/72inch，1twip=1/1440inch）
+          var Wt = Math.round(vp.width * 20);
+          var Ht = Math.round(vp.height * 20);
+
+          // 满页底图（浮动、置于文字层之下）
+          var children = [
+            new docx.Paragraph({
+              spacing: { before: 0, after: 0, line: 240 },
+              children: [ new docx.ImageRun({
+                type: 'png',
+                data: buf,
+                transformation: { width: Wt, height: Ht },
+                floating: {
+                horizontalPosition: { relative: docx.HorizontalPositionRelativeFrom.PAGE, align: 'left' },
+                verticalPosition:   { relative: docx.VerticalPositionRelativeFrom.PAGE, align: 'top' },
+                behindDocument: true
+              }
+              }) ]
+            })
+          ];
+
+          // 可选：可编辑文字层
+          if (withText) {
+            var tc = await page.getTextContent();
+            groupByLineXY(tc.items).forEach(function (ln) {
+              if (!ln.text.trim()) return;
+              var xT = Math.round(ln.x * 20);
+              var yT = Math.round((vp.height - ln.y) * 20);
+              children.push(new docx.Paragraph({
+                frame: {
+                  type: 'absolute',
+                  x: xT,
+                  y: yT,
+                  width: Math.max(0, Wt - xT),
+                  height: Math.max(200, Math.round(ln.size * 30)),
+                  anchor: { horizontal: 'page', vertical: 'page' }
+                },
+                spacing: { before: 0, after: 0, line: 240 },
+                children: [ new docx.TextRun({
+                  text: ln.text,
+                  size: Math.round(ln.size * 2),
+                  font: hasCJK(ln.text) ? 'SimSun' : undefined
+                }) ]
+              }));
+            });
+          }
+
+          sections.push({
+            properties: {
+              page: {
+                size: { width: Wt, height: Ht },
+                margin: { top: 0, right: 0, bottom: 0, left: 0 }
+              }
+            },
+            children: children
+          });
+
+          setBusy(true, '已渲染第 ' + p + ' / ' + pdf.numPages + ' 页…');
+          setProgress(p / pdf.numPages * 100);
+        }
+
+        setBusy(true, '正在生成 Word 文档…');
+        setProgress(98);
+        var doc = new docx.Document({ sections: sections });
+        var out = await docx.Packer.toBlob(doc);
+        offerDownload(out, name.replace(/\.pdf$/i, '') + '_保真版.docx');
+        statusEl.className = 'pdf-status ok';
+        statusEl.textContent = '✓ 转换完成（版式 1:1 还原），点击下载。';
+      } catch (err) {
+        console.error(err);
+        statusEl.className = 'pdf-status error';
+        var em = (err && err.message) ? err.message : '未知错误';
+        var hint = /password|encrypted/i.test(em) ? '（该 PDF 已加密，请先解密后再转换）'
+                 : /invalid|corrupt|format/i.test(em) ? '（PDF 文件可能已损坏或格式不支持，请换一个文件试试）'
+                 : '（可换「标准」清晰度重试，或换一个 PDF 试试）';
+        statusEl.textContent = '✗ 转换失败：' + em + hint;
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    // ===== PDF -> Word（纯文字提取，可编辑）=====
+    async function convertToWordText(data, name) {
       setBusy(true, '正在解析 PDF（提取文字）…');
       try {
         var pdf = await pdfjsLib.getDocument({ data: data }).promise;
         var children = [];
         var avgSize = 0, sizes = [];
-        // 先收集字号用于识别标题
         for (var p = 1; p <= pdf.numPages; p++) {
           var page = await pdf.getPage(p);
           var tc = await page.getTextContent();
@@ -357,7 +519,7 @@
             if (!txt) return;
             var isTitle = ln.size > avgSize * 1.35 && txt.length < 50;
             var para = new docx.Paragraph({
-              children: [new docx.TextRun({ text: txt, bold: isTitle })],
+              children: [new docx.TextRun({ text: txt, bold: isTitle, font: hasCJK(txt) ? 'SimSun' : undefined })],
               heading: isTitle ? docx.HeadingLevel.HEADING_1 : undefined
             });
             children.push(para);
@@ -376,7 +538,11 @@
       } catch (err) {
         console.error(err);
         statusEl.className = 'pdf-status error';
-        statusEl.textContent = '转换失败：' + (err && err.message ? err.message : '未知错误');
+        var em = (err && err.message) ? err.message : '未知错误';
+        var hint = /password|encrypted/i.test(em) ? '（该 PDF 已加密，请先解密后再转换）'
+                 : /invalid|corrupt|format/i.test(em) ? '（PDF 文件可能已损坏或格式不支持，请换一个文件试试）'
+                 : '（可换「标准」清晰度重试，或换一个 PDF 试试）';
+        statusEl.textContent = '✗ 转换失败：' + em + hint;
       } finally {
         setBusy(false);
       }
@@ -396,7 +562,20 @@
           aoa.push([]); // 页间空行
         }
         var ws = XLSX.utils.aoa_to_sheet(aoa);
-        // 自适应列宽
+        // 加单元格边框 + 首行表头加粗，提升表格可读性
+        if (ws['!ref']) {
+          var rng = XLSX.utils.decode_range(ws['!ref']);
+          for (var r = rng.s.r; r <= rng.e.r; r++) {
+            for (var c = rng.s.c; c <= rng.e.c; c++) {
+              var ref = XLSX.utils.encode_cell({ r: r, c: c });
+              var cell = ws[ref];
+              if (!cell) continue;
+              cell.s = cell.s || {};
+              cell.s.border = { top: 'thin', left: 'thin', bottom: 'thin', right: 'thin' };
+              if (r === 0) cell.s.font = { bold: true };
+            }
+          }
+        }
         ws['!cols'] = autoCols(aoa);
         var wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'PDF数据');
@@ -409,7 +588,11 @@
       } catch (err) {
         console.error(err);
         statusEl.className = 'pdf-status error';
-        statusEl.textContent = '转换失败：' + (err && err.message ? err.message : '未知错误');
+        var em = (err && err.message) ? err.message : '未知错误';
+        var hint = /password|encrypted/i.test(em) ? '（该 PDF 已加密，请先解密后再转换）'
+                 : /invalid|corrupt|format/i.test(em) ? '（PDF 文件可能已损坏或格式不支持，请换一个文件试试）'
+                 : '（可换「标准」清晰度重试，或换一个 PDF 试试）';
+        statusEl.textContent = '✗ 转换失败：' + em + hint;
       } finally {
         setBusy(false);
       }
@@ -423,7 +606,7 @@
       resultEl.classList.add('show');
     }
 
-    // 按 y 坐标（基线）分组为行
+    // 按 y 坐标（基线）分组为行（文字版用）
     function groupByLine(items) {
       var arr = items
         .filter(function (it) { return it.str && it.str.trim() !== ''; })
@@ -442,6 +625,32 @@
           cur.size = Math.max(cur.size, it.size);
         } else {
           cur = { text: it.str, size: it.size, maxY: it.y };
+          lines.push(cur);
+        }
+        lastY = it.y;
+      });
+      return lines;
+    }
+
+    // 按 y 坐标分组为行，并保留 x / y / size（保真文字层用）
+    function groupByLineXY(items) {
+      var arr = items
+        .filter(function (it) { return it.str && it.str.trim() !== ''; })
+        .map(function (it) {
+          var y = it.transform ? it.transform[5] : 0;
+          var x = it.transform ? it.transform[4] : 0;
+          var size = it.height || (it.transform ? Math.abs(it.transform[3]) : 10);
+          return { str: it.str, x: x, y: y, size: size };
+        });
+      arr.sort(function (a, b) { return b.y - a.y || a.x - b.x; });
+      var lines = [], cur = null, lastY = null;
+      arr.forEach(function (it) {
+        if (lastY === null || Math.abs(it.y - lastY) <= Math.max(it.size, 6) * 0.6) {
+          if (!cur) { cur = { text: '', x: it.x, size: it.size, y: it.y }; lines.push(cur); }
+          cur.text += it.str;
+          cur.size = Math.max(cur.size, it.size);
+        } else {
+          cur = { text: it.str, x: it.x, size: it.size, y: it.y };
           lines.push(cur);
         }
         lastY = it.y;
@@ -490,7 +699,6 @@
         if (!placed) row.push({ text: it.str, xStart: it.x, xEnd: it.x + it.w });
       }
 
-      // 每行列按 xStart 排序，取 text
       return rows.map(function (r) {
         r.sort(function (a, b) { return a.xStart - b.xStart; });
         return r.map(function (c) { return c.text; });
@@ -512,6 +720,11 @@
       return cols;
     }
 
+    // 判断是否包含 CJK（中日韩）字符，用于给 Word 文字层指定中文字体
+    function hasCJK(s) {
+      return /[\u4e00-\u9fa5\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/.test(s || '');
+    }
+
     // 监听本地库脚本加载失败
     var libFailed = false;
     document.querySelectorAll('script[src*="./lib/"]').forEach(function (s) {
@@ -530,6 +743,7 @@
         return;
       }
       if (libsReady()) {
+        ensureWorker();
         convertBtn.disabled = !currentFile;
         convertBtn.textContent = '⚙️ 开始转换';
         statusEl.className = 'pdf-status';
