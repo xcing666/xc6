@@ -8,6 +8,51 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css?v=20260816" />
+  <!-- 微信环境检测：微信内打开时显示内置引导层 -->
+  <script>
+  (function () {
+    var ua = navigator.userAgent || '';
+    if (/MicroMessenger|WeChat/i.test(ua)) {
+      document.documentElement.className += ' wx-block';
+    }
+  })();
+  </script>
+  <style>
+    /* ===== 微信内置浏览器引导层（仅微信内显示） ===== */
+    #wx-guide { display: none; }
+    .wx-block #wx-guide {
+      display: flex; flex-direction: column; position: fixed; inset: 0;
+      z-index: 2147483647; background: #fff;
+    }
+    #wx-guide .wx-nav { height:44px; background:#111; display:flex; align-items:center; justify-content:center; position:relative; color:#fff; padding:0 50px; flex-shrink:0; }
+    #wx-guide .wx-close { position:absolute; left:12px; top:50%; transform:translateY(-50%); width:20px; height:20px; }
+    #wx-guide .wx-close::before, #wx-guide .wx-close::after { content:''; position:absolute; left:0; top:50%; width:18px; height:2px; background:#fff; }
+    #wx-guide .wx-close::before { transform:rotate(45deg); }
+    #wx-guide .wx-close::after { transform:rotate(-45deg); }
+    #wx-guide .wx-nav-title { text-align:center; }
+    #wx-guide .wx-main { font-size:15px; font-weight:500; line-height:1.2; }
+    #wx-guide .wx-sub { font-size:10px; color:#999; line-height:1.2; }
+    #wx-guide .wx-dots { position:absolute; right:12px; top:50%; transform:translateY(-50%); display:flex; gap:3px; }
+    #wx-guide .wx-dots span { width:4px; height:4px; background:#fff; border-radius:50%; }
+    #wx-guide .wx-header { position:relative; background:linear-gradient(135deg,#2979ff 0%,#00b0ff 100%); padding:32px 24px 70px; color:#fff; overflow:hidden; flex-shrink:0; }
+    #wx-guide .wx-header-content { position:relative; z-index:1; display:flex; justify-content:space-between; align-items:flex-start; }
+    #wx-guide .wx-tip { font-size:16px; line-height:1.6; font-weight:500; text-shadow:0 1px 2px rgba(0,0,0,.1); }
+    #wx-guide .wx-safari-row { display:inline-flex; align-items:center; gap:6px; margin-top:4px; }
+    #wx-guide .wx-safari-icon { width:22px; height:22px; border-radius:50%; background:#fff; display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; }
+    #wx-guide .wx-safari-icon svg { width:18px; height:18px; }
+    #wx-guide .wx-finger { width:90px; height:90px; flex-shrink:0; margin-top:-10px; margin-right:-10px; }
+    #wx-guide .wx-wave { position:absolute; bottom:-1px; left:0; width:100%; line-height:0; }
+    #wx-guide .wx-wave svg { display:block; width:100%; height:auto; }
+    #wx-guide .wx-body { flex:1; padding:28px 28px 8px; }
+    #wx-guide .wx-reason { background:#f5f8ff; border:1px solid #e3edff; border-radius:14px; padding:18px 20px; font-size:14px; color:#444; line-height:1.8; }
+    #wx-guide .wx-reason b { color:#2979ff; }
+    #wx-guide .wx-footer { padding:18px 28px 40px; text-align:center; flex-shrink:0; }
+    #wx-guide .wx-copy { color:#2979ff; font-size:15px; text-decoration:underline; background:transparent; border:none; cursor:pointer; margin-bottom:18px; }
+    #wx-guide .wx-continue { width:100%; max-width:300px; height:46px; border-radius:23px; border:1px solid #2979ff; background:#fff; color:#2979ff; font-size:16px; font-weight:500; cursor:pointer; }
+    #wx-guide .wx-domain-tip { margin-top:14px; font-size:12px; color:#999; }
+    #wx-guide .wx-toast { position:fixed; top:45%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,.75); color:#fff; padding:14px 24px; border-radius:10px; font-size:14px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:100; }
+    #wx-guide .wx-toast.show { opacity:1; }
+  </style>
   <style>
     body::before, body::after { z-index: -1 !important; }
     body { position: relative; }
@@ -60,6 +105,101 @@
 </head>
 <body class="service-page">
 
+<!-- ======== 微信内置浏览器引导层（仅微信内显示） ======== -->
+<div id="wx-guide">
+  <div class="wx-nav">
+    <div class="wx-close"></div>
+    <div class="wx-nav-title">
+      <div class="wx-main">请使用浏览器打开</div>
+      <div class="wx-sub" id="wxSubDomain">xcing666.github.io</div>
+    </div>
+    <div class="wx-dots"><span></span><span></span><span></span></div>
+  </div>
+  <div class="wx-header">
+    <div class="wx-header-content">
+      <div class="wx-tip">
+        微信内无法直接打开本站<br>
+        <span class="wx-safari-row">
+          <span class="wx-safari-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="#00b0ff" stroke-width="2"/>
+              <path d="M12 3V21" stroke="#00b0ff" stroke-width="1.5"/>
+              <path d="M3 12H21" stroke="#00b0ff" stroke-width="1.5"/>
+              <path d="M12 12L17 7" stroke="#00b0ff" stroke-width="1.5"/>
+              <path d="M12 12L7 17" stroke="#00b0ff" stroke-width="1.5"/>
+            </svg>
+          </span>
+          Safari打开
+        </span><br>
+        可以继续浏览本站内容
+      </div>
+      <svg class="wx-finger" viewBox="0 0 100 100" fill="none">
+        <path d="M55 35 C55 28 62 24 68 28 C72 31 73 37 70 42 L68 45 L70 46 C74 44 79 45 81 49 C83 53 81 58 77 60 L75 62 C79 63 82 67 82 71 C82 76 78 79 74 80 L72 81 C75 83 76 87 74 90 C72 93 68 94 64 92 L45 82 C38 78 34 72 34 65 L34 50 C34 44 38 40 43 40 C48 40 52 43 53 48 L55 35Z" fill="#ffe0bd"/>
+        <path d="M55 35 C55 28 62 24 68 28 C72 31 73 37 70 42" stroke="#f5c6a0" stroke-width="2" stroke-linecap="round"/>
+        <path d="M42 82 L30 95 L45 100 L58 88" fill="#fff"/>
+        <circle cx="78" cy="22" r="12" stroke="#fff" stroke-width="2" stroke-opacity=".6"/>
+        <circle cx="78" cy="22" r="7" stroke="#fff" stroke-width="2" stroke-opacity=".9"/>
+      </svg>
+    </div>
+    <div class="wx-wave">
+      <svg viewBox="0 0 375 60" preserveAspectRatio="none">
+        <path d="M0 30 C80 50 150 10 220 30 C290 50 340 20 375 35 V60 H0 Z" fill="#fff"/>
+      </svg>
+    </div>
+  </div>
+  <div class="wx-body">
+    <p class="wx-reason">
+      <b>为什么需要跳转到浏览器？</b><br>
+      微信内置浏览器对 GitHub Pages 等外部链接存在访问限制，部分功能（如下载、跳转、在线工具调用）可能不可用或显示异常。使用手机自带的浏览器（Safari / Chrome / 系统浏览器）打开，可获得完整、稳定的访问体验。
+    </p>
+  </div>
+  <div class="wx-footer">
+    <button class="wx-copy" id="wxCopyBtn">您也可以复制本站网址，到其它浏览器打开</button>
+    <br>
+    <button class="wx-continue" id="wxContinueBtn">点此继续访问</button>
+    <div class="wx-domain-tip">当前地址：<span id="wxTargetText">https://xcing666.github.io/xc6/</span></div>
+  </div>
+  <div class="wx-toast" id="wxToast"></div>
+</div>
+<script>
+  (function () {
+    'use strict';
+    var target = window.location.href.split('#')[0];
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('target')) target = decodeURIComponent(params.get('target'));
+    } catch (e) {}
+    var sub = document.getElementById('wxSubDomain');
+    var txt = document.getElementById('wxTargetText');
+    if (sub) { try { sub.textContent = new URL(target).hostname; } catch (e) {} }
+    if (txt) txt.textContent = target;
+    function toast(m) {
+      var t = document.getElementById('wxToast');
+      if (!t) return;
+      t.textContent = m; t.classList.add('show');
+      setTimeout(function(){ t.classList.remove('show'); }, 2000);
+    }
+    var copyBtn = document.getElementById('wxCopyBtn');
+    var contBtn = document.getElementById('wxContinueBtn');
+    if (copyBtn) copyBtn.addEventListener('click', function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(target).then(function(){ toast('网址已复制，请到浏览器粘贴打开'); }, function(){ fb(); });
+      } else { fb(); }
+      function fb() {
+        var ta = document.createElement('textarea');
+        ta.value = target; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); toast('网址已复制，请到浏览器粘贴打开'); }
+        catch (err) { toast('复制失败，请手动复制地址栏链接'); }
+        document.body.removeChild(ta);
+      }
+    });
+    if (contBtn) contBtn.addEventListener('click', function () {
+      window.location.href = target;
+    });
+  })();
+</script>
+
   <!-- 导航 -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
@@ -85,6 +225,12 @@
   <section class="service-hero">
     <h1>📱 社交媒体运营服务</h1>
     <p>抖音 · 快手 · 微博 · QQ · 影视会员，一站式全网流量增长与业务办理平台。真人操作、安全稳定、快速到账。</p>
+  </section>
+
+  <!-- 前往下单平台（放在服务板块上方） -->
+  <section class="cta-section" style="padding-top:30px; padding-bottom:20px;">
+    <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="cta-btn">前往下单平台 →</a>
+    <p style="color:#5a6490; font-size:12px; margin-top:16px;">将在浏览器新标签页中打开 · 如有疑问请联系微信：xcing888</p>
   </section>
 
   <!-- 服务项目 -->
@@ -175,7 +321,7 @@
   <section class="cta-section">
     <h2 style="font-size:24px; font-weight:700; color:#f0f2ff; margin-bottom:16px;">准备好提升您的社交媒体影响力了吗？</h2>
     <p style="color:var(--muted); font-size:15px; margin-bottom:32px;">点击下方按钮前往下单平台，享受便捷的一站式服务</p>
-    <a href="https://xc6.ccuse.cn/" target="_blank" rel="noopener noreferrer" class="cta-btn">前往下单平台 →</a>
+    <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="cta-btn">前往下单平台 →</a>
     <p style="color:#5a6490; font-size:12px; margin-top:16px;">将在浏览器新标签页中打开 · 如有疑问请联系微信：xcing888</p>
   </section>
 
