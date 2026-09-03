@@ -375,7 +375,7 @@ body::after {
   background-clip:text;
   animation:gradient-shift 1.5s ease infinite;
 }
-@keyframes gradent-shift {
+@keyframes gradient-shift {
   0%   { background-position:0% 50%; }
   50%  { background-position:100% 50%; }
   100% { background-position:0% 50%; }
@@ -457,7 +457,7 @@ body::after {
 }
 .showcase-bg {
   position:absolute; inset:0; z-index:0;
-  background:url('showcase_bg.png') center/cover no-repeat;
+  background:url('showcase_bg.jpg') center/cover no-repeat;
   opacity:.45;
 }
 .showcase-bg::before {
@@ -792,7 +792,7 @@ body::after {
   font-size:18px; font-weight:700; color:#fff;
   background:linear-gradient(135deg, var(--c1), var(--c2), var(--c3));
   background-size:200% 200%;
-  animation:gradent-shift 1.25s ease infinite;
+  animation:gradient-shift 1.25s ease infinite;
 }
 .case-body { padding:24px; }
 .case-body h4 { font-size:16px; font-weight:700; margin-bottom:6px; }
@@ -2839,11 +2839,126 @@ header, section, footer, .hero, .sub-hero, .showcase, .services, .price-section,
 
 /* ========== 打印友好样式 ========== */
 @media print {
-  .nav, .back-to-top, .scroll-progress, .hero-orb, .showcase-orb,
+  .nav, .back-to-top, .float-contact, .scroll-progress, .hero-orb, .showcase-orb,
   .sub-hero-orb, .footer-glow, .showcase-gridlines, .tools-hero::before,
   #particle-canvas, .hero-bg-img { display: none !important; }
   body { background: #fff !important; color: #000 !important; }
   .service-card, .tool-card, .ti-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #ddd !important; }
   a { text-decoration: underline !important; color: #000 !important; }
+}
+
+/* =========================================================
+   装饰增强（用户指定 ⑧⑨⑩⑪⑫）
+   ========================================================= */
+
+/* ========== ⑧ 右下角浮动快捷联系按钮组 ========== */
+.float-contact {
+  position: fixed; right: 28px; bottom: 32px; z-index: 10000;
+  display: flex; flex-direction: column; gap: 14px; align-items: center;
+  opacity: 0; visibility: hidden; transform: translateY(16px);
+  transition: opacity .35s ease, transform .35s ease, visibility .35s;
+}
+.float-contact.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.fc-btn {
+  position: relative; width: 50px; height: 50px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(20,25,55,.7);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 6px 22px rgba(0,0,0,.35);
+  transition: transform .3s ease, box-shadow .3s ease, background .3s ease, border-color .3s ease;
+}
+.fc-btn:hover { transform: translateY(-3px) scale(1.06); }
+.fc-btn svg { width: 24px; height: 24px; pointer-events: none; }
+.fc-wechat { color: #2dc100; }
+.fc-wechat:hover {
+  background: linear-gradient(135deg, #2dc100, #1a9d00); border-color: transparent; color: #fff;
+  box-shadow: 0 8px 26px rgba(45,193,0,.45);
+}
+.fc-qq { color: #12b7f5; }
+.fc-qq:hover {
+  background: linear-gradient(135deg, #12b7f5, #0a8fd0); border-color: transparent; color: #fff;
+  box-shadow: 0 8px 26px rgba(18,183,245,.45);
+}
+.fc-top { background: linear-gradient(135deg, var(--c1), var(--c2)); border-color: transparent; }
+.fc-top:hover { box-shadow: 0 8px 30px rgba(108,92,231,.6); }
+/* 悬浮提示 */
+.fc-btn::after {
+  content: attr(data-tooltip);
+  position: absolute; right: calc(100% + 12px); top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  background: rgba(15,18,50,.95); color: var(--text);
+  font-size: 12px; white-space: nowrap;
+  padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1);
+  opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
+}
+.fc-btn:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+@media (max-width:768px){
+  .float-contact { right: 16px; bottom: 20px; gap: 12px; }
+  .fc-btn { width: 46px; height: 46px; }
+  .fc-btn svg { width: 22px; height: 22px; }
+}
+
+/* ========== ⑨ Hero 鼠标视差层 ========== */
+.hero-parallax { position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+.hp-blob {
+  position:absolute; border-radius:50%; filter:blur(40px); opacity:.5;
+  transition: transform .25s ease-out; will-change: transform;
+}
+.hp-b1 { width:260px; height:260px; top:12%; left:18%;
+  background: radial-gradient(circle, rgba(108,92,231,.5), transparent 70%); }
+.hp-b2 { width:200px; height:200px; bottom:14%; right:20%;
+  background: radial-gradient(circle, rgba(0,206,201,.4), transparent 70%); }
+.hp-ring {
+  position:absolute; border-radius:50%; border:1px solid rgba(255,255,255,.12);
+  transition: transform .25s ease-out; will-change: transform;
+}
+.hp-r1 { width:180px; height:180px; top:55%; left:62%; border-color:rgba(253,121,168,.25); }
+.hp-r2 { width:120px; height:120px; top:30%; right:32%; border-color:rgba(116,185,255,.25); }
+
+/* ========== ⑩ 重要 CTA 主题光晕 ========== */
+.hero-btn, .ai-cta-btn, .cta-btn { animation: ctaGlowPulse 3.4s ease-in-out infinite; }
+.hero-btn:hover, .ai-cta-btn:hover, .cta-btn:hover { animation: none; }
+@keyframes ctaGlowPulse {
+  0%, 100% { box-shadow: 0 4px 30px rgba(108,92,231,.35); }
+  50%      { box-shadow: 0 10px 48px rgba(108,92,231,.55), 0 0 30px rgba(0,206,201,.32); }
+}
+.ai-cta-btn { animation: ctaGlowPulseCyan 3.4s ease-in-out infinite; }
+.ai-cta-btn:hover { animation: none; }
+@keyframes ctaGlowPulseCyan {
+  0%, 100% { box-shadow: 0 5px 25px rgba(0,212,255,.3); }
+  50%      { box-shadow: 0 10px 40px rgba(0,212,255,.5), 0 0 28px rgba(0,212,255,.3); }
+}
+/* CTA 后方真实光晕（包一层，不受按钮 overflow 裁剪） */
+.cta-glow-wrap { position: relative; display: inline-flex; }
+.cta-glow {
+  position:absolute; inset:-26px -14px; z-index:-1; border-radius:60px;
+  background: radial-gradient(ellipse at center, rgba(108,92,231,.6), rgba(0,206,201,.28) 45%, transparent 72%);
+  filter: blur(26px); pointer-events:none;
+  animation: ctaGlowBreath 3.6s ease-in-out infinite;
+}
+.cta-glow-cyan { background: radial-gradient(ellipse at center, rgba(0,212,255,.6), rgba(0,150,255,.3) 45%, transparent 72%); }
+@keyframes ctaGlowBreath { 0%,100%{opacity:.55; transform:scale(1);} 50%{opacity:1; transform:scale(1.08);} }
+
+/* ========== ⑪ 玻璃拟态卡片统一 + 序号角标 ========== */
+.service-card, .ti-card, .benefit-item, .case-card, .why-item,
+.service-card-lg, .resource-card, .tool-card {
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02)),
+    var(--card-bg);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+/* ========== ⑫ 浅色区块细微点阵纹理（统一） ========== */
+.learn-more, .cta-section, .ai-culling-intro { position: relative; }
+.learn-more::before, .cta-section::before, .ai-culling-intro::before {
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 30%, transparent 85%);
+  opacity:.7;
 }
 

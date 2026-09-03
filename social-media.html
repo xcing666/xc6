@@ -24,22 +24,13 @@
       display: flex; flex-direction: column; position: fixed; inset: 0;
       z-index: 2147483647; background: #fff;
     }
-    #wx-guide .wx-nav { height:44px; background:#111; display:flex; align-items:center; justify-content:center; position:relative; color:#fff; padding:0 50px; flex-shrink:0; }
-    #wx-guide .wx-close { position:absolute; left:12px; top:50%; transform:translateY(-50%); width:20px; height:20px; }
-    #wx-guide .wx-close::before, #wx-guide .wx-close::after { content:''; position:absolute; left:0; top:50%; width:18px; height:2px; background:#fff; }
-    #wx-guide .wx-close::before { transform:rotate(45deg); }
-    #wx-guide .wx-close::after { transform:rotate(-45deg); }
+    #wx-guide .wx-nav { height:44px; background:#111; display:flex; align-items:center; justify-content:center; color:#fff; flex-shrink:0; }
     #wx-guide .wx-nav-title { text-align:center; }
     #wx-guide .wx-main { font-size:15px; font-weight:500; line-height:1.2; }
-    #wx-guide .wx-sub { font-size:10px; color:#999; line-height:1.2; }
-    #wx-guide .wx-dots { position:absolute; right:12px; top:50%; transform:translateY(-50%); display:flex; gap:3px; }
-    #wx-guide .wx-dots span { width:4px; height:4px; background:#fff; border-radius:50%; }
     #wx-guide .wx-header { position:relative; background:linear-gradient(135deg,#2979ff 0%,#00b0ff 100%); padding:32px 24px 70px; color:#fff; overflow:hidden; flex-shrink:0; }
     #wx-guide .wx-header-content { position:relative; z-index:1; display:flex; justify-content:space-between; align-items:flex-start; }
-    #wx-guide .wx-tip { font-size:16px; line-height:1.6; font-weight:500; text-shadow:0 1px 2px rgba(0,0,0,.1); }
-    #wx-guide .wx-safari-row { display:inline-flex; align-items:center; gap:6px; margin-top:4px; }
-    #wx-guide .wx-safari-icon { width:22px; height:22px; border-radius:50%; background:#fff; display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; }
-    #wx-guide .wx-safari-icon svg { width:18px; height:18px; }
+    #wx-guide .wx-tip { font-size:16px; line-height:1.7; font-weight:500; text-shadow:0 1px 2px rgba(0,0,0,.1); }
+    #wx-guide .wx-tip b { color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.25); }
     #wx-guide .wx-finger { width:90px; height:90px; flex-shrink:0; margin-top:-10px; margin-right:-10px; }
     #wx-guide .wx-wave { position:absolute; bottom:-1px; left:0; width:100%; line-height:0; }
     #wx-guide .wx-wave svg { display:block; width:100%; height:auto; }
@@ -89,11 +80,140 @@
     .cta-btn { display:inline-block; padding:16px 56px; background:linear-gradient(135deg, #6c5ce7, #fd79a8); color:#fff; border-radius:50px; text-decoration:none; font-weight:700; font-size:16px; transition:.3s; box-shadow:0 4px 20px rgba(108,92,231,.3); }
     .cta-btn:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(108,92,231,.5); }
 
+    /* 服务长条形列表（紧凑） */
+
+    /* 社媒热门业务价格卡（更紧凑） */
+    .sm-price-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:9px; margin-top:6px; }
+    @media (max-width:900px){ .sm-price-grid { grid-template-columns:repeat(3,1fr); gap:9px; } }
+    @media (max-width:640px){ .sm-price-grid { grid-template-columns:repeat(2,1fr); gap:8px; } }
+    .sm-price-card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:11px 6px; text-align:center; transition:.3s; position:relative; }
+    .sm-price-card:hover { transform:translateY(-2px); border-color:rgba(108,92,231,.35); box-shadow:0 6px 18px rgba(108,92,231,.14); }
+    .sm-price-card .icon { font-size:21px; margin-bottom:4px; }
+    .sm-price-card h3 { font-size:12px; font-weight:700; color:#f0f2ff; margin-bottom:1px; }
+    .sm-price-card .desc { color:var(--muted); font-size:10px; margin-bottom:6px; line-height:1.3; }
+    .sm-price-card .price { font-size:20px; font-weight:800; color:var(--c2); margin:3px 0 8px; }
+    .sm-price-card .price span { font-size:10px; font-weight:400; color:var(--muted); margin-left:1px; }
+    .sm-price-card .stock { display:none; }
+    .sm-price-card .buy-btn { display:inline-block; padding:5px 13px; background:linear-gradient(135deg, #6c5ce7, #fd79a8); color:#fff; border-radius:50px; text-decoration:none; font-size:11px; font-weight:700; transition:.3s; }
+    .sm-price-card .buy-btn:hover { transform:translateY(-1px); box-shadow:0 3px 10px rgba(108,92,231,.35); }
+
+    /* 小分类容器与标题 */
+    .sm-subcat { margin-bottom:14px; }
+    /* 相邻小分类之间：虚线分隔 + 间距，形成清晰板块分组 */
+    .sm-subcat + .sm-subcat {
+      margin-top:28px;
+      padding-top:26px;
+      border-top:1px dashed rgba(255,255,255,.14);
+    }
+    .sm-subcat-title {
+      font-size:16px; font-weight:800; color:#fff;
+      padding:11px 20px; margin:0 0 14px;
+      background:linear-gradient(135deg, rgba(108,92,231,.55), rgba(0,206,201,.3));
+      border:1px solid rgba(108,92,231,.55);
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center; gap:9px;
+      box-shadow:0 5px 20px rgba(108,92,231,.28);
+      letter-spacing:.6px;
+    }
+    @media (max-width:480px){
+      .sm-subcat-title { font-size:14px; padding:9px 14px; gap:7px; }
+      .sm-subcat + .sm-subcat { margin-top:22px; padding-top:20px; }
+    }
+
+    /* 更多业务 紧凑列表 */
+    .sm-subcat-title-sm {
+      font-size:13px; font-weight:700; color:#f0f2ff;
+      padding:6px 14px; margin:0 0 10px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:8px;
+      display:flex; align-items:center; justify-content:center; gap:6px;
+      letter-spacing:.3px;
+    }
+    .sm-list { background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:2px 0; }
+    .sm-list-section { padding:7px 14px; border-bottom:1px dashed rgba(255,255,255,.08); }
+    .sm-list-section:last-child { border-bottom:none; }
+    .sm-list-group-title { font-size:11px; font-weight:700; color:#ffc107; margin-bottom:5px; letter-spacing:.4px; }
+    .sm-list-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-size:12px; border-bottom:1px dotted rgba(255,255,255,.05); }
+    .sm-list-row:last-child { border-bottom:none; }
+    .sm-list-text { color:var(--text); flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .sm-list-desc { font-style:normal; color:var(--text-dim); margin-left:4px; font-size:11px; }
+    .sm-list-btn { flex-shrink:0; margin-left:10px; padding:3px 12px; border-radius:50px; background:linear-gradient(135deg,#6c5ce7,#fd79a8); color:#fff; font-size:11px; font-weight:600; text-decoration:none; transition:.2s; white-space:nowrap; }
+    .sm-list-btn:hover { transform:translateY(-1px); box-shadow:0 3px 10px rgba(108,92,231,.35); }
+    @media (max-width:480px){
+      .sm-subcat-title-sm { font-size:12px; padding:5px 10px; }
+      .sm-list-section { padding:6px 10px; }
+      .sm-list-row { padding:4px 0; font-size:11px; }
+      .sm-list-desc { font-size:10px; }
+      .sm-list-btn { padding:2px 10px; font-size:10px; margin-left:8px; }
+    }
+    /* 网格内小组分隔标题（横跨整行） */
+    .sm-mini-title {
+      grid-column: 1 / -1;
+      font-size:12px; font-weight:700;
+      color:#ffc107;
+      padding:6px 10px; margin-top:6px;
+      background:rgba(255,193,7,.08);
+      border-left:3px solid #ffc107;
+      border-radius:6px;
+      display:flex; align-items:center; gap:6px;
+      letter-spacing:.3px;
+    }
+    /* 下单流程强提示（醒目警示条） */
+    .sm-order-tip {
+      display:flex; align-items:flex-start; gap:9px;
+      background:linear-gradient(135deg, rgba(255,152,0,.2), rgba(255,193,7,.1));
+      border:1px solid rgba(255,193,7,.55);
+      border-left:4px solid #ff9800;
+      border-radius:10px;
+      padding:11px 14px;
+      margin:0 0 14px;
+      line-height:1.75;
+    }
+    .sm-order-tip .tip-icon { font-size:17px; flex-shrink:0; line-height:1.5; }
+    .sm-order-tip .tip-text { font-size:13px; font-weight:600; color:#ffeaa7; }
+    .sm-order-tip .tip-text b { color:#ffc107; font-weight:800; }
+    @media (max-width:480px){
+      .sm-order-tip { padding:9px 11px; gap:7px; }
+      .sm-order-tip .tip-text { font-size:12px; }
+      .sm-order-tip .tip-icon { font-size:15px; }
+    }
+.sm-subcat-more {
+      text-align:center; color:var(--muted); font-size:13px;
+      padding:13px; margin-top:14px;
+      border:1px dashed rgba(255,255,255,.12);
+      border-radius:12px;
+      letter-spacing:.5px;
+    }
+
+    /* 最低价角标 */
+    .sm-price-card.is-lowest { border-color:rgba(255,193,7,.5); background:rgba(255,193,7,.05); box-shadow:0 5px 18px rgba(255,193,7,.1); }
+    .sm-price-card.is-lowest .price { color:#ffc107; }
+    .sm-price-card .low-badge {
+      position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+      background:linear-gradient(135deg,#ff9800,#ffc107); color:#3a2a00;
+      font-size:10px; font-weight:800; padding:2px 10px; border-radius:20px;
+      box-shadow:0 2px 8px rgba(255,152,0,.4); white-space:nowrap; letter-spacing:.3px;
+    }
+
+    /* 热门套餐角标 */
+    .sm-price-card.is-hot { border-color:rgba(253,121,168,.45); background:rgba(253,121,168,.05); box-shadow:0 5px 18px rgba(253,121,168,.1); }
+    .sm-price-card.is-hot .price { color:#fd79a8; }
+    .sm-price-card .hot-badge {
+      position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+      background:linear-gradient(135deg,#fd79a8,#ffc107); color:#fff;
+      font-size:10px; font-weight:800; padding:2px 10px; border-radius:20px;
+      box-shadow:0 2px 8px rgba(253,121,168,.4); white-space:nowrap; letter-spacing:.3px;
+    }
+
     @media (max-width:900px) {
-      .service-hero { padding:60px 20px 40px; }
-      .service-section { padding:40px 16px; }
-      .howto-steps { grid-template-columns:repeat(2,1fr); gap:16px; }
-      .howto-step { padding:24px 16px; }
+      .service-hero { padding:32px 16px 20px; }
+      .service-hero h1 { font-size:clamp(21px,6vw,30px); margin-bottom:9px; }
+      .service-hero p { font-size:14px; line-height:1.6; }
+      .service-section { padding:28px 14px; }
+      .service-section h2 { font-size:20px; margin-bottom:16px; }
+      .howto-steps { grid-template-columns:repeat(2,1fr); gap:14px; }
+      .howto-step { padding:20px 14px; }
     }
     @media (max-width:480px) {
       .howto-steps { grid-template-columns:repeat(2,1fr); gap:12px; }
@@ -108,19 +228,16 @@
 <!-- ======== 微信内置浏览器引导层（仅微信内显示） ======== -->
 <div id="wx-guide">
   <div class="wx-nav">
-    <div class="wx-close"></div>
     <div class="wx-nav-title">
       <div class="wx-main">请使用浏览器打开</div>
-      <div class="wx-sub" id="wxSubDomain">xcing666.github.io</div>
     </div>
-    <div class="wx-dots"><span></span><span></span><span></span></div>
   </div>
   <div class="wx-header">
     <div class="wx-header-content">
       <div class="wx-tip">
-        微信内无法直接打开本站<br>
-        请点击右上角 <b style="font-size:18px">···</b><br>
-        选择「在手机浏览器打开」
+        <div style="font-size:20px; font-weight:700; margin-bottom:10px;">微信内无法直接打开本站</div>
+        第1步：点击微信右上角 <b style="font-size:20px">···</b><br>
+        第2步：选择「在手机浏览器打开」
       </div>
       <svg class="wx-finger" viewBox="0 0 100 100" fill="none">
         <path d="M55 35 C55 28 62 24 68 28 C72 31 73 37 70 42 L68 45 L70 46 C74 44 79 45 81 49 C83 53 81 58 77 60 L75 62 C79 63 82 67 82 71 C82 76 78 79 74 80 L72 81 C75 83 76 87 74 90 C72 93 68 94 64 92 L45 82 C38 78 34 72 34 65 L34 50 C34 44 38 40 43 40 C48 40 52 43 53 48 L55 35Z" fill="#ffe0bd"/>
@@ -230,53 +347,192 @@
   </section>
 
   <!-- 前往下单平台（放在服务板块上方） -->
-  <section class="cta-section" style="padding-top:30px; padding-bottom:20px;">
+  <section class="cta-section" style="padding-top:18px; padding-bottom:12px;">
     <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="cta-btn">前往下单平台 →</a>
     <p style="color:#5a6490; font-size:12px; margin-top:16px;">将在浏览器新标签页中打开 · 如有疑问请联系微信：xcing888</p>
   </section>
 
   <!-- 服务项目 -->
-  <section class="service-section">
-    <h2>我们提供的服务</h2>
-    <div class="service-grid">
-      <div class="service-item">
-        <div class="icon">🔥</div>
-        <h3>短视频粉丝增长</h3>
-        <p>抖音、快手真人粉丝增长，提升账号权重与曝光量，助力创作者快速涨粉。</p>
-        <span class="tag">真人活跃</span>
-      </div>
-      <div class="service-item">
-        <div class="icon">❤️</div>
-        <h3>点赞评论互动</h3>
-        <p>视频点赞、评论、转发、收藏一站式完成，提升作品热度与推荐权重。</p>
-        <span class="tag">真实互动</span>
-      </div>
-      <div class="service-item">
-        <div class="icon">👑</div>
-        <h3>会员代充服务</h3>
-        <p>各大影视平台会员、音乐会员、QQ会员/钻等，低价代充，秒到账。</p>
-        <span class="tag">低价秒到</span>
-      </div>
-      <div class="service-item">
-        <div class="icon">📊</div>
-        <h3>QQ业务办理</h3>
-        <p>QQ等级加速、名片赞、空间访客、群组推广等，满足多样化需求。</p>
-        <span class="tag">业务齐全</span>
-      </div>
-      <div class="service-item">
-        <div class="icon">🎬</div>
-        <h3>影视会员充值</h3>
-        <p>爱奇艺、腾讯视频、优酷、芒果TV等主流平台会员，低价稳定。</p>
-        <span class="tag">正规渠道</span>
-      </div>
-      <div class="service-item">
-        <div class="icon">🛡️</div>
-        <h3>直播人气提升</h3>
-        <p>直播间人气、点赞、评论、礼物互动，打造高人气直播氛围。</p>
-        <span class="tag">安全稳定</span>
-      </div>
+    <!-- 热门业务自助下单 -->
+  <section class="service-section" style="border-top:1px solid rgba(255,255,255,.06);">
+    <h2>热门业务自助下单</h2>
+    <p style="text-align:center;color:var(--muted);font-size:14px;margin-bottom:28px;">点击任意卡片即可跳转至合作下单平台，选择对应业务一键购买</p>
+    <div class="sm-subcat">
+  <h3 class="sm-subcat-title">📱 抖音业务（DY）</h3>
+  <div class="sm-order-tip">
+    <span class="tip-icon">⚠️</span>
+    <span class="tip-text">点击「立即下单」→ 点击「请选择分类」→「DY业务区」→ 选择商品即可下单，<b>注意网页内的下单要求哦！！！</b></span>
+  </div>
+  <div class="sm-price-grid">
+    <div class="sm-price-card is-lowest">
+      <span class="low-badge">🔥爆款</span>
+      <div class="icon">▶️</div>
+      <h3>视频播放</h3>
+      <div class="desc">小单 · 100个起</div>
+      <div class="price">¥0.02</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
+    <div class="sm-price-card is-lowest">
+      <span class="low-badge">🔥爆款</span>
+      <div class="icon">❤️</div>
+      <h3>点赞</h3>
+      <div class="desc">压价 · 10个起</div>
+      <div class="price">¥0.45</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+    <div class="sm-price-card is-lowest">
+      <span class="low-badge">🔥爆款</span>
+      <div class="icon">💬</div>
+      <h3>评论</h3>
+      <div class="desc">秒刷分享 · 100个起</div>
+      <div class="price">¥0.11</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+    <div class="sm-price-card is-lowest">
+      <span class="low-badge">🔥爆款</span>
+      <div class="icon">👥</div>
+      <h3>粉丝</h3>
+      <div class="desc">低价真人 · 100个起</div>
+      <div class="price">¥8.00</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+    <div class="sm-price-card is-hot">
+      <span class="hot-badge">热门套餐</span>
+      <div class="icon">🔥</div>
+      <h3>套餐A</h3>
+      <div class="desc">赞58 + 播1W + 评10条 + 分享128</div>
+      <div class="price">¥8.00</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+    <div class="sm-price-card is-hot">
+      <span class="hot-badge">热门套餐</span>
+      <div class="icon">🔥</div>
+      <h3>套餐B</h3>
+      <div class="desc">赞188 + 播2W + 评15条 + 分享288</div>
+      <div class="price">¥12.00</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+
+    <div class="sm-price-card is-lowest">
+      <span class="low-badge">🔥爆款</span>
+      <div class="icon">👍</div>
+      <h3>直播间点赞</h3>
+      <div class="desc">真人点赞 · 3000个起</div>
+      <div class="price">¥1.32</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+    <div class="sm-price-card is-lowest">
+      <span class="low-badge">🔥爆款</span>
+      <div class="icon">🎉</div>
+      <h3>直播间人气</h3>
+      <div class="desc">娱乐上榜 · 10人/1小时</div>
+      <div class="price">¥4.40</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+  </div>
+</div>
+<!-- 快手小分类（KS） -->
+<div class="sm-subcat">
+  <h3 class="sm-subcat-title">⚡ 快手业务（KS）</h3>
+  <div class="sm-order-tip">
+    <span class="tip-icon">⚠️</span>
+    <span class="tip-text">点击「立即下单」→ 点击「请选择分类」→「KS业务区」→ 选择商品即可下单，<b>注意网页内的下单要求哦！！！</b></span>
+  </div>
+  <div class="sm-price-grid">
+    <div class="sm-price-card is-lowest">
+      <span class="low-badge">🔥爆款</span>
+      <div class="icon">👆</div>
+      <h3>双击点赞</h3>
+      <div class="desc">真人双击 · 10个起</div>
+      <div class="price">¥0.18</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+    <div class="sm-price-card is-lowest">
+      <span class="low-badge">🔥爆款</span>
+      <div class="icon">👥</div>
+      <h3>粉丝</h3>
+      <div class="desc">手工真人 · 100个起</div>
+      <div class="price">¥2.85</div>
+      <a href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+    </div>
+  </div>
+</div>
+
+<!-- 更多业务（紧凑列表） -->
+<div class="sm-subcat">
+  <h3 class="sm-subcat-title-sm">更多业务 · 一键直达下单平台</h3>
+  <div class="sm-list">
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">精选分类</div>
+        <div class="sm-list-row"><span class="sm-list-text">【免费商品区】<em class="sm-list-desc">每日领取</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【每日福利价】<em class="sm-list-desc">一折福利</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【综合商品区】<em class="sm-list-desc">热销特价</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ名片赞】<em class="sm-list-desc">快速秒到</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ空间访】<em class="sm-list-desc">人气推荐</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【拼多多砍价】<em class="sm-list-desc">全天秒砍</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【DY业务区】<em class="sm-list-desc">粉丝播放</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【KS业务区】<em class="sm-list-desc">粉丝双击</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【网易代看区】<em class="sm-list-desc">校园新品</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">QQ钻专区</div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ永久钻】<em class="sm-list-desc">独家开通</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ永久钻】<em class="sm-list-desc">无时同版</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ永久钻】<em class="sm-list-desc">超高质保</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ永久钻】<em class="sm-list-desc">不掉专区</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ官方钻】<em class="sm-list-desc">半价直充</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">影视会员区</div>
+        <div class="sm-list-row"><span class="sm-list-text">【影视会员区】<em class="sm-list-desc">多种影视</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【影视VIP】<em class="sm-list-desc">账号出租</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【影视VIP】<em class="sm-list-desc">年费特价</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">游戏业务专区</div>
+        <div class="sm-list-row"><span class="sm-list-text">【王者荣耀区】<em class="sm-list-desc">点赞人气</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【王者荣耀区】<em class="sm-list-desc">礼包福利</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【蛋仔派对区】<em class="sm-list-desc">主页点赞</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【和平精英区】<em class="sm-list-desc">礼包多样</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">多种特色专区</div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信红包码】<em class="sm-list-desc">赚钱实物</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信红包封面】<em class="sm-list-desc">多种样式</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【无限流量卡】<em class="sm-list-desc">免费包邮</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ特效区】<em class="sm-list-desc">商品大全</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ代挂区】<em class="sm-list-desc">加速等级</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ群拉人】<em class="sm-list-desc">活跃排名</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ举报区】<em class="sm-list-desc">真实有效</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【文案创作区】<em class="sm-list-desc">百种样式</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【音乐人认证】<em class="sm-list-desc">多种平台</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【外卖优惠券】<em class="sm-list-desc">实惠多多</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">粉丝关注专区</div>
+        <div class="sm-list-row"><span class="sm-list-text">【KS直播区】<em class="sm-list-desc">人气互动</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【DY直播区】<em class="sm-list-desc">人气热度</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【新浪微博区】<em class="sm-list-desc">粉丝关注</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【哔哩哔哩区】<em class="sm-list-desc">粉丝投币</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【网易云音乐】<em class="sm-list-desc">多种业务</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【VX视频号】<em class="sm-list-desc">关注爱心</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【小红书专区】<em class="sm-list-desc">粉丝播放</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【闲鱼商品区】<em class="sm-list-desc">粉丝浏览</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【拼多多店铺】<em class="sm-list-desc">关注收藏</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信投票区】<em class="sm-list-desc">多种类型</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信公众号】<em class="sm-list-desc">关注阅读</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【今日头条区】<em class="sm-list-desc">粉丝阅读</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【全民K歌区】<em class="sm-list-desc">鲜花关注</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【海外自媒体】<em class="sm-list-desc">粉丝订阅</em></span><a class="sm-list-btn" href="https://xcing.ldt3.top" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+  </div>
+</div>
+
+    <p style="text-align:center;color:var(--muted);font-size:12px;margin-top:22px;">* 价格与合作库存以下单平台实时显示为准；点击后将跳转至 xcing.ldt3.top 自助下单，无需人工找链接。</p>
   </section>
+
+
+
 
   <!-- 使用流程 -->
   <section class="service-section" style="border-top:1px solid rgba(255,255,255,.06);">
@@ -332,6 +588,29 @@
   </footer>
 
   <script src="script.js"></script>
-  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+    <!-- 浮动快捷联系按钮组（⑧ 微信/QQ/回到顶部） -->
+  <!-- 二维码弹窗 -->
+  <div class="qr-modal" id="qrModal">
+    <div class="qr-modal-content">
+      <span class="qr-modal-close" onclick="closeQRModal()">&times;</span>
+      <h3 id="qrTitle">联系方式</h3>
+      <div id="qrContent"></div>
+    </div>
+  </div>
+
+  <!-- 提示 Toast -->
+  <div class="toast" id="toast"></div>
+
+  <div class="float-contact visible" id="floatContact">
+    <button class="fc-btn fc-wechat" onclick="showQRCode('wechat')" aria-label="微信" data-tooltip="微信：xcing888">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 4C5.1 4 2 6.6 2 9.8c0 1.9.9 3.6 2.5 4.8l-.6 2 2.4-1.3c.8.2 1.6.3 2.5.3.2 0 .4 0 .6-.1-.3-.7-.5-1.5-.5-2.3 0-3 2.9-5.4 6.5-5.4.3 0 .5 0 .8.1C15.2 5.9 12.3 4 9 4zM6.6 8.4a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9z"/><path d="M22 14.2c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.8 0 1.5-.1 2.2-.3l1.9 1-.5-1.7c1.5-.8 2.4-2 2.4-3.9zm-8-.9a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8zm4 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8z"/></svg>
+    </button>
+    <button class="fc-btn fc-qq" onclick="showQRCode('qq')" aria-label="QQ" data-tooltip="QQ：738874448">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+    </button>
+    <button class="fc-btn fc-top" id="backToTop" title="回到顶部" aria-label="回到顶部">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
+  </div>
 </body>
 </html>

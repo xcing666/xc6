@@ -7,6 +7,8 @@
   <meta name="keywords" content="短视频涨粉,二维码生成,图片格式转换,直播人气,兴程网络,数字服务,平面设计,小程序开发" />
   <meta name="author" content="兴程网络" />
   <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0b0f2e" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/" />
   <!-- 微信环境检测：微信内打开时给 html 加 wx-block 类，显示内置引导层 -->
   <script>
   (function () {
@@ -28,42 +30,17 @@
       z-index: 2147483647;
       background: #fff;
     }
-    #wx-guide .wx-nav {
-      height: 44px;
-      background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      color: #fff;
-      padding: 0 50px;
-      flex-shrink: 0;
-    }
-    #wx-guide .wx-close {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px; height: 20px;
-    }
-    #wx-guide .wx-close::before, #wx-guide .wx-close::after {
-      content: '';
-      position: absolute;
-      left: 0; top: 50%;
-      width: 18px; height: 2px;
-      background: #fff;
-    }
-    #wx-guide .wx-close::before { transform: rotate(45deg); }
-    #wx-guide .wx-close::after { transform: rotate(-45deg); }
-    #wx-guide .wx-nav-title { text-align: center; }
-    #wx-guide .wx-main { font-size: 15px; font-weight: 500; line-height: 1.2; }
-    #wx-guide .wx-sub { font-size: 10px; color: #999; line-height: 1.2; }
-    #wx-guide .wx-dots {
-      position: absolute; right: 12px; top: 50%;
-      transform: translateY(-50%);
-      display: flex; gap: 3px;
-    }
-    #wx-guide .wx-dots span { width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+  #wx-guide .wx-nav {
+    height: 44px;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  #wx-guide .wx-nav-title { text-align: center; }
+  #wx-guide .wx-main { font-size: 15px; font-weight: 500; line-height: 1.2; }
     #wx-guide .wx-header {
       position: relative;
       background: linear-gradient(135deg, #2979ff 0%, #00b0ff 100%);
@@ -76,7 +53,8 @@
       position: relative; z-index: 1;
       display: flex; justify-content: space-between; align-items: flex-start;
     }
-    #wx-guide .wx-tip { font-size: 16px; line-height: 1.6; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,.1); }
+    #wx-guide .wx-tip { font-size: 16px; line-height: 1.7; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,.1); }
+    #wx-guide .wx-tip b { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.25); }
     #wx-guide .wx-safari-row { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; }
     #wx-guide .wx-safari-icon {
       width: 22px; height: 22px; border-radius: 50%; background: #fff;
@@ -115,24 +93,23 @@
   <meta property="og:description" content="技术驱动创意，专注数字服务，为您的品牌提供一站式数字化解决方案。" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://xcing666.github.io/xc6" />
-  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.png" />
+  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="兴程网络 — 短视频涨粉·二维码生成·图片转换·直播人气" />
   <meta name="twitter:description" content="技术驱动创意，专注数字服务，为您的品牌提供一站式数字化解决方案。" />
-  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.png" />
+  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
   <title>兴程网络 — 短视频涨粉·二维码生成·图片转换·直播人气</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css?v=20260816" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "兴程网络",
     "url": "https://xcing666.github.io/xc6",
-    "logo": "https://xcing666.github.io/xc6/showcase_bg.png",
+    "logo": "https://xcing666.github.io/xc6/showcase_bg.jpg",
     "description": "技术驱动创意，专注数字服务。提供广告平面设计、微信小程序开发、社交媒体运营、拼多多助力等一站式数字化解决方案。",
     "contactPoint": {
       "@type": "ContactPoint",
@@ -147,19 +124,16 @@
 <!-- ======== 微信内置浏览器引导层（仅微信内显示） ======== -->
 <div id="wx-guide">
   <div class="wx-nav">
-    <div class="wx-close"></div>
     <div class="wx-nav-title">
       <div class="wx-main">请使用浏览器打开</div>
-      <div class="wx-sub" id="wxSubDomain">xcing666.github.io</div>
     </div>
-    <div class="wx-dots"><span></span><span></span><span></span></div>
   </div>
   <div class="wx-header">
     <div class="wx-header-content">
       <div class="wx-tip">
-        微信内无法直接打开本站<br>
-        请点击右上角 <b style="font-size:18px">···</b><br>
-        选择「在手机浏览器打开」
+        <div style="font-size:20px; font-weight:700; margin-bottom:10px;">微信内无法直接打开本站</div>
+        第1步：点击微信右上角 <b style="font-size:20px">···</b><br>
+        第2步：选择「在手机浏览器打开」
       </div>
       <svg class="wx-finger" viewBox="0 0 100 100" fill="none">
         <path d="M55 35 C55 28 62 24 68 28 C72 31 73 37 70 42 L68 45 L70 46 C74 44 79 45 81 49 C83 53 81 58 77 60 L75 62 C79 63 82 67 82 71 C82 76 78 79 74 80 L72 81 C75 83 76 87 74 90 C72 93 68 94 64 92 L45 82 C38 78 34 72 34 65 L34 50 C34 44 38 40 43 40 C48 40 52 43 53 48 L55 35Z" fill="#ffe0bd"/>
@@ -306,6 +280,14 @@
     </svg>
     <div class="hero-dots"></div>
 
+    <!-- ⑨ Hero 鼠标视差层 -->
+    <div class="hero-parallax" aria-hidden="true">
+      <span class="hp-blob hp-b1" data-depth="0.5"></span>
+      <span class="hp-blob hp-b2" data-depth="0.7"></span>
+      <span class="hp-ring hp-r1" data-depth="0.9"></span>
+      <span class="hp-ring hp-r2" data-depth="1.1"></span>
+    </div>
+
     <div class="hero-inner">
       <p class="hero-tag">—— 数字化服务解决方案 ——</p>
       <h1 class="hero-title">
@@ -321,7 +303,10 @@
         <a href="miniprogram/index.html" class="hs-tag hs-mini" target="_blank" rel="noopener noreferrer">📱 小程序开发</a>
         <a href="social-media.html" class="hs-tag hs-video" target="_blank" rel="noopener noreferrer">▶ KS·DY 粉丝·点赞·人气</a>
       </div>
-      <a href="#services" class="hero-btn">查看服务 <span class="arrow">↓</span></a>
+      <span class="cta-glow-wrap">
+        <span class="cta-glow" aria-hidden="true"></span>
+        <a href="#services" class="hero-btn">查看服务 <span class="arrow">↓</span></a>
+      </span>
     </div>
   </header>
 
@@ -372,8 +357,7 @@
         <p>四大核心业务，助力您的品牌增长</p>
       </div>
       <div class="cards-grid">
-        <a href="design/index.html" class="service-card reveal" data-service="design">
-          <div class="card-icon-wrap">
+        <a href="design/index.html" class="service-card reveal" data-service="design">          <div class="card-icon-wrap">
             <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <rect x="8" y="8" width="48" height="48" rx="4"/>
               <circle cx="24" cy="24" r="6"/>
@@ -384,8 +368,7 @@
           <p>海报 · 宣传册 · 电商详情页</p>
           <span class="card-link">查看详情</span>
         </a>
-        <a href="miniprogram/index.html" class="service-card reveal" data-service="miniprogram" style="animation-delay:.1s;">
-          <div class="card-icon-wrap">
+        <a href="miniprogram/index.html" class="service-card reveal" data-service="miniprogram" style="animation-delay:.1s;">          <div class="card-icon-wrap">
             <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
               <rect x="12" y="6" width="40" height="52" rx="6"/>
               <line x1="12" y1="18" x2="52" y2="18"/>
@@ -396,8 +379,7 @@
           <p>电商 · 预约 · 会员 · 定制功能</p>
           <span class="card-link">查看详情</span>
         </a>
-        <a href="social-media.html" class="service-card reveal" data-service="social" style="animation-delay:.2s;">
-          <div class="card-icon-wrap">
+        <a href="social-media.html" class="service-card reveal" data-service="social" style="animation-delay:.2s;">          <div class="card-icon-wrap">
             <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round">
               <path d="M32 8 L36 24 L52 24 L40 34 L44 50 L32 40 L20 50 L24 34 L12 24 L28 24 Z"/>
             </svg>
@@ -406,8 +388,7 @@
           <p>短视频粉丝、影视会员、QQ业务等</p>
           <span class="card-link">立即访问</span>
         </a>
-        <a href="pdd-assist.html" class="service-card reveal" data-service="pdd" style="animation-delay:.3s;">
-          <div class="card-icon-wrap">
+        <a href="pdd-assist.html" class="service-card reveal" data-service="pdd" style="animation-delay:.3s;">          <div class="card-icon-wrap">
             <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M32 12 C20 12 12 22 12 32 C12 44 32 56 32 56 C32 56 52 44 52 32 C52 22 44 12 32 12Z"/>
               <path d="M24 30 L28 34 L40 22"/>
@@ -464,11 +445,14 @@
         <span class="ai-target-tag">电商卖家</span>
         <span class="ai-target-tag">设计师</span>
       </div>
-      <a href="design/ai-culling.html" class="ai-cta-btn" target="_blank" rel="noopener noreferrer">
-        <span class="ai-cta-icon">🚀</span>
-        立即体验 AI 选图
-        <span class="ai-cta-arrow">→</span>
-      </a>
+      <span class="cta-glow-wrap">
+        <span class="cta-glow cta-glow-cyan" aria-hidden="true"></span>
+        <a href="design/ai-culling.html" class="ai-cta-btn" target="_blank" rel="noopener noreferrer">
+          <span class="ai-cta-icon">🚀</span>
+          立即体验 AI 选图
+          <span class="ai-cta-arrow">→</span>
+        </a>
+      </span>
     </div>
   </section>
 
@@ -597,13 +581,13 @@
 
       <div class="footer-social-icons">
         <a href="javascript:void(0)" class="social-icon" onclick="showQRCode('wechat')" data-tooltip="点击扫码添加微信">
-          <i class="fa-brands fa-weixin" style="font-size:20px;"></i>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9 4C5.1 4 2 6.6 2 9.8c0 1.9.9 3.6 2.5 4.8l-.6 2 2.4-1.3c.8.2 1.6.3 2.5.3.2 0 .4 0 .6-.1-.3-.7-.5-1.5-.5-2.3 0-3 2.9-5.4 6.5-5.4.3 0 .5 0 .8.1C15.2 5.9 12.3 4 9 4zM6.6 8.4a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9z"/><path d="M22 14.2c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.8 0 1.5-.1 2.2-.3l1.9 1-.5-1.7c1.5-.8 2.4-2 2.4-3.9zm-8-.9a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8zm4 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8z"/></svg>
         </a>
         <a href="https://qm.qq.com/q/ARPMUBOd5m" class="social-icon" target="_blank" rel="noopener" data-tooltip="点击跳转添加QQ">
-          <i class="fa-brands fa-qq" style="font-size:20px;"></i>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
         </a>
         <a href="mailto:738874448@qq.com?subject=咨询合作&body=您好，我对贵公司的服务感兴趣，请与我联系。" class="social-icon" data-tooltip="点击发送邮件">
-          <i class="fa-solid fa-envelope" style="font-size:20px;"></i>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.2 7h15.6L12 12.2z"/></svg>
         </a>
       </div>
 
@@ -624,8 +608,18 @@
     </div>
   </div>
 
-  <!-- ======== 回到顶部按钮 ======== -->
-  <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+  <!-- ======== 浮动快捷联系按钮组（⑧ 微信/QQ/回到顶部） ======== -->
+  <div class="float-contact visible" id="floatContact">
+    <button class="fc-btn fc-wechat" onclick="showQRCode('wechat')" aria-label="微信" data-tooltip="微信：xcing888">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 4C5.1 4 2 6.6 2 9.8c0 1.9.9 3.6 2.5 4.8l-.6 2 2.4-1.3c.8.2 1.6.3 2.5.3.2 0 .4 0 .6-.1-.3-.7-.5-1.5-.5-2.3 0-3 2.9-5.4 6.5-5.4.3 0 .5 0 .8.1C15.2 5.9 12.3 4 9 4zM6.6 8.4a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9z"/><path d="M22 14.2c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.8 0 1.5-.1 2.2-.3l1.9 1-.5-1.7c1.5-.8 2.4-2 2.4-3.9zm-8-.9a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8zm4 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8z"/></svg>
+    </button>
+    <button class="fc-btn fc-qq" onclick="showQRCode('qq')" aria-label="QQ" data-tooltip="QQ：738874448">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+    </button>
+    <button class="fc-btn fc-top" id="backToTop" title="回到顶部" aria-label="回到顶部">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
+  </div>
 
   <!-- ======== 提示 Toast ======== -->
   <div class="toast" id="toast"></div>

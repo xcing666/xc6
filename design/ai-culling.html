@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI 智能选图工具 — 基于 TensorFlow MobileNet 模型，自动识别图片内容并智能筛选，提升选图效率。" />
-<title>AI 智能选图 — 兴程网络</title>
+  <meta name="description" content="AI 智能选图工具 — 基于本地智能算法，自动检测虚焦、曝光、构图与重复画面，帮您快速筛选最佳照片，纯浏览器运行不上传云端。" />
+  <title>AI 智能选图 — 兴程网络</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -148,6 +147,7 @@ a{color:var(--c2);text-decoration:none;}
   .stats-grid{grid-template-columns:repeat(2,1fr);}
 }
 </style>
+<link rel="stylesheet" href="../style.css?v=20260816" />
 </head>
 <body>
 
@@ -161,7 +161,7 @@ a{color:var(--c2);text-decoration:none;}
 <div class="main-container">
   <div class="page-hero">
     <h1>🤖 AI 智能选图</h1>
-    <p>基于深度学习模型，自动检测闭眼、虚焦、重复画面等问题，智能筛选最佳照片。</p>
+    <p>基于本地智能算法，自动检测虚焦、曝光、构图与重复画面，帮您快速筛选最佳照片。</p>
   </div>
 
   <!-- 上传区域 -->
@@ -266,24 +266,11 @@ window.addEventListener('DOMContentLoaded', () => {
   setupScoreSlider();
 });
 
-// ===== 加载 AI 模型（静默加载，不提示错误）=====
+// ===== 加载 AI 模型（纯本地算法，无需外部模型/网络）=====
 async function loadAIModel() {
-  if (modelLoading || tfModel) return;
-  modelLoading = true;
-  try {
-    await tf.ready();
-    tfModel = await mobilenet.load({
-      version: 2,
-      alpha: 1.0,
-      modelUrl: 'https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/model/model.json'
-    });
-    console.log('[AI] 模型加载完成');
-  } catch(e) {
-    console.log('[AI] 使用增强分析模式');
-    tfModel = null;
-  } finally {
-    modelLoading = false;
-  }
+  // 本站采用完全本地运行的智能算法（清晰度/曝光/构图/重复检测），
+  // 不依赖任何外部 CDN 或深度学习模型，离线可用、隐私安全。
+  tfModel = null;
 }
 
 // ===== 上传区域 =====
@@ -375,23 +362,10 @@ async function analyzeImage(file) {
         const isDup = checkDuplicate(hash);
         if (!isDup) phashDB.push({ name: file.name, hash });
 
-        // 5. AI 美学评分
-        let aesthetic = 50;
+        // 5. 美学评分（本地算法）
+        let aesthetic = calcAestheticBasic(data, canvas.width, canvas.height);
         let predictions = [];
-        let aiComment  = '';
-        if (tfModel) {
-          try {
-            predictions = await tfModel.classify(img, 5);
-            aesthetic   = calcAestheticFromAI(predictions, data, canvas.width, canvas.height);
-            aiComment   = genAIComment(predictions, clarity, exposure, composition, isBlur, isOver, isUnder, isDup);
-          } catch(e) {
-            aesthetic = calcAestheticBasic(data, canvas.width, canvas.height);
-            aiComment = genBasicComment(clarity, exposure, composition, isBlur, isOver, isUnder, isDup);
-          }
-        } else {
-          aesthetic = calcAestheticBasic(data, canvas.width, canvas.height);
-          aiComment = genBasicComment(clarity, exposure, composition, isBlur, isOver, isUnder, isDup);
-        }
+        let aiComment  = genBasicComment(clarity, exposure, composition, isBlur, isOver, isUnder, isDup);
 
         // 6. 闭眼检测（基于亮度分布 heuristic）
         const hasClosedEye = detectClosedEye(data, canvas.width, canvas.height);
@@ -537,33 +511,6 @@ function detectClosedEye(data, w, h) {
   return (eyeDark / eyeRegion) > 0.35;
 }
 
-// ===== AI 美学评分 =====
-function calcAestheticFromAI(predictions, data, w, h) {
-  let score = 50;
-  const highQualityKeywords = [
-    'person','woman','man','portrait','model','fashion',
-    'wedding','bride','groom',
-    'animal','bird','horse','dog','cat',
-    'food','pizza','cake','fruit',
-    'architecture','building','castle','church','tower',
-    'nature','mountain','beach','sky','sunset','ocean',
-    'flower','garden','park',
-    'art','painting','sculpture'
-  ];
-  const allPreds = predictions.map(p => p.className.toLowerCase()).join(' ');
-  const matched = highQualityKeywords.filter(kw => allPreds.includes(kw));
-  if (matched.length >= 2) score += 25;
-  else if (matched.length >= 1) score += 15;
-
-  const saturation = calcSaturation(data);
-  const contrast   = calcContrast(data);
-  score += saturation * 0.3;
-  score += contrast   * 0.2;
-  const confidence = predictions[0]?.probability || 0.5;
-  score += confidence * 15;
-  return Math.min(100, Math.max(10, score));
-}
-
 function calcAestheticBasic(data, w, h) {
   const sat = calcSaturation(data);
   const con = calcContrast(data);
@@ -594,47 +541,6 @@ function calcContrast(data) {
     variance += (m - mean) ** 2;
   }
   return Math.min(100, Math.sqrt(variance / count) * 0.8);
-}
-
-// ===== 生成 AI 评价文本 =====
-function genAIComment(preds, clarity, exposure, composition, isBlur, isOver, isUnder, isDup) {
-  const subject = preds?.[0]?.className || '照片';
-  let comment = `这张${subject}`;
-
-  // 清晰度评价
-  if (isBlur) {
-    comment += '存在明显的虚焦问题，画面不够清晰，';
-  } else if (clarity >= 80) {
-    comment += '清晰度出色，细节丰富，';
-  } else if (clarity >= 60) {
-    comment += '清晰度尚可，但仍有提升空间，';
-  } else {
-    comment += '清晰度不足，建议重新拍摄，';
-  }
-
-  // 曝光评价
-  if (isOver) {
-    comment += '曝光过度导致细节丢失，';
-  } else if (isUnder) {
-    comment += '曝光不足，画面偏暗，';
-  } else if (exposure >= 80) {
-    comment += '曝光准确，光影层次丰富，';
-  } else {
-    comment += '曝光基本合理，但可进一步优化，';
-  }
-
-  // 构图评价
-  if (composition >= 80) {
-    comment += '构图符合美学原则，视觉平衡感好。';
-  } else if (composition >= 60) {
-    comment += '构图中规中矩，建议尝试更有创意的拍摄角度。';
-  } else {
-    comment += '构图有待改进，建议参考三分法或对称构图。';
-  }
-
-  if (isDup) comment += '⚠️ 检测到与同组其他照片高度相似，建议去重。';
-
-  return comment;
 }
 
 function genBasicComment(clarity, exposure, composition, isBlur, isOver, isUnder, isDup) {
@@ -808,5 +714,34 @@ function setupScoreSlider() {
   });
 }
 </script>
+  <!-- ======== 浮动快捷联系按钮组（⑧ 微信/QQ/回到顶部） ======== -->
+  <footer class="footer-simple">
+    <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
+  </footer>
+
+  <!-- 二维码弹窗 -->
+  <div class="qr-modal" id="qrModal">
+    <div class="qr-modal-content">
+      <span class="qr-modal-close" onclick="closeQRModal()">&times;</span>
+      <h3 id="qrTitle">联系方式</h3>
+      <div id="qrContent"></div>
+    </div>
+  </div>
+
+  <!-- 提示 Toast -->
+  <div class="toast" id="toast"></div>
+
+  <div class="float-contact visible" id="floatContact">
+    <button class="fc-btn fc-wechat" onclick="showQRCode('wechat')" aria-label="微信" data-tooltip="微信：xcing888">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 4C5.1 4 2 6.6 2 9.8c0 1.9.9 3.6 2.5 4.8l-.6 2 2.4-1.3c.8.2 1.6.3 2.5.3.2 0 .4 0 .6-.1-.3-.7-.5-1.5-.5-2.3 0-3 2.9-5.4 6.5-5.4.3 0 .5 0 .8.1C15.2 5.9 12.3 4 9 4zM6.6 8.4a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9z"/><path d="M22 14.2c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.8 0 1.5-.1 2.2-.3l1.9 1-.5-1.7c1.5-.8 2.4-2 2.4-3.9zm-8-.9a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8zm4 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8z"/></svg>
+    </button>
+    <button class="fc-btn fc-qq" onclick="showQRCode('qq')" aria-label="QQ" data-tooltip="QQ：738874448">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+    </button>
+    <button class="fc-btn fc-top" id="backToTop" title="回到顶部" aria-label="回到顶部">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
+  </div>
+  <script src="../script.js?v=20260816"></script>
 </body>
 </html>
