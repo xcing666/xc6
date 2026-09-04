@@ -2,12 +2,28 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <script src="../no-zoom.js"></script>
   <meta name="description" content="免费在线图片格式转换工具 — 支持 JPG/PNG/WEBP/RAW 互转，RAW格式自动色彩增强，批量转换，无需安装软件。" />
   <title>图片格式转换 — 智能工具中心</title>
+
+  <!-- Open Graph / 微信分享 -->
+  <meta property="og:site_name" content="兴程网络" />
+  <meta property="og:title" content="图片格式转换 — 智能工具中心" />
+  <meta property="og:description" content="免费在线图片格式转换工具 — 支持 JPG/PNG/WEBP/RAW 互转，RAW格式自动色彩增强，批量转换，无需安装软件。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xcing666.github.io/xc6/tools/image-convert.html" />
+  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="图片格式转换 — 智能工具中心" />
+  <meta name="twitter:description" content="免费在线图片格式转换工具 — 支持 JPG/PNG/WEBP/RAW 互转，RAW格式自动色彩增强，批量转换，无需安装软件。" />
+  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/tools/image-convert.html" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🖼️</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=20260816" />
+  <link rel="stylesheet" href="../style.css?v=20260904" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 680px; margin: 0 auto; padding: 0 20px; }
@@ -450,7 +466,7 @@
     for (var i = 0; i < fileList.length; i++) {
       // 文件大小检查
       if (fileList[i].size > 200 * 1024 * 1024) {
-        alert('⚠️ 文件 "' + fileList[i].name + '" 太大（' + (fileList[i].size / 1024 / 1024).toFixed(1) + 'MB），已超过 200MB 处理上限。\n建议：用相机官方软件将照片导出为 JPG 格式后再上传。');
+        showToast('⚠️ 文件 "' + fileList[i].name + '" 太大（' + (fileList[i].size / 1024 / 1024).toFixed(1) + 'MB），已超过 200MB 处理上限。\n建议：用相机官方软件将照片导出为 JPG 格式后再上传。', 'error');
         continue;
       }
       files.push(fileList[i]);
@@ -472,7 +488,7 @@
       var thumbHtml = '';
       if (!isRaw) {
         var url = URL.createObjectURL(f);
-        thumbHtml = '<img class="file-thumb" src="'+url+'" alt="" />';
+        thumbHtml = '<img class="file-thumb" src="'+url+'" alt="待转换文件预览" />';
       } else {
         thumbHtml = '<div class="file-thumb-placeholder">📸</div>';
       }
@@ -529,7 +545,7 @@
       var card = document.createElement('div');
       card.className = 'result-item';
       card.innerHTML =
-        '<img class="result-thumb" src="'+url+'" alt="" />' +
+        '<img class="result-thumb" src="'+url+'" alt="转换结果预览" />' +
         '<div class="result-info">' +
           '<div class="result-name">'+name+'</div>' +
           '<div class="result-size">'+sizeStr+'</div>' +
@@ -586,7 +602,7 @@
               fc.getContext('2d').drawImage(fallbackImg, 0, 0);
               fc.toBlob(function(fb){ var fu = URL.createObjectURL(fb);
                 var c = document.createElement('div'); c.className = 'result-item';
-                c.innerHTML = '<img class="result-thumb" src="'+fu+'" style="max-width:100%;max-height:180px;object-fit:contain;" /><div class="result-info"><div class="result-name">'+name+'</div><div class="result-size">'+(fb.size/1024).toFixed(1)+' KB</div><a class="result-download" href="'+fu+'" download="'+name+'">⬇ 下载 JPG</a></div>';
+                c.innerHTML = '<img class="result-thumb" src="'+fu+'" alt="'+name+' 转换结果预览" style="max-width:100%;max-height:180px;object-fit:contain;" /><div class="result-info"><div class="result-name">'+name+'</div><div class="result-size">'+(fb.size/1024).toFixed(1)+' KB</div><a class="result-download" href="'+fu+'" download="'+name+'">⬇ 下载 JPG</a></div>';
                 grid.appendChild(c); finishOne();
               }, 'image/jpeg', 0.92);
             };
@@ -714,7 +730,7 @@
                 var card = document.createElement('div');
                 card.className = 'result-item';
                 card.innerHTML =
-                  '<img class="result-thumb" src="'+finalUrl+'" alt="" style="max-width:100%;max-height:200px;object-fit:contain;" />' +
+                  '<img class="result-thumb" src="'+finalUrl+'" alt="转换结果预览" style="max-width:100%;max-height:200px;object-fit:contain;" />' +
                   '<div class="result-info">' +
                     '<div class="result-name">'+name+'</div>' +
                     '<div class="result-size">'+(finalBlob.size/1024).toFixed(1)+' KB | '+w+'x'+h+' | '+result.source+'</div>' +
@@ -782,7 +798,7 @@
 
 })();
 </script>
-<script src="../script.js?v=20260816"></script>
+<script src="../script.js?v=20260904"></script>
 
     <!-- 浮动快捷联系按钮组（⑧ 微信/QQ/回到顶部） -->
   <!-- 二维码弹窗 -->

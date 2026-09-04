@@ -2,12 +2,28 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <script src="../no-zoom.js"></script>
   <meta name="description" content="免费在线二维码生成器 — 支持网址、文本、名片、WiFi 等多种类型，自定义样式与颜色，支持嵌入Logo，SVG/PNG导出。纯本地生成，不上传服务器。" />
   <title>二维码生成器 — 智能工具中心</title>
+
+  <!-- Open Graph / 微信分享 -->
+  <meta property="og:site_name" content="兴程网络" />
+  <meta property="og:title" content="二维码生成器 — 智能工具中心" />
+  <meta property="og:description" content="免费在线二维码生成器 — 支持网址、文本、名片、WiFi 等多种类型，自定义样式与颜色，支持嵌入Logo，SVG/PNG导出。纯本地生成，不上传服务器。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xcing666.github.io/xc6/tools/qrcode.html" />
+  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="二维码生成器 — 智能工具中心" />
+  <meta name="twitter:description" content="免费在线二维码生成器 — 支持网址、文本、名片、WiFi 等多种类型，自定义样式与颜色，支持嵌入Logo，SVG/PNG导出。纯本地生成，不上传服务器。" />
+  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/tools/qrcode.html" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>📱</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=20260816" />
+  <link rel="stylesheet" href="../style.css?v=20260904" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 640px; margin: 0 auto; padding: 0 20px; }
@@ -160,7 +176,7 @@
         <div class="qr-field">
           <label class="qr-label">嵌入Logo（可选）</label>
           <div class="qr-logo-upload" id="logoUploadArea">
-            <img class="qr-logo-preview" id="logoPreview" />
+            <img class="qr-logo-preview" id="logoPreview" alt="已上传的 Logo 预览" />
             <span class="qr-logo-upload-text" id="logoUploadText">点击上传Logo图片（建议正方形，≤200KB）</span>
             <button class="qr-logo-clear" id="logoClear">✕</button>
           </div>
@@ -344,7 +360,7 @@
   logoInput.addEventListener('change', function(e){
     var file = e.target.files[0];
     if (!file) return;
-    if (file.size > 200 * 1024) { alert('Logo图片不能超过200KB'); return; }
+    if (file.size > 200 * 1024) { showToast('Logo图片不能超过200KB', 'error'); return; }
     var reader = new FileReader();
     reader.onload = function(ev) {
       logoDataUrl = ev.target.result;
@@ -367,7 +383,7 @@
 
   btn.addEventListener('click', function(){
     var text = textInput.value.trim();
-    if (!text) { textInput.focus(); alert('请输入内容'); return; }
+    if (!text) { textInput.focus(); showToast('请输入内容', 'error'); return; }
     var size = parseInt(sizeSelect.value);
     var fg = fgInput.value;
     var bg = bgInput.value;
@@ -382,7 +398,7 @@
       btn.textContent = '📱 生成二维码';
 
       if (err) {
-        alert('生成失败：' + (err && err.message ? err.message : err));
+        showToast('生成失败：' + (err && err.message ? err.message : err), 'error');
         return;
       }
 
@@ -440,7 +456,7 @@
     var fg = fgInput.value;
     var bg = bgInput.value;
     var text = textInput.value.trim();
-    if (!text) { alert('请先生成二维码'); return; }
+    if (!text) { showToast('请先生成二维码', 'error'); return; }
 
     // 用本地库重新生成当前参数的SVG（含边距）
     try {
@@ -475,7 +491,7 @@
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
     } catch (e) {
-      alert('SVG导出失败：' + (e && e.message ? e.message : e));
+      showToast('SVG导出失败：' + (e && e.message ? e.message : e), 'error');
     }
   });
 
@@ -484,16 +500,16 @@
     canvas.toBlob(function(blob){
       if (navigator.clipboard && window.ClipboardItem) {
         navigator.clipboard.write([new ClipboardItem({'image/png': blob})]).then(function(){
-          alert('二维码已复制到剪贴板！');
-        }).catch(function(){ alert('复制失败，请直接下载。'); });
+          showToast('二维码已复制到剪贴板！', 'success');
+        }).catch(function(){ showToast('复制失败，请直接下载。', 'error'); });
       } else {
-        alert('您的浏览器不支持复制图片，请直接下载。');
+        showToast('您的浏览器不支持复制图片，请直接下载。', 'error');
       }
     }, 'image/png');
   };
 })();
 </script>
-  <script src="../script.js?v=20260816"></script>
+  <script src="../script.js?v=20260904"></script>
 
     <!-- 浮动快捷联系按钮组（⑧ 微信/QQ/回到顶部） -->
   <!-- 二维码弹窗 -->

@@ -17,4 +17,7 @@
   <url><loc>https://xcing666.github.io/xc6/tools/perler.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://xcing666.github.io/xc6/faq.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://xcing666.github.io/xc6/blog/index.html</loc><changefreq>weekly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://xcing666.github.io/xc6/blog/design-tips.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://xcing666.github.io/xc6/blog/miniprogram-guide.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://xcing666.github.io/xc6/blog/social-media-guide.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
 </urlset>

@@ -2,9 +2,25 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<script src="../no-zoom.js"></script>
   <meta name="description" content="AI 智能选图工具 — 基于本地智能算法，自动检测虚焦、曝光、构图与重复画面，帮您快速筛选最佳照片，纯浏览器运行不上传云端。" />
   <title>AI 智能选图 — 兴程网络</title>
+
+  <!-- Open Graph / 微信分享 -->
+  <meta property="og:site_name" content="兴程网络" />
+  <meta property="og:title" content="AI 智能选图 — 兴程网络" />
+  <meta property="og:description" content="AI 智能选图工具 — 基于本地智能算法，自动检测虚焦、曝光、构图与重复画面，帮您快速筛选最佳照片，纯浏览器运行不上传云端。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xcing666.github.io/xc6/design/ai-culling.html" />
+  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI 智能选图 — 兴程网络" />
+  <meta name="twitter:description" content="AI 智能选图工具 — 基于本地智能算法，自动检测虚焦、曝光、构图与重复画面，帮您快速筛选最佳照片，纯浏览器运行不上传云端。" />
+  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/design/ai-culling.html" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
 <style>
@@ -145,16 +161,35 @@ a{color:var(--c2);text-decoration:none;}
   .upload-zone{padding:40px 20px;}
   .photo-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
   .stats-grid{grid-template-columns:repeat(2,1fr);}
+  /* 导航：窄屏缩小 + 链接横向滚动，避免挤爆换行 */
+  .top-nav{padding:0 16px;gap:12px;}
+  .top-nav .logo{font-size:15px;flex-shrink:0;}
+  .top-nav .nav-links{gap:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .top-nav .nav-links::-webkit-scrollbar{display:none;}
+  .top-nav .nav-links a{font-size:13px;white-space:nowrap;}
+}
+@media(max-width:480px){
+  .top-nav{padding:0 12px;gap:8px;}
+  .top-nav .logo{font-size:14px;}
+  .top-nav .logo span{display:none;}
+  .top-nav .nav-links{gap:10px;}
+  .top-nav .nav-links a{font-size:12px;}
+  .photo-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
 }
 </style>
-<link rel="stylesheet" href="../style.css?v=20260816" />
+<link rel="stylesheet" href="../style.css?v=20260904" />
 </head>
 <body>
 
 <nav class="top-nav">
-  <div class="logo">兴程网络 · AI 选图</div>
+  <a href="../index.html" class="logo" style="text-decoration:none;">兴程网络 <span style="opacity:.7;font-weight:600;">· AI 选图</span></a>
   <div class="nav-links">
-    <a href="../index.html" class="back-link">返回首页</a>
+    <a href="../index.html">首页</a>
+    <a href="index.html">广告设计</a>
+    <a href="../miniprogram/index.html">小程序开发</a>
+    <a href="../social-media.html">社交媒体运营</a>
+    <a href="../tools/index.html">智能工具中心</a>
+    <a href="../faq.html">常见问题</a>
   </div>
 </nav>
 
@@ -293,10 +328,10 @@ async function handleFiles(files) {
     const ext = '.' + f.name.split('.').pop().toLowerCase();
     return f.type.startsWith('image/') || ['jpg','jpeg','png','webp'].includes(ext.slice(1));
   });
-  if (!valid.length) { alert('请上传图片文件（JPG / PNG / WebP）'); return; }
-  if (valid.length > 50)  { alert('每次最多上传 50 张图片'); return; }
+  if (!valid.length) { showToast('请上传图片文件（JPG / PNG / WebP）', 'error'); return; }
+  if (valid.length > 50)  { showToast('每次最多上传 50 张图片', 'error'); return; }
   const oversized = valid.filter(f => f.size > 20 * 1024 * 1024);
-  if (oversized.length) { alert(`以下文件超过 20MB：${oversized.map(f=>f.name).join('、')}`); return; }
+  if (oversized.length) { showToast(`以下文件超过 20MB：${oversized.map(f=>f.name).join('、')}`, 'error'); return; }
 
   if (!tfModel && !modelLoading) await loadAIModel();
 
@@ -698,7 +733,7 @@ function closePreview() { document.getElementById('previewModal').classList.remo
 // ===== 下载选中 =====
 function downloadSelected() {
   const sel = photos.filter(p => selected.has(p.name));
-  if (!sel.length) { alert('请先选择照片'); return; }
+  if (!sel.length) { showToast('请先选择照片', 'error'); return; }
   sel.forEach(p => {
     const a = document.createElement('a'); a.href = p.url; a.download = p.name; a.click();
   });
@@ -742,6 +777,6 @@ function setupScoreSlider() {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
     </button>
   </div>
-  <script src="../script.js?v=20260816"></script>
+  <script src="../script.js?v=20260904"></script>
 </body>
 </html>

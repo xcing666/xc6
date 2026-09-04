@@ -2,12 +2,28 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <script src="../no-zoom.js"></script>
   <meta name="description" content="免费在线拼豆图纸生成器 — 上传图片一键抠出主体并转为标准拼豆色号（MARD 体系 A–H、M 系列 221 色）图纸。每个格子标注色号、四周带坐标、底部附色号图例与用量，方便直接对照买珠和拼豆。纯前端本地处理，文件不上传。" />
   <title>拼豆图纸生成器 — 智能工具中心</title>
+
+  <!-- Open Graph / 微信分享 -->
+  <meta property="og:site_name" content="兴程网络" />
+  <meta property="og:title" content="拼豆图纸生成器 — 智能工具中心" />
+  <meta property="og:description" content="免费在线拼豆图纸生成器 — 上传图片一键抠出主体并转为标准拼豆色号（MARD 体系 A–H、M 系列 221 色）图纸。每个格子标注色号、四周带坐标、底部附色号图例与用量，方便直接对照买珠和拼豆。纯前端本地处理，文件不上传。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xcing666.github.io/xc6/tools/perler.html" />
+  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="拼豆图纸生成器 — 智能工具中心" />
+  <meta name="twitter:description" content="免费在线拼豆图纸生成器 — 上传图片一键抠出主体并转为标准拼豆色号（MARD 体系 A–H、M 系列 221 色）图纸。每个格子标注色号、四周带坐标、底部附色号图例与用量，方便直接对照买珠和拼豆。纯前端本地处理，文件不上传。" />
+  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/tools/perler.html" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🟡</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=20260816" />
+  <link rel="stylesheet" href="../style.css?v=20260904" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 760px; margin: 0 auto; padding: 0 20px; }
@@ -113,6 +129,24 @@
     @media (max-width:768px) {
       .tool-page { padding:70px 0 30px; }
       .tool-title { font-size:22px; }
+    }
+  
+    @media (max-width:480px) {
+      .tool-page { padding:64px 0 24px; }
+      .tool-container { padding:0 14px; }
+      .tool-title { font-size:20px; }
+      .tool-desc { font-size:13px; margin-bottom:20px; }
+      .pl-upload { padding:26px 14px; }
+      .pl-upload-icon { font-size:32px; }
+      .pl-upload-text { font-size:14px; }
+      .pl-panel { padding:14px; }
+      .pl-field { flex-wrap:wrap; gap:6px; }
+      .pl-field > label { font-size:12px; }
+      .pl-bead-list { grid-template-columns:repeat(2,1fr); gap:6px; }
+      .pl-btn { padding:11px 22px; font-size:14px; }
+      .pl-dl-btn { padding:9px 20px; font-size:13px; }
+      .pl-result { padding:16px 12px; }
+      .pl-canvas-wrap { padding:10px; }
     }
   </style>
 </head>
@@ -772,7 +806,7 @@
   })();
   </script>
 
-  <script src="../script.js?v=20260816"></script>
+  <script src="../script.js?v=20260904"></script>
     <!-- 浮动快捷联系按钮组（⑧ 微信/QQ/回到顶部） -->
   <!-- 二维码弹窗 -->
   <div class="qr-modal" id="qrModal">

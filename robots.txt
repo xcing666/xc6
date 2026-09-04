@@ -1,4 +1,50 @@
-User-agent: *
-Allow: /xc6/
+# robots.txt — 兴程网络
+# 站点：https://xcing666.github.io/xc6/
 
+# ============ 通用规则：允许所有搜索引擎抓取 ============
+User-agent: *
+Allow: /
+Disallow: /*.json$
+Disallow: /*.py$
+Disallow: /_
+
+# ============ 中文搜索引擎（单独声明，便于站长平台识别）============
+
+# 百度（含移动端 / 图片 / 新闻爬虫）
+User-agent: Baiduspider
+Allow: /
+User-agent: Baiduspider-image
+Allow: /
+User-agent: Baiduspider-mobile
+Allow: /
+
+# 必应 Bing
+User-agent: Bingbot
+Allow: /
+
+# 搜狗 Sogou
+User-agent: Sogou web spider
+Allow: /
+User-agent: Sogou Pic Spider
+Allow: /
+
+# 360 搜索
+User-agent: 360Spider
+Allow: /
+
+# 神马搜索（UC / 夸克）
+User-agent: Yisouspider
+Allow: /
+
+# 头条 / 抖音搜索
+User-agent: Bytespider
+Allow: /
+
+# 谷歌
+User-agent: Googlebot
+Allow: /
+User-agent: Googlebot-Image
+Allow: /
+
+# ============ 站点地图 ============
 Sitemap: https://xcing666.github.io/xc6/sitemap.xml

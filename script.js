@@ -541,7 +541,10 @@ function initFakeComments() {
     if (!tile) return;
     const img = tile.querySelector('img');
     if (!img) return;
-    vImg.src = img.src;
+    // 优先加载 WebP（<picture> 中的 source），老浏览器回退原始图片
+    const webpSrc = tile.querySelector('source[type="image/webp"]')?.getAttribute('srcset');
+    vImg.src = webpSrc || img.src;
+    vImg.alt = img.alt || '案例作品';
     vCap.textContent = img.alt || '案例作品';
     viewer.classList.add('show');
     document.body.style.overflow = 'hidden';
@@ -608,18 +611,48 @@ function toggleFooterGroup(titleEl) {
   group.classList.toggle('active');
 }
 
-/* ========== 通用 Toast ========== */
-function showToast(message) {
+/* ========== 通用 Toast ==========
+   用法：showToast('提示文字')            普通提示
+        showToast('操作成功','success')  成功（绿）
+        showToast('出错了','error')      错误（红）
+   说明：优先复用页面里已有的 #toast 元素，没有则自动创建。
+*/
+var __toastTimer = null;
+function showToast(message, type) {
+  if (message == null) return;
+  message = String(message);
+  type = type || 'info';
+
   var toast = document.getElementById('toast');
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'toast';
-    toast.style.cssText = 'position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;padding:12px 22px;border-radius:24px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99999;';
     document.body.appendChild(toast);
   }
-  toast.textContent = message;
-  toast.style.opacity = '1';
-  setTimeout(function () { toast.style.opacity = '0'; }, 2200);
+  // 保证样式类始终存在（旧版部分页面可能只写了 id）
+  if (toast.className.indexOf('toast') === -1) {
+    toast.className = 'toast' + (toast.className ? ' ' + toast.className : '');
+  }
+
+  // 类型：error / success / info
+  toast.classList.remove('toast-error', 'toast-success');
+  if (type === 'error') toast.classList.add('toast-error');
+  else if (type === 'success') toast.classList.add('toast-success');
+
+  // 长文本 / 多行自动换行并延长停留时间
+  var isLong = message.length > 26 || message.indexOf('\n') !== -1;
+  toast.classList.toggle('toast-wrap', isLong);
+
+  if (isLong) toast.innerText = message; else toast.textContent = message;
+
+  // 强制重排，保证连续调用时动画会重新播放
+  void toast.offsetWidth;
+  toast.classList.add('show');
+
+  clearTimeout(__toastTimer);
+  __toastTimer = setTimeout(function () {
+    toast.classList.remove('show');
+  }, isLong ? 4200 : 2400);
 }
 function copyText(text, label) {
   label = label || '内容';
@@ -701,3 +734,87 @@ document.addEventListener('keydown', function(e) {
     closeQRModal();
   }
 });
+
+/* =========== 客户好评墙：3 行轨道，每次刷新随机分组 + 随机顺序 + 随机起点 =========== */
+(function() {
+  var track = document.querySelector('.rv-track');
+  if (!track) return;
+  var marquee = track.parentNode;
+  var cards = track.querySelectorAll('.rv-card');
+  if (cards.length < 6 || cards.length % 2 !== 0) return;
+  var half = cards.length / 2;
+  // 提取不重复的评论文本
+  var texts = [];
+  for (var i = 0; i < half; i++) {
+    var p = cards[i].querySelector('.rv-text');
+    texts.push(p ? p.textContent : '');
+  }
+  // Fisher-Yates 洗牌：每次刷新顺序都不一样
+  for (var j = texts.length - 1; j > 0; j--) {
+    var r = Math.floor(Math.random() * (j + 1));
+    var t = texts[j]; texts[j] = texts[r]; texts[r] = t;
+  }
+  // 分成 3 组，每组速度略有错落，避免三条齐刷刷同步
+  var ROWS = 3;
+  var mults = [1.0, 1.18, 0.86];
+  var base = Math.ceil(texts.length / ROWS);
+  function buildTrack(group) {
+    var html = '';
+    for (var k = 0; k < 2; k++) {           // x2 无缝循环
+      for (var m = 0; m < group.length; m++) {
+        html += '<div class="rv-card"><span class="rv-stars">\u2605\u2605\u2605\u2605\u2605</span><p class="rv-text">' + group[m] + '</p></div>';
+      }
+    }
+    return html;
+  }
+  for (var row = 0; row < ROWS; row++) {
+    var group = texts.slice(row * base, (row + 1) * base);
+    if (!group.length) continue;
+    var rowTrack;
+    if (row === 0) {
+      rowTrack = track;                      // 复用原轨道（HTML 兜底）
+    } else {
+      var rowMarquee = document.createElement('div');
+      rowMarquee.className = 'rv-marquee';
+      rowTrack = document.createElement('div');
+      rowTrack.className = 'rv-track';
+      rowMarquee.appendChild(rowTrack);
+      marquee.parentNode.insertBefore(rowMarquee, marquee.nextSibling);
+      marquee = rowMarquee;
+    }
+    rowTrack.innerHTML = buildTrack(group);
+    rowTrack.setAttribute('data-mult', mults[row] || 1);
+    // 随机起点：每次刷新首屏看到的评论都不同
+    rowTrack.style.animationDelay = '-' + (Math.random() * 12).toFixed(1) + 's';
+  }
+})();
+
+/* =========== 跑马灯恒定线速度（业务跑马灯 + 客户好评墙，不同屏幕宽度速度一致） =========== */
+(function() {
+  var TRACKS = [
+    { sel: '.biz-track', speed: 200 },
+    { sel: '.rv-track',  speed: 700 }
+  ];
+  function applySpeed() {
+    TRACKS.forEach(function(cfg) {
+      var tracks = document.querySelectorAll(cfg.sel);
+      for (var i = 0; i < tracks.length; i++) {
+        var half = tracks[i].scrollWidth / 2;
+        var mult = parseFloat(tracks[i].getAttribute('data-mult')) || 1;
+        if (half > 0) {
+          var dur = Math.max(4, half / (cfg.speed * mult));
+          tracks[i].style.animationDuration = dur.toFixed(1) + 's';
+        }
+      }
+    });
+  }
+  applySpeed();
+  var timer = null;
+  window.addEventListener('resize', function() {
+    clearTimeout(timer);
+    timer = setTimeout(applySpeed, 200);
+  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(applySpeed, 100); });
+  }
+})();

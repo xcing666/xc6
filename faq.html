@@ -2,12 +2,28 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <script src="no-zoom.js"></script>
   <meta name="description" content="兴程网络常见问题解答 — 设计、小程序、社交媒体运营、拼多多助力等服务的常见问题与解答。" />
   <title>常见问题 — 兴程网络</title>
+
+  <!-- Open Graph / 微信分享 -->
+  <meta property="og:site_name" content="兴程网络" />
+  <meta property="og:title" content="常见问题 — 兴程网络" />
+  <meta property="og:description" content="兴程网络常见问题解答 — 设计、小程序、社交媒体运营、拼多多助力等服务的常见问题与解答。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xcing666.github.io/xc6/faq.html" />
+  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="常见问题 — 兴程网络" />
+  <meta name="twitter:description" content="兴程网络常见问题解答 — 设计、小程序、社交媒体运营、拼多多助力等服务的常见问题与解答。" />
+  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/faq.html" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css?v=20260816" />
+  <link rel="stylesheet" href="style.css?v=20260904" />
   <style>
     body::before, body::after { z-index: -1 !important; }
     body { position: relative; }
@@ -33,6 +49,21 @@
     .faq-contact .contact-links a { display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:50px; color:#f0f2ff; text-decoration:none; font-size:14px; transition:.3s; }
     .faq-contact .contact-links a:hover { background:rgba(108,92,231,.15); border-color:rgba(108,92,231,.3); }
     @media (max-width:640px) { .faq-hero { padding:60px 20px 40px; } .faq-section { padding:30px 16px 50px; } }
+    @media (max-width:480px) {
+      .faq-hero { padding:48px 16px 32px; }
+      .faq-hero h1 { font-size:24px; }
+      .faq-hero p { font-size:14px; }
+      .faq-section { padding:24px 14px 40px; }
+      .faq-category { margin-bottom:36px; }
+      .faq-category h2 { font-size:18px; margin-bottom:18px; }
+      .faq-q { padding:16px 18px; font-size:14px; gap:12px; }
+      .faq-a { padding:0 18px; font-size:13px; }
+      .faq-item.open .faq-a { padding:0 18px 16px; max-height:420px; }
+      .faq-contact { padding:44px 16px; }
+      .faq-contact h2 { font-size:19px; }
+      .faq-contact p { font-size:14px; }
+      .faq-contact .contact-links a { padding:10px 22px; font-size:13px; }
+    }
   </style>
 </head>
 <body class="faq-page">
@@ -166,7 +197,7 @@
     <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260904"></script>
     <!-- 浮动快捷联系按钮组（⑧ 微信/QQ/回到顶部） -->
   <!-- 二维码弹窗 -->
   <div class="qr-modal" id="qrModal">

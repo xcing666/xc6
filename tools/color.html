@@ -2,12 +2,28 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <script src="../no-zoom.js"></script>
   <meta name="description" content="AI图片智能美化 — 纯本地处理，一键滤镜、批量处理、前后对比、点击放大查看细节，免费下载。" />
   <title>AI图片智能美化 — 兴程网络</title>
+
+  <!-- Open Graph / 微信分享 -->
+  <meta property="og:site_name" content="兴程网络" />
+  <meta property="og:title" content="AI图片智能美化 — 兴程网络" />
+  <meta property="og:description" content="AI图片智能美化 — 纯本地处理，一键滤镜、批量处理、前后对比、点击放大查看细节，免费下载。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xcing666.github.io/xc6/tools/color.html" />
+  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI图片智能美化 — 兴程网络" />
+  <meta name="twitter:description" content="AI图片智能美化 — 纯本地处理，一键滤镜、批量处理、前后对比、点击放大查看细节，免费下载。" />
+  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/tools/color.html" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>&#x1F916;</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=20260816" />
+  <link rel="stylesheet" href="../style.css?v=20260904" />
   <style>
     .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
     .tool-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
@@ -238,7 +254,7 @@
 <!-- 放大弹窗 -->
 <div class="z-overlay" id="zOverlay" onclick="zoomClose(event)">
   <div class="z-hint" id="zHint">100%</div>
-  <img class="z-img" id="zImg" draggable="false" />
+  <img class="z-img" id="zImg" draggable="false" alt="图片放大预览" />
   <button class="z-close" onclick="zoomClose(event)">&#x2715;</button>
 </div>
 
@@ -277,7 +293,7 @@
   </div>
 </footer>
 
-<script src="../script.js?v=20260816"></script>
+<script src="../script.js?v=20260904"></script>
 <script>
 /* ============================================================
    AI 图片智能美化 — 纯前端实现 v=25062809
@@ -340,7 +356,7 @@
   }
 
   function loadOne(file){
-    if(file.size>50*1024*1024){alert('文件过大，请选择50MB以内');return;}
+    if(file.size>50*1024*1024){showToast('文件过大，请选择50MB以内', 'error');return;}
     var r=new FileReader();
     r.onload=function(ev){
       var im=new Image();

@@ -2,12 +2,28 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <script src="../no-zoom.js"></script>
   <meta name="description" content="兴程网络博客 — 分享平面设计技巧、小程序开发经验、社交媒体运营指南等实用干货。" />
   <title>博客 — 兴程网络</title>
+
+  <!-- Open Graph / 微信分享 -->
+  <meta property="og:site_name" content="兴程网络" />
+  <meta property="og:title" content="博客 — 兴程网络" />
+  <meta property="og:description" content="兴程网络博客 — 分享平面设计技巧、小程序开发经验、社交媒体运营指南等实用干货。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://xcing666.github.io/xc6/blog/index.html" />
+  <meta property="og:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="博客 — 兴程网络" />
+  <meta name="twitter:description" content="兴程网络博客 — 分享平面设计技巧、小程序开发经验、社交媒体运营指南等实用干货。" />
+  <meta name="twitter:image" content="https://xcing666.github.io/xc6/showcase_bg.jpg" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/blog/index.html" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="../manifest.json" />
-  <link rel="stylesheet" href="../style.css?v=20260816" />
+  <link rel="stylesheet" href="../style.css?v=20260904" />
   <style>
     body::before, body::after { z-index: -1 !important; }
     body { position: relative; }
@@ -27,6 +43,18 @@
     .blog-card .meta { display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.06); color:#5a6490; font-size:13px; }
     .blog-card .meta a { color:var(--c1); text-decoration:none; font-weight:600; }
     @media (max-width:640px) { .blog-hero { padding:60px 20px 40px; } .blog-section { padding:30px 16px 60px; } }
+  
+  @media (max-width:480px) {
+    .blog-hero { padding:48px 16px 32px; }
+    .blog-hero h1 { font-size:24px; }
+    .blog-hero p { font-size:14px; }
+    .blog-section { padding:24px 14px 48px; }
+    .blog-grid { gap:16px; }
+    .blog-card .cover { height:130px; font-size:44px; }
+    .blog-card .body { padding:20px 18px; }
+    .blog-card h3 { font-size:16px; }
+    .blog-card p { font-size:13px; }
+  }
   </style>
 </head>
 <body class="blog-page">
@@ -101,7 +129,7 @@
     <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
   </footer>
 
-  <script src="../script.js"></script>
+  <script src="../script.js?v=20260904"></script>
     <!-- 浮动快捷联系按钮组（⑧ 微信/QQ/回到顶部） -->
   <!-- 二维码弹窗 -->
   <div class="qr-modal" id="qrModal">
