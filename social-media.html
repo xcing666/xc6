@@ -237,6 +237,38 @@
       .howto-step h4 { font-size:14px; }
       .howto-step p { font-size:12px; }
     }
+
+    /* ===== 价格速查（折叠面板） ===== */
+    .sm-quick { background:linear-gradient(180deg,rgba(108,92,231,.06),rgba(0,184,212,.04)); border-radius:16px; padding:20px 18px; margin-top:30px; }
+    .sm-quick .sm-subcat-title-sm { margin-top:0; }
+    .qp-list { display:flex; flex-direction:column; gap:10px; }
+    .qp-theme { background:rgba(255,255,255,.04); border:1px solid rgba(108,92,231,.18); border-radius:12px; overflow:hidden; transition:.2s; }
+    .qp-theme[open] { border-color:rgba(108,92,231,.4); }
+    .qp-theme > summary { padding:14px 18px; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; color:#e8eaff; font-size:14px; user-select:none; }
+    .qp-theme > summary::-webkit-details-marker { display:none; }
+    .qp-theme > summary::before { content:'▸'; display:inline-block; margin-right:8px; color:#7eb6ff; font-size:11px; transition:transform .2s; }
+    .qp-theme[open] > summary::before { transform:rotate(90deg); }
+    .qp-theme > summary b { font-weight:600; }
+    .qp-theme .qp-meta { color:var(--muted); font-size:12px; background:rgba(108,92,231,.15); padding:2px 10px; border-radius:999px; }
+    .qp-cats { padding:0 14px 14px; display:flex; flex-direction:column; gap:6px; }
+    .qp-cat { background:rgba(0,0,0,.18); border-radius:8px; overflow:hidden; }
+    .qp-cat > summary { padding:10px 14px; cursor:pointer; list-style:none; color:#cdd1ee; font-size:13px; display:flex; justify-content:space-between; align-items:center; user-select:none; }
+    .qp-cat > summary::-webkit-details-marker { display:none; }
+    .qp-cat > summary::before { content:'·'; margin-right:8px; color:#7eb6ff; font-size:18px; line-height:1; }
+    .qp-cat[open] > summary::before { content:'•'; color:#ffd166; }
+    .qp-cat .qp-min { color:#a7f3d0; font-size:12px; font-weight:600; }
+    .qp-rows { padding:0 14px 12px 28px; display:flex; flex-direction:column; gap:4px; }
+    .qp-row { display:flex; justify-content:space-between; align-items:baseline; padding:5px 0; border-bottom:1px dashed rgba(255,255,255,.06); font-size:12.5px; }
+    .qp-row:last-child { border-bottom:none; }
+    .qp-row .qp-name { color:#cdd1ee; flex:1; padding-right:12px; }
+    .qp-row .qp-price { color:#ffd166; font-weight:600; white-space:nowrap; }
+    @media (max-width:768px) {
+      .sm-quick { padding:16px 12px; }
+      .qp-theme > summary { padding:12px 14px; font-size:13px; }
+      .qp-cat > summary { padding:9px 12px; font-size:12.5px; }
+      .qp-rows { padding:0 12px 10px 24px; }
+      .qp-row { font-size:11.5px; }
+    }
   </style>
 </head>
 <body class="service-page">
@@ -377,7 +409,7 @@
   <h3 class="sm-subcat-title">📱 抖音业务（DY）</h3>
   <div class="sm-order-tip">
     <span class="tip-icon">⚠️</span>
-    <span class="tip-text">点击「立即下单」→ 点击「请选择分类」→「（抖音）☞XX区」→ 选择商品即可下单，<b>注意网页内的下单要求哦！！！</b></span>
+    <span class="tip-text">点击「立即下单」→ 自动跳转对应商品页，确认规格后下单，<b>显示价格为后台实时起步价，实际以下单页为准。</b></span>
   </div>
   <div class="sm-price-grid">
     <div class="sm-price-card is-lowest">
@@ -385,64 +417,64 @@
       <div class="icon">▶️</div>
       <h3>视频播放</h3>
       <div class="desc">特价播放 · 100个</div>
-      <div class="price">¥0.36</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="price">¥0.26</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1145&tid=55334" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">🔥爆款</span>
       <div class="icon">❤️</div>
       <h3>作品点赞</h3>
-      <div class="desc">特价双击 · 10个</div>
-      <div class="price">¥1.04</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">宝妈手工点赞 · 10个</div>
+      <div class="price">¥1.96</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1144&tid=55332" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">真人评论</span>
       <div class="icon">💬</div>
       <h3>作品评论</h3>
-      <div class="desc">随机评论 · 10条</div>
-      <div class="price">¥2.46</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">评论点赞 · 10个</div>
+      <div class="price">¥0.53</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1146&tid=60388" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">🔥爆款</span>
       <div class="icon">👥</div>
       <h3>涨粉丝</h3>
       <div class="desc">特价关注 · 10个</div>
-      <div class="price">¥1.66</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="price">¥1.26</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1143&tid=55314" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-hot">
       <span class="hot-badge">热门套餐</span>
       <div class="icon">🔥</div>
       <h3>入门套餐</h3>
       <div class="desc">10双击 + 1000播放</div>
-      <div class="price">¥3.74</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="price">¥2.86</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=959&tid=29967" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-hot">
       <span class="hot-badge">热门套餐</span>
       <div class="icon">🔥</div>
       <h3>进阶套餐</h3>
-      <div class="desc">50双击 + 2000播放</div>
-      <div class="price">¥11.54</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">100粉 + 100双击 + 3000播放</div>
+      <div class="price">¥28.86</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=959&tid=29961" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">秒到</span>
       <div class="icon">👍</div>
       <h3>直播间点赞</h3>
       <div class="desc">直播间点赞 · 5000个</div>
-      <div class="price">¥4.55</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="price">¥3.36</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=957&tid=56784" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">上榜人气</span>
       <div class="icon">🎉</div>
       <h3>直播间人气</h3>
-      <div class="desc">10人1小时 · 上榜</div>
-      <div class="price">¥6.50</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">20人1小时 · 不上榜</div>
+      <div class="price">¥1.78</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=957&tid=52297" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
   </div>
 </div>
@@ -451,7 +483,7 @@
   <h3 class="sm-subcat-title">⚡ 快手业务（KS）</h3>
   <div class="sm-order-tip">
     <span class="tip-icon">⚠️</span>
-    <span class="tip-text">点击「立即下单」→ 点击「请选择分类」→「（快手）☞XX区」→ 选择商品即可下单，<b>注意网页内的下单要求哦！！！</b></span>
+    <span class="tip-text">点击「立即下单」→ 自动跳转对应商品页，确认规格后下单，<b>显示价格为后台实时起步价，实际以下单页为准。</b></span>
   </div>
   <div class="sm-price-grid">
     <div class="sm-price-card is-lowest">
@@ -459,64 +491,64 @@
       <div class="icon">▶️</div>
       <h3>视频播放</h3>
       <div class="desc">特价播放 · 100个</div>
-      <div class="price">¥0.33</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="price">¥0.23</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1139&tid=55259" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">🔥爆款</span>
       <div class="icon">👆</div>
       <h3>双击点赞</h3>
-      <div class="desc">特惠双击 · 10个</div>
-      <div class="price">¥0.51</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">宝妈手工点赞 · 10个</div>
+      <div class="price">¥0.96</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1138&tid=55246" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">🔥爆款</span>
       <div class="icon">👥</div>
       <h3>涨粉丝</h3>
       <div class="desc">特价关注 · 10个</div>
-      <div class="price">¥0.75</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="price">¥0.56</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1137&tid=55238" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">真人评论</span>
       <div class="icon">💬</div>
       <h3>作品评论</h3>
-      <div class="desc">随机评论 · 10条</div>
-      <div class="price">¥1.27</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">随机评论 · 10个</div>
+      <div class="price">¥0.94</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1141&tid=55265" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-hot">
       <span class="hot-badge">热门套餐</span>
       <div class="icon">🔥</div>
       <h3>入门套餐</h3>
       <div class="desc">10双击 + 1000播放</div>
-      <div class="price">¥3.46</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="price">¥2.64</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=958&tid=31902" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-hot">
       <span class="hot-badge">热门套餐</span>
       <div class="icon">🔥</div>
       <h3>进阶套餐</h3>
-      <div class="desc">66双击 + 1666播放</div>
-      <div class="price">¥9.07</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">100粉 + 100双击 + 3000播放</div>
+      <div class="price">¥15.93</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=958&tid=31912" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">不上榜</span>
       <div class="icon">📺</div>
       <h3>直播人气</h3>
-      <div class="desc">高质量10-60人 · 单场</div>
-      <div class="price">¥0.65</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">直播间爱心 · 1000个</div>
+      <div class="price">¥0.29</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1033&tid=56820" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
     <div class="sm-price-card is-lowest">
       <span class="low-badge">🔥上榜</span>
       <div class="icon">🎊</div>
       <h3>直播上榜</h3>
-      <div class="desc">高质量10-60人 · 单场</div>
-      <div class="price">¥2.89</div>
-      <a href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
+      <div class="desc">高质量10-60人 · 不上榜</div>
+      <div class="price">¥0.48</div>
+      <a href="https://xckj.ynmshy.com/dws/?cid=1033&tid=33538" target="_blank" rel="noopener noreferrer" class="buy-btn">立即下单</a>
     </div>
   </div>
 </div>
@@ -527,61 +559,759 @@
   <div class="sm-list">
       <div class="sm-list-section">
         <div class="sm-list-group-title">精选分类</div>
-        <div class="sm-list-row"><span class="sm-list-text">【免费商品区】<em class="sm-list-desc">每日领取</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【综合商品区】<em class="sm-list-desc">热销特价</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【QQ名片赞】<em class="sm-list-desc">快速秒到</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【QQ空间区】<em class="sm-list-desc">人气推荐</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【DY业务区】<em class="sm-list-desc">粉丝播放</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【KS业务区】<em class="sm-list-desc">粉丝双击</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【网课代看区】<em class="sm-list-desc">校园新品</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【平台福利区】<em class="sm-list-desc">起步 ¥0.1 · 11 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=32" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【低价商品区】<em class="sm-list-desc">起步 ¥3.57 · 12 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=722" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【拼多多商家】<em class="sm-list-desc">起步 ¥0.59 · 12 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=696" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【拼多多助力】<em class="sm-list-desc">起步 ¥1.86 · 22 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=750" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【高质量网课】<em class="sm-list-desc">起步 ¥0.53 · 26 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=158" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【举报查询区】<em class="sm-list-desc">起步 ¥0.19 · 27 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1155" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【短信测压区】<em class="sm-list-desc">起步 ¥2.86 · 3 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=278" target="_blank" rel="noopener noreferrer">立即下单</a></div>
       </div>
       <div class="sm-list-section">
-        <div class="sm-list-group-title">永久QQ钻专区</div>
-        <div class="sm-list-row"><span class="sm-list-text">【QQ永久钻】<em class="sm-list-desc">独家开通</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【QQ永久钻】<em class="sm-list-desc">无时间版</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【QQ永久钻】<em class="sm-list-desc">超高质保</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【QQ永久钻】<em class="sm-list-desc">不掉专区</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【QQ官方钻】<em class="sm-list-desc">半价直充</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-group-title">抖音业务（6个分区）</div>
+        <div class="sm-list-row"><span class="sm-list-text">【抖音·粉丝关注】<em class="sm-list-desc">起步 ¥1.26 · 15 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1143" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【抖音·作品点赞】<em class="sm-list-desc">起步 ¥0.78 · 15 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1144" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【抖音·作品播放】<em class="sm-list-desc">起步 ¥0.26 · 23 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1145" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【抖音·热门套餐】<em class="sm-list-desc">起步 ¥2.86 · 9 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=959" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【抖音·综合业务】<em class="sm-list-desc">起步 ¥0.26 · 26 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1146" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【抖音·直播人气】<em class="sm-list-desc">起步 ¥1.78 · 25 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=957" target="_blank" rel="noopener noreferrer">立即下单</a></div>
       </div>
       <div class="sm-list-section">
-        <div class="sm-list-group-title">影视会员专区</div>
-        <div class="sm-list-row"><span class="sm-list-text">【影视会员区】<em class="sm-list-desc">多种影视</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【影视VIP】<em class="sm-list-desc">年费特价</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【影视VIP】<em class="sm-list-desc">官方直充</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-group-title">快手业务（6个分区）</div>
+        <div class="sm-list-row"><span class="sm-list-text">【快手·粉丝关注】<em class="sm-list-desc">起步 ¥0.56 · 9 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1137" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【快手·作品点赞】<em class="sm-list-desc">起步 ¥0.37 · 12 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1138" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【快手·作品播放】<em class="sm-list-desc">起步 ¥0.23 · 20 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1139" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【快手·热门套餐】<em class="sm-list-desc">起步 ¥2.64 · 12 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=958" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【快手·综合业务】<em class="sm-list-desc">起步 ¥0.19 · 24 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1141" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【快手·直播人气】<em class="sm-list-desc">起步 ¥0.29 · 21 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1033" target="_blank" rel="noopener noreferrer">立即下单</a></div>
       </div>
       <div class="sm-list-section">
-        <div class="sm-list-group-title">游戏业务专区</div>
-        <div class="sm-list-row"><span class="sm-list-text">【王者荣耀区】<em class="sm-list-desc">点赞人气</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【蛋仔派对区】<em class="sm-list-desc">主页点赞</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-group-title">QQ 业务（7个分区）</div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ·名片赞】<em class="sm-list-desc">起步 ¥0.25 · 5 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=11" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ·空间说说赞】<em class="sm-list-desc">起步 ¥0.19 · 11 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=640" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ·空间访客】<em class="sm-list-desc">起步 ¥0.48 · 6 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1192" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ·永久钻】<em class="sm-list-desc">起步 ¥16.0 · 14 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1032" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ·群拉人】<em class="sm-list-desc">起步 ¥7.49 · 9 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=599" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ·综合业务】<em class="sm-list-desc">起步 ¥0.58 · 15 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=748" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【QQ·音乐业务】<em class="sm-list-desc">起步 ¥4.2 · 24 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=949" target="_blank" rel="noopener noreferrer">立即下单</a></div>
       </div>
       <div class="sm-list-section">
-        <div class="sm-list-group-title">多种特色专区</div>
-        <div class="sm-list-row"><span class="sm-list-text">【QQ群拉人】<em class="sm-list-desc">活跃排名</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-group-title">微信业务（8个分区）</div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·视频号】<em class="sm-list-desc">起步 ¥0.48 · 23 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=941" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·公众号】<em class="sm-list-desc">起步 ¥0.23 · 25 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=948" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·朋友圈集赞】<em class="sm-list-desc">起步 ¥8.68 · 4 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1157" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·投票】<em class="sm-list-desc">起步 ¥5.6 · 29 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=963" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·苹果功能】<em class="sm-list-desc">起步 ¥0.68 · 29 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=857" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·安卓功能】<em class="sm-list-desc">起步 ¥0.19 · 29 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=858" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·抢红包】<em class="sm-list-desc">起步 ¥0.38 · 30 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=725" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·人工群拉人】<em class="sm-list-desc">起步 ¥30.7 · 4 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=939" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【微信·云端功能】<em class="sm-list-desc">起步 ¥0.58 · 29 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=850" target="_blank" rel="noopener noreferrer">立即下单</a></div>
       </div>
       <div class="sm-list-section">
-        <div class="sm-list-group-title">粉丝关注专区</div>
-        <div class="sm-list-row"><span class="sm-list-text">【KS直播区】<em class="sm-list-desc">人气互动</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【DY直播区】<em class="sm-list-desc">人气热度</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【新浪微博区】<em class="sm-list-desc">粉丝关注</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【哔哩哔哩区】<em class="sm-list-desc">粉丝投币</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【网易云音乐】<em class="sm-list-desc">多种业务</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【VX视频号】<em class="sm-list-desc">关注爱心</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【小红书专区】<em class="sm-list-desc">粉丝播放</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【闲鱼商品区】<em class="sm-list-desc">粉丝浏览</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【拼多多店铺】<em class="sm-list-desc">关注收藏</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【微信投票区】<em class="sm-list-desc">多种类型</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【微信公众号】<em class="sm-list-desc">关注阅读</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【今日头条区】<em class="sm-list-desc">粉丝阅读</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【全民K歌区】<em class="sm-list-desc">鲜花关注</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
-        <div class="sm-list-row"><span class="sm-list-text">【海外自媒体】<em class="sm-list-desc">粉丝订阅</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-group-title">自媒体 / 音乐 / 电商</div>
+        <div class="sm-list-row"><span class="sm-list-text">【新浪微博】<em class="sm-list-desc">起步 ¥0.12 · 22 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=945" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【小红书】<em class="sm-list-desc">起步 ¥0.84 · 25 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=942" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【闲鱼】<em class="sm-list-desc">起步 ¥0.56 · 13 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=946" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【全民K歌】<em class="sm-list-desc">起步 ¥0.29 · 25 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=944" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【网易云音乐】<em class="sm-list-desc">起步 ¥4.2 · 24 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=940" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【电商业务】<em class="sm-list-desc">起步 ¥0.28 · 30 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=947" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">游戏业务</div>
+        <div class="sm-list-row"><span class="sm-list-text">【王者荣耀】<em class="sm-list-desc">起步 ¥0.5 · 8 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=60" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【各大游戏】<em class="sm-list-desc">起步 ¥0.03 · 29 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=135" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【cfm·特价】<em class="sm-list-desc">起步 ¥0.9 · 28 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=196" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【cfm·加急】<em class="sm-list-desc">起步 ¥1.68 · 28 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1153" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">影视 / 音乐人</div>
+        <div class="sm-list-row"><span class="sm-list-text">【影视共享号】<em class="sm-list-desc">起步 ¥0.83 · 24 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1130" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【电视会员号】<em class="sm-list-desc">起步 ¥0.83 · 30 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1131" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【热门共享号】<em class="sm-list-desc">起步 ¥0.29 · 16 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1132" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【音乐人认证】<em class="sm-list-desc">起步 ¥21.7 · 6 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1055" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【影视多平台】<em class="sm-list-desc">起步 ¥1.4 · 22 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1185" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+      </div>
+      <div class="sm-list-section">
+        <div class="sm-list-group-title">冷门 / 福利 / 创业</div>
+        <div class="sm-list-row"><span class="sm-list-text">【冷门业务】<em class="sm-list-desc">起步 ¥2.02 · 30 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1187" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【美团大众点评】<em class="sm-list-desc">起步 ¥3.5 · 29 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1188" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【头条西瓜】<em class="sm-list-desc">起步 ¥0.04 · 26 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1183" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【红果番茄】<em class="sm-list-desc">起步 ¥0.22 · 11 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1154" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【百家号】<em class="sm-list-desc">起步 ¥0.14 · 28 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1189" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【懂车帝】<em class="sm-list-desc">起步 ¥0.08 · 27 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1190" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【海外业务】<em class="sm-list-desc">起步 ¥0.01 · 28 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1191" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【薅羊毛】<em class="sm-list-desc">起步 ¥6.6 · 30 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1194" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【创业项目】<em class="sm-list-desc">起步 ¥6.6 · 30 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1195" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【技术分享】<em class="sm-list-desc">起步 ¥0.58 · 24 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1044" target="_blank" rel="noopener noreferrer">立即下单</a></div>
+        <div class="sm-list-row"><span class="sm-list-text">【省钱项目】<em class="sm-list-desc">起步 ¥0.11 · 30 件</em></span><a class="sm-list-btn" href="https://xckj.ynmshy.com/dws/?cid=1193" target="_blank" rel="noopener noreferrer">立即下单</a></div>
       </div>
   </div>
 </div>
 
-    <p style="text-align:center;color:var(--muted);font-size:12px;margin-top:22px;">* 价格与合作库存以下单平台实时显示为准；点击后将跳转至 xckj.ynmshy.com 自助下单，无需人工找链接。</p>
+    <p style="text-align:center;color:var(--muted);font-size:12px;margin-top:22px;">* 价格与合作库存以下单平台实时显示为准；点击「立即下单」自动跳转对应商品页或分类页，规格/库存/下单要求以平台显示为准，无需人工找链接。</p>
   </section>
 
 
+
+
+<!-- 全部商品价格速查（折叠展开） -->
+<div class="sm-subcat sm-quick">
+  <h3 class="sm-subcat-title-sm">📋 全部商品价格速查（301 件精选）</h3>
+  <p style="text-align:center;color:var(--muted);font-size:12px;margin:0 0 18px;">点击主题展开，每个分类下展示最低 5 件商品 · 价格为平台实时销售价</p>
+  <div class="qp-list">
+      <details class="qp-theme">
+        <summary><b>精选分类</b><span class="qp-meta">7 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>平台福利区 <span class="qp-min">¥0.1 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">免费快手双击10次-每天限购1件</span><span class="qp-price">¥0.1</span></div>
+              <div class="qp-row"><span class="qp-name">免费快手收藏10次-每天限购1件</span><span class="qp-price">¥0.1</span></div>
+              <div class="qp-row"><span class="qp-name">免费快手播放100次-每天限购1件</span><span class="qp-price">¥0.1</span></div>
+              <div class="qp-row"><span class="qp-name">免费快手分享1000次-每天限购1件</span><span class="qp-price">¥0.1</span></div>
+              <div class="qp-row"><span class="qp-name">免费抖音分享10次-每天限购1件</span><span class="qp-price">¥0.1</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>低价商品区 <span class="qp-min">¥4.75 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">抖音续火花月卡(推荐)</span><span class="qp-price">¥4.75</span></div>
+              <div class="qp-row"><span class="qp-name">【人工代充】淘宝闪购 饿了么超级会员年费 接码充值</span><span class="qp-price">¥7.81</span></div>
+              <div class="qp-row"><span class="qp-name">抖音续火花季卡(推荐)</span><span class="qp-price">¥9.39</span></div>
+              <div class="qp-row"><span class="qp-name">抖音续火花年卡(推荐)</span><span class="qp-price">¥18.7</span></div>
+              <div class="qp-row"><span class="qp-name">【人工代充】88渠道-网易云黑胶会员--170天+</span><span class="qp-price">¥48.3</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>拼多多商家 <span class="qp-min">¥0.78 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">拼多多宝贝收藏（十起）</span><span class="qp-price">¥0.78</span></div>
+              <div class="qp-row"><span class="qp-name">拼多多宝贝访客（时间段）</span><span class="qp-price">¥1.12</span></div>
+              <div class="qp-row"><span class="qp-name">拼多多宝贝访客（直接执行）</span><span class="qp-price">¥1.12</span></div>
+              <div class="qp-row"><span class="qp-name">拼多多宝贝访客-3天运营方案【精选】</span><span class="qp-price">¥3.72</span></div>
+              <div class="qp-row"><span class="qp-name">拼多多宝贝访客-7天运营方案【精选】</span><span class="qp-price">¥9.3</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>拼多多助力 <span class="qp-min">¥2.44 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">拼多多助力真人（支持所有活动）-5次（包含0-1个新人助/力）</span><span class="qp-price">¥2.44</span></div>
+              <div class="qp-row"><span class="qp-name">纯真人助力不吞刀（支持所有活动）-5次（包含1-2个新人助/力）</span><span class="qp-price">¥2.57</span></div>
+              <div class="qp-row"><span class="qp-name">拼多多〔推金/币赢现/金〕-5人帮助/力（优质通道·刀/刀有截图）</span><span class="qp-price">¥2.57</span></div>
+              <div class="qp-row"><span class="qp-name">拼多多助力真人（支持所有活动）-10次（包含1-3个新人助/力）</span><span class="qp-price">¥3.26</span></div>
+              <div class="qp-row"><span class="qp-name">拼多多〔免费领商品〕-5人帮帮砍（优质通道·刀/刀有截图）</span><span class="qp-price">¥4.68</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>高质量网课 <span class="qp-min">¥0.39 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">池馆（按单元）新时代外语</span><span class="qp-price">¥0.39</span></div>
+              <div class="qp-row"><span class="qp-name">【高质量】学习通全包</span><span class="qp-price">¥0.72</span></div>
+              <div class="qp-row"><span class="qp-name">【高质量】学习通快刷</span><span class="qp-price">¥0.72</span></div>
+              <div class="qp-row"><span class="qp-name">【高质量】学习通仅考试</span><span class="qp-price">¥0.72</span></div>
+              <div class="qp-row"><span class="qp-name">【高质量】学习通（仅课件）</span><span class="qp-price">¥0.72</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>举报查询区 <span class="qp-min">¥0.26 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">（单次卡）查权重抖音快手B站小红书查限流解除限流</span><span class="qp-price">¥0.26</span></div>
+              <div class="qp-row"><span class="qp-name">（10次卡）查权重抖音快手B站小红书查限流解除限流</span><span class="qp-price">¥1.3</span></div>
+              <div class="qp-row"><span class="qp-name">（天卡）查权重抖音快手B站小红书查限流解除限流</span><span class="qp-price">¥2.6</span></div>
+              <div class="qp-row"><span class="qp-name">（100次卡）查权重抖音快手B站小红书查限流解除限流</span><span class="qp-price">¥13.0</span></div>
+              <div class="qp-row"><span class="qp-name">B站双封（卡密版）</span><span class="qp-price">¥20.8</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>短信测压区 <span class="qp-min">¥3.87 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">短信测压【天卡】</span><span class="qp-price">¥3.87</span></div>
+              <div class="qp-row"><span class="qp-name">短信测压【周卡】</span><span class="qp-price">¥31.2</span></div>
+              <div class="qp-row"><span class="qp-name">短信测压【月卡】</span><span class="qp-price">¥49.4</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+      <details class="qp-theme">
+        <summary><b>抖音业务（6个分区）</b><span class="qp-meta">6 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>抖音·粉丝关注 <span class="qp-min">¥1.66 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">抖音特价关注10个</span><span class="qp-price">¥1.66</span></div>
+              <div class="qp-row"><span class="qp-name">抖音秒速关注10个</span><span class="qp-price">¥2.2</span></div>
+              <div class="qp-row"><span class="qp-name">抖音稳定真人关注10个</span><span class="qp-price">¥2.59</span></div>
+              <div class="qp-row"><span class="qp-name">抖音手工粉30-200（推荐）</span><span class="qp-price">¥7.8</span></div>
+              <div class="qp-row"><span class="qp-name">抖音手工粉50-8000（推荐）</span><span class="qp-price">¥11.5</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>抖音·作品点赞 <span class="qp-min">¥1.04 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">抖音特价双击10个</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">抖音图文双击10个</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">抖音秒速双击10个</span><span class="qp-price">¥1.27</span></div>
+              <div class="qp-row"><span class="qp-name">ＤＹ宝妈手工点赞10（推荐）</span><span class="qp-price">¥2.57</span></div>
+              <div class="qp-row"><span class="qp-name">抖音特价双击100个</span><span class="qp-price">¥10.4</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>抖音·作品播放 <span class="qp-min">¥0.36 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">抖音特价播放100个</span><span class="qp-price">¥0.36</span></div>
+              <div class="qp-row"><span class="qp-name">抖音5秒作品完播100次</span><span class="qp-price">¥0.38</span></div>
+              <div class="qp-row"><span class="qp-name">抖音10秒作品完播100次</span><span class="qp-price">¥0.46</span></div>
+              <div class="qp-row"><span class="qp-name">抖音15秒作品完播100次</span><span class="qp-price">¥0.51</span></div>
+              <div class="qp-row"><span class="qp-name">抖音真人播放100个</span><span class="qp-price">¥0.65</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>抖音·热门套餐 <span class="qp-min">¥3.74 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">抖音10双击+1000播放（热门套餐）</span><span class="qp-price">¥3.74</span></div>
+              <div class="qp-row"><span class="qp-name">抖音10粉丝+10双击+1000播放（热门套餐）</span><span class="qp-price">¥5.17</span></div>
+              <div class="qp-row"><span class="qp-name">抖音10粉+10赞+100转发+1000播放（热门套餐）</span><span class="qp-price">¥8.94</span></div>
+              <div class="qp-row"><span class="qp-name">抖音50双击+2000播放（热门套餐）</span><span class="qp-price">¥11.5</span></div>
+              <div class="qp-row"><span class="qp-name">抖音10粉+10赞+10藏+100转+1000播（热门套餐）</span><span class="qp-price">¥11.5</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>抖音·综合业务 <span class="qp-min">¥0.36 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">DY真人分享10个</span><span class="qp-price">¥0.36</span></div>
+              <div class="qp-row"><span class="qp-name">DY真人收藏10个</span><span class="qp-price">¥0.65</span></div>
+              <div class="qp-row"><span class="qp-name">DY作品评论点赞10个</span><span class="qp-price">¥0.72</span></div>
+              <div class="qp-row"><span class="qp-name">DY真人分享100个</span><span class="qp-price">¥1.66</span></div>
+              <div class="qp-row"><span class="qp-name">DY特价小黄车评论10个</span><span class="qp-price">¥2.24</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>抖音·直播人气 <span class="qp-min">¥2.57 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">dy直播人气20人1小时（不上榜）</span><span class="qp-price">¥2.57</span></div>
+              <div class="qp-row"><span class="qp-name">dy直播人气20人2小时（不上榜）</span><span class="qp-price">¥3.87</span></div>
+              <div class="qp-row"><span class="qp-name">dy直播间点赞5000个</span><span class="qp-price">¥4.55</span></div>
+              <div class="qp-row"><span class="qp-name">dy-直播间预约</span><span class="qp-price">¥4.65</span></div>
+              <div class="qp-row"><span class="qp-name">dy直播人气20人3小时（不上榜）</span><span class="qp-price">¥5.17</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+      <details class="qp-theme">
+        <summary><b>快手业务（6个分区）</b><span class="qp-meta">6 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>快手·粉丝关注 <span class="qp-min">¥0.75 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">快手特价关注10个</span><span class="qp-price">¥0.75</span></div>
+              <div class="qp-row"><span class="qp-name">快手真人关注10个</span><span class="qp-price">¥0.9</span></div>
+              <div class="qp-row"><span class="qp-name">ＫＳ宝妈手工关注10个</span><span class="qp-price">¥1.27</span></div>
+              <div class="qp-row"><span class="qp-name">快手特价关注100个</span><span class="qp-price">¥7.15</span></div>
+              <div class="qp-row"><span class="qp-name">快手真人关注100个</span><span class="qp-price">¥8.45</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>快手·作品点赞 <span class="qp-min">¥0.51 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">快手特惠双击10个</span><span class="qp-price">¥0.51</span></div>
+              <div class="qp-row"><span class="qp-name">快手真人双击10个</span><span class="qp-price">¥0.72</span></div>
+              <div class="qp-row"><span class="qp-name">ＫＳ宝妈手工点赞10个</span><span class="qp-price">¥1.27</span></div>
+              <div class="qp-row"><span class="qp-name">快手特惠双击100个</span><span class="qp-price">¥4.55</span></div>
+              <div class="qp-row"><span class="qp-name">快手真人双击100个</span><span class="qp-price">¥6.5</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>快手·作品播放 <span class="qp-min">¥0.33 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">快手特价播放100个</span><span class="qp-price">¥0.33</span></div>
+              <div class="qp-row"><span class="qp-name">快手秒单播放100个</span><span class="qp-price">¥0.38</span></div>
+              <div class="qp-row"><span class="qp-name">快手5秒作品完播100次</span><span class="qp-price">¥0.47</span></div>
+              <div class="qp-row"><span class="qp-name">快手30秒作品完播100次</span><span class="qp-price">¥0.56</span></div>
+              <div class="qp-row"><span class="qp-name">快手宝妈播放100个</span><span class="qp-price">¥0.65</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>快手·热门套餐 <span class="qp-min">¥3.46 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">快手10双击+1000播放（热门套餐）</span><span class="qp-price">¥3.46</span></div>
+              <div class="qp-row"><span class="qp-name">快手10粉丝+10双击+1000播放（热门套餐）</span><span class="qp-price">¥4.78</span></div>
+              <div class="qp-row"><span class="qp-name">快手10粉+10赞+100转发+1000播放（热门套餐）</span><span class="qp-price">¥8.66</span></div>
+              <div class="qp-row"><span class="qp-name">快手66双击+1666播放（热门套餐）</span><span class="qp-price">¥9.07</span></div>
+              <div class="qp-row"><span class="qp-name">快手50双击+2000播放（热门套餐）</span><span class="qp-price">¥9.07</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>快手·综合业务 <span class="qp-min">¥0.26 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">快手真人收藏10个</span><span class="qp-price">¥0.26</span></div>
+              <div class="qp-row"><span class="qp-name">快手真人分享1000个</span><span class="qp-price">¥0.65</span></div>
+              <div class="qp-row"><span class="qp-name">快手随机评论10个</span><span class="qp-price">¥1.27</span></div>
+              <div class="qp-row"><span class="qp-name">快手真人收藏100个</span><span class="qp-price">¥1.3</span></div>
+              <div class="qp-row"><span class="qp-name">快手围绕评论10个</span><span class="qp-price">¥1.37</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>快手·直播人气 <span class="qp-min">¥0.39 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">k直播间爱心1000个</span><span class="qp-price">¥0.39</span></div>
+              <div class="qp-row"><span class="qp-name">K高质量单场10-60不上榜</span><span class="qp-price">¥0.65</span></div>
+              <div class="qp-row"><span class="qp-name">K高质量包天10-60不上榜</span><span class="qp-price">¥1.3</span></div>
+              <div class="qp-row"><span class="qp-name">k直播正在购买--单场</span><span class="qp-price">¥1.3</span></div>
+              <div class="qp-row"><span class="qp-name">k直播正在购买--包天</span><span class="qp-price">¥2.08</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+      <details class="qp-theme">
+        <summary><b>QQ 业务（7个分区）</b><span class="qp-meta">7 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>QQ·名片赞 <span class="qp-min">¥0.34 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">QQ名片赞100个/下单秒/日刷无上限</span><span class="qp-price">¥0.34</span></div>
+              <div class="qp-row"><span class="qp-name">QQ名片赞1000个/下单秒/日刷无上限</span><span class="qp-price">¥2.89</span></div>
+              <div class="qp-row"><span class="qp-name">QQ名片赞5000个/下单秒/日刷无上限</span><span class="qp-price">¥13.0</span></div>
+              <div class="qp-row"><span class="qp-name">QQ名片赞10000个/下单秒/日刷无上限</span><span class="qp-price">¥26.0</span></div>
+              <div class="qp-row"><span class="qp-name">QQ名片赞100000个/下单秒/日刷无上限</span><span class="qp-price">¥257</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>QQ·空间说说赞 <span class="qp-min">¥0.26 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">QQ秒速说说浏览100次</span><span class="qp-price">¥0.26</span></div>
+              <div class="qp-row"><span class="qp-name">QQ真人说说浏览100个</span><span class="qp-price">¥0.42</span></div>
+              <div class="qp-row"><span class="qp-name">QQ秒速说说浏览1000次</span><span class="qp-price">¥1.27</span></div>
+              <div class="qp-row"><span class="qp-name">QQ真人说说赞10个</span><span class="qp-price">¥2.55</span></div>
+              <div class="qp-row"><span class="qp-name">QQ真人说说浏览1000个</span><span class="qp-price">¥4.16</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>QQ·空间访客 <span class="qp-min">¥0.65 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">QQ空间访客100个</span><span class="qp-price">¥0.65</span></div>
+              <div class="qp-row"><span class="qp-name">QQ空间真人访客100个</span><span class="qp-price">¥0.78</span></div>
+              <div class="qp-row"><span class="qp-name">QQ空间访客1000个</span><span class="qp-price">¥6.5</span></div>
+              <div class="qp-row"><span class="qp-name">QQ空间真人访客1000个</span><span class="qp-price">¥7.8</span></div>
+              <div class="qp-row"><span class="qp-name">QQ空间访客10000个</span><span class="qp-price">¥65.0</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>QQ·永久钻 <span class="qp-min">¥21.8 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">QQ会员丨永久几率30%丨质保25天</span><span class="qp-price">¥21.8</span></div>
+              <div class="qp-row"><span class="qp-name">QQ黄钻丨永久几率30%丨质保25天</span><span class="qp-price">¥22.0</span></div>
+              <div class="qp-row"><span class="qp-name">QQ豪华黄钻丨永久几率30%丨质保25天</span><span class="qp-price">¥29.3</span></div>
+              <div class="qp-row"><span class="qp-name">QQ豪华绿钻丨永久几率30%丨质保25天</span><span class="qp-price">¥29.7</span></div>
+              <div class="qp-row"><span class="qp-name">QQ超级会员丨永久几率30%丨质保25天</span><span class="qp-price">¥36.8</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>QQ·群拉人 <span class="qp-min">¥10.1 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">QQ群防打代码</span><span class="qp-price">¥10.1</span></div>
+              <div class="qp-row"><span class="qp-name">q号引流好友-20人，搜号主动加！纯真人个体号</span><span class="qp-price">¥32.5</span></div>
+              <div class="qp-row"><span class="qp-name">QQ频道拉人/20人/纯真人扫码进/高质个体人</span><span class="qp-price">¥41.6</span></div>
+              <div class="qp-row"><span class="qp-name">q号引流好友-30人，搜号主动加！纯真人个体号</span><span class="qp-price">¥48.1</span></div>
+              <div class="qp-row"><span class="qp-name">QQ频道拉人/30人/纯真人扫码进/高质个体人</span><span class="qp-price">¥62.4</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>QQ·综合业务 <span class="qp-min">¥0.78 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">QQ财神秒（时卡）</span><span class="qp-price">¥0.78</span></div>
+              <div class="qp-row"><span class="qp-name">QQ超级会员加速包1月-卡密兑换-一月一次</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">QQ会员系列永久特殊铭牌1积分-可倍拍</span><span class="qp-price">¥1.56</span></div>
+              <div class="qp-row"><span class="qp-name">安卓功能Q月卡</span><span class="qp-price">¥2.6</span></div>
+              <div class="qp-row"><span class="qp-name">QQ等级全套月卡</span><span class="qp-price">¥2.86</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>QQ·音乐业务 <span class="qp-min">¥0.42 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">QQ音乐+微信步数托管天卡</span><span class="qp-price">¥0.42</span></div>
+              <div class="qp-row"><span class="qp-name">QQ音乐+微信步数托管月卡</span><span class="qp-price">¥2.34</span></div>
+              <div class="qp-row"><span class="qp-name">QQ音乐+微信步数托管季卡</span><span class="qp-price">¥5.46</span></div>
+              <div class="qp-row"><span class="qp-name">QQ音乐-动态文章阅读5000</span><span class="qp-price">¥5.58</span></div>
+              <div class="qp-row"><span class="qp-name">QQ音乐-动态视频阅读5000</span><span class="qp-price">¥5.58</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+      <details class="qp-theme">
+        <summary><b>微信业务（8个分区）</b><span class="qp-meta">9 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>微信·视频号 <span class="qp-min">¥0.49 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">SPH直播间预约10个</span><span class="qp-price">¥0.49</span></div>
+              <div class="qp-row"><span class="qp-name">SPH真人转发100个</span><span class="qp-price">¥0.65</span></div>
+              <div class="qp-row"><span class="qp-name">SPH真人播放1000个</span><span class="qp-price">¥0.75</span></div>
+              <div class="qp-row"><span class="qp-name">SPH直播间停留(30分钟)</span><span class="qp-price">¥0.78</span></div>
+              <div class="qp-row"><span class="qp-name">SPH超级拇指10个</span><span class="qp-price">¥0.82</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>微信·公众号 <span class="qp-min">¥0.31 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">公众号超级阅读10个</span><span class="qp-price">¥0.31</span></div>
+              <div class="qp-row"><span class="qp-name">公众号自定义评论</span><span class="qp-price">¥0.52</span></div>
+              <div class="qp-row"><span class="qp-name">公众号文章自定义评论【特价小单】</span><span class="qp-price">¥0.52</span></div>
+              <div class="qp-row"><span class="qp-name">公众号小单阅读10个</span><span class="qp-price">¥0.62</span></div>
+              <div class="qp-row"><span class="qp-name">公众号文章转发10个</span><span class="qp-price">¥0.75</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>微信·朋友圈集赞 <span class="qp-min">¥11.5 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">微信朋友圈点赞20个</span><span class="qp-price">¥11.5</span></div>
+              <div class="qp-row"><span class="qp-name">微信朋友圈点赞30个</span><span class="qp-price">¥17.3</span></div>
+              <div class="qp-row"><span class="qp-name">微信朋友圈点赞50个</span><span class="qp-price">¥28.8</span></div>
+              <div class="qp-row"><span class="qp-name">微信朋友圈点赞100个</span><span class="qp-price">¥57.6</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>微信·投票 <span class="qp-min">¥7.44 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">磐石投票</span><span class="qp-price">¥7.44</span></div>
+              <div class="qp-row"><span class="qp-name">易企秀投票</span><span class="qp-price">¥8.37</span></div>
+              <div class="qp-row"><span class="qp-name">问卷星投票</span><span class="qp-price">¥9.3</span></div>
+              <div class="qp-row"><span class="qp-name">小程序机刷</span><span class="qp-price">¥10.2</span></div>
+              <div class="qp-row"><span class="qp-name">微信直接投票（人工）</span><span class="qp-price">¥13.9</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>微信·苹果功能 <span class="qp-min">¥0.85 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">TF魔法师外侧码（斗战神8073）</span><span class="qp-price">¥0.85</span></div>
+              <div class="qp-row"><span class="qp-name">TF微元素外侧码（斗战神8065）</span><span class="qp-price">¥0.85</span></div>
+              <div class="qp-row"><span class="qp-name">TF至尊宝外侧码（斗战神8073）不退换</span><span class="qp-price">¥0.85</span></div>
+              <div class="qp-row"><span class="qp-name">TF山茶花外侧码（斗战神8073）不退换</span><span class="qp-price">¥0.85</span></div>
+              <div class="qp-row"><span class="qp-name">TF草莓熊外侧码（斗战神8073）不退换</span><span class="qp-price">¥0.85</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>微信·安卓功能 <span class="qp-min">¥0.26 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">馥梦繁花天卡</span><span class="qp-price">¥0.26</span></div>
+              <div class="qp-row"><span class="qp-name">【安卓幻影/新路行/先驱者】(全应用定位)时卡</span><span class="qp-price">¥0.26</span></div>
+              <div class="qp-row"><span class="qp-name">安卓天龙(密友+小程序版)时卡</span><span class="qp-price">¥1.61</span></div>
+              <div class="qp-row"><span class="qp-name">馥梦繁花月卡</span><span class="qp-price">¥4.06</span></div>
+              <div class="qp-row"><span class="qp-name">蝴蝶密友月卡</span><span class="qp-price">¥4.06</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>微信·抢红包 <span class="qp-min">¥0.52 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">流星雨天卡</span><span class="qp-price">¥0.52</span></div>
+              <div class="qp-row"><span class="qp-name">小怪兽 天卡</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">流星雨周卡</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">穿云箭（神鹰）天卡</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">百灵鸟全功能三天卡</span><span class="qp-price">¥1.04</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>微信·人工群拉人 <span class="qp-min">¥41.6 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">微信群拉人-拉20人，好友列表最质量群员，可发言不退群，纯眞人</span><span class="qp-price">¥41.6</span></div>
+              <div class="qp-row"><span class="qp-name">微信群拉人-拉30人，好友列表最质量群员，可发言不退群，纯眞人</span><span class="qp-price">¥62.4</span></div>
+              <div class="qp-row"><span class="qp-name">微信群拉人-拉50人，好友列表最质量群员，可发言不退群，纯眞人</span><span class="qp-price">¥104</span></div>
+              <div class="qp-row"><span class="qp-name">微信群拉人-拉100人，好友列表最质量群员，可发言不退群，纯眞人</span><span class="qp-price">¥208</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>微信·云端功能 <span class="qp-min">¥0.78 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">云端双子座周卡</span><span class="qp-price">¥0.78</span></div>
+              <div class="qp-row"><span class="qp-name">水星云（原时光云）周卡</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">海底星空月卡（活动）</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">小当家天卡</span><span class="qp-price">¥1.04</span></div>
+              <div class="qp-row"><span class="qp-name">郁金香周卡</span><span class="qp-price">¥1.56</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+      <details class="qp-theme">
+        <summary><b>自媒体 / 音乐 / 电商</b><span class="qp-meta">6 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>新浪微博 <span class="qp-min">¥0.42 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">新浪视频播放-10000次</span><span class="qp-price">¥0.42</span></div>
+              <div class="qp-row"><span class="qp-name">新浪秒单评论赞100个</span><span class="qp-price">¥0.91</span></div>
+              <div class="qp-row"><span class="qp-name">新浪博文点赞-100个</span><span class="qp-price">¥1.3</span></div>
+              <div class="qp-row"><span class="qp-name">WB头条长博文阅读【1万】</span><span class="qp-price">¥1.43</span></div>
+              <div class="qp-row"><span class="qp-name">新浪围绕评论-20个</span><span class="qp-price">¥1.69</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>小红书 <span class="qp-min">¥1.13 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">红书前台小眼睛1000个</span><span class="qp-price">¥1.13</span></div>
+              <div class="qp-row"><span class="qp-name">红书阅读+眼睛100个</span><span class="qp-price">¥1.14</span></div>
+              <div class="qp-row"><span class="qp-name">红书秒单曝光10000个</span><span class="qp-price">¥1.17</span></div>
+              <div class="qp-row"><span class="qp-name">红书发现页曝光10000个</span><span class="qp-price">¥1.17</span></div>
+              <div class="qp-row"><span class="qp-name">红书超低小眼睛1000个</span><span class="qp-price">¥1.21</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>闲鱼 <span class="qp-min">¥0.75 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">咸鱼真人浏览100</span><span class="qp-price">¥0.75</span></div>
+              <div class="qp-row"><span class="qp-name">咸鱼真人关注10</span><span class="qp-price">¥0.95</span></div>
+              <div class="qp-row"><span class="qp-name">咸鱼真人想要10</span><span class="qp-price">¥0.95</span></div>
+              <div class="qp-row"><span class="qp-name">咸鱼真人收藏10</span><span class="qp-price">¥0.95</span></div>
+              <div class="qp-row"><span class="qp-name">闲鱼兼职真人想要（赠送浏览）</span><span class="qp-price">¥1.53</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>全民K歌 <span class="qp-min">¥0.39 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">K歌-多号送花100个</span><span class="qp-price">¥0.39</span></div>
+              <div class="qp-row"><span class="qp-name">K歌-多号送道具1k</span><span class="qp-price">¥0.39</span></div>
+              <div class="qp-row"><span class="qp-name">K歌-真人主页显示播放100</span><span class="qp-price">¥0.65</span></div>
+              <div class="qp-row"><span class="qp-name">K歌-普通播放1k</span><span class="qp-price">¥0.75</span></div>
+              <div class="qp-row"><span class="qp-name">K歌-真人点赞10个</span><span class="qp-price">¥0.94</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>网易云音乐 <span class="qp-min">¥5.58 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">网易云MV分享100</span><span class="qp-price">¥5.58</span></div>
+              <div class="qp-row"><span class="qp-name">网易云MV收藏100</span><span class="qp-price">¥5.58</span></div>
+              <div class="qp-row"><span class="qp-name">网易云专栏文章分享100</span><span class="qp-price">¥5.58</span></div>
+              <div class="qp-row"><span class="qp-name">网易云专栏文章点赞100</span><span class="qp-price">¥5.58</span></div>
+              <div class="qp-row"><span class="qp-name">网易云专栏文章阅读1000</span><span class="qp-price">¥7.44</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>电商业务 <span class="qp-min">¥0.18 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">淘宝宝贝推荐（时间段）</span><span class="qp-price">¥0.18</span></div>
+              <div class="qp-row"><span class="qp-name">淘宝宝贝推荐（直接执行）</span><span class="qp-price">¥0.18</span></div>
+              <div class="qp-row"><span class="qp-name">京东达人进店浏览</span><span class="qp-price">¥0.18</span></div>
+              <div class="qp-row"><span class="qp-name">淘宝宝贝推荐（搜索 时间段）</span><span class="qp-price">¥0.22</span></div>
+              <div class="qp-row"><span class="qp-name">淘宝宝贝访客（高级，直接执行）</span><span class="qp-price">¥0.38</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+      <details class="qp-theme">
+        <summary><b>游戏业务</b><span class="qp-meta">4 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>王者荣耀 <span class="qp-min">¥0.68 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">王者荣耀安卓QQ火花人气值1000-可倍拍</span><span class="qp-price">¥0.68</span></div>
+              <div class="qp-row"><span class="qp-name">王者荣耀苹果QQ火花人气值1000-可倍拍</span><span class="qp-price">¥0.68</span></div>
+              <div class="qp-row"><span class="qp-name">王者荣耀苹果微信火花人气值1000-可倍拍</span><span class="qp-price">¥0.68</span></div>
+              <div class="qp-row"><span class="qp-name">王者荣耀安卓微信火花人气值1000-可倍拍</span><span class="qp-price">¥0.68</span></div>
+              <div class="qp-row"><span class="qp-name">王者荣耀安卓微信拇指赞50-可倍拍</span><span class="qp-price">¥1.09</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>各大游戏 <span class="qp-min">¥0.04 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">王者荣耀新版自助查战力-自动发货</span><span class="qp-price">¥0.04</span></div>
+              <div class="qp-row"><span class="qp-name">英雄联盟手游微信区大拇指</span><span class="qp-price">¥0.07</span></div>
+              <div class="qp-row"><span class="qp-name">英雄联盟手游QQ区大拇指</span><span class="qp-price">¥0.09</span></div>
+              <div class="qp-row"><span class="qp-name">和平精英捏脸码-随机款式-自动发货</span><span class="qp-price">¥0.22</span></div>
+              <div class="qp-row"><span class="qp-name">王者每日游戏礼包-自动发货-每天1次</span><span class="qp-price">¥0.38</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>cfm·特价 <span class="qp-min">¥1.2 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">安卓QQcfm赏金令4000积分卡密-自动发货</span><span class="qp-price">¥1.2</span></div>
+              <div class="qp-row"><span class="qp-name">安卓微信cfm赏金令4000积分卡密-自动发货</span><span class="qp-price">¥1.2</span></div>
+              <div class="qp-row"><span class="qp-name">安卓QQcfm赏金令5000积分卡密-自动发货</span><span class="qp-price">¥1.46</span></div>
+              <div class="qp-row"><span class="qp-name">安卓微信cfm赏金令5000积分卡密-自动发货</span><span class="qp-price">¥1.46</span></div>
+              <div class="qp-row"><span class="qp-name">安卓QQcfm赏金令6000积分卡密-自动发货</span><span class="qp-price">¥1.94</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>cfm·加急 <span class="qp-min">¥2.24 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">安卓QQ加急赏金令4000积分卡密-自动发货</span><span class="qp-price">¥2.24</span></div>
+              <div class="qp-row"><span class="qp-name">安卓微信加急赏金令4000积分卡密-自动发货</span><span class="qp-price">¥2.24</span></div>
+              <div class="qp-row"><span class="qp-name">安卓QQ加急赏金令5000积分卡密-自动发货</span><span class="qp-price">¥2.8</span></div>
+              <div class="qp-row"><span class="qp-name">安卓微信加急赏金令5000积分卡密-自动发货</span><span class="qp-price">¥2.8</span></div>
+              <div class="qp-row"><span class="qp-name">安卓QQ加急赏金令6000积分卡密-自动发货</span><span class="qp-price">¥3.34</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+      <details class="qp-theme">
+        <summary><b>影视 / 音乐人</b><span class="qp-meta">5 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>影视共享号 <span class="qp-min">¥1.12 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">【共享】芒果会员7天号（只限安卓手机使用）</span><span class="qp-price">¥1.12</span></div>
+              <div class="qp-row"><span class="qp-name">【共享】芒果会员7天号（平板或电脑端使用）</span><span class="qp-price">¥1.12</span></div>
+              <div class="qp-row"><span class="qp-name">【共享】优酷SVIP会员5-7天号（平板或电脑端使用）</span><span class="qp-price">¥2.68</span></div>
+              <div class="qp-row"><span class="qp-name">【共享】芒果SVIP会员7天号（只限安卓手机使用）</span><span class="qp-price">¥2.68</span></div>
+              <div class="qp-row"><span class="qp-name">【共享】芒果SVIP会员7天号（平板或电脑端使用）</span><span class="qp-price">¥2.68</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>电视会员号 <span class="qp-min">¥1.12 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">【特价】芒果电视会员7天号</span><span class="qp-price">¥1.12</span></div>
+              <div class="qp-row"><span class="qp-name">【特价】酷喵电视会员5-7天号</span><span class="qp-price">¥1.9</span></div>
+              <div class="qp-row"><span class="qp-name">【特价】云视听极光电视会员1天号</span><span class="qp-price">¥2.68</span></div>
+              <div class="qp-row"><span class="qp-name">【特价】小米电视 儿童会员5-7天号</span><span class="qp-price">¥4.89</span></div>
+              <div class="qp-row"><span class="qp-name">【特价】酷喵电视会员25-30天</span><span class="qp-price">¥6.71</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>热门共享号 <span class="qp-min">¥0.39 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">【共享】WPS超级会员1天号 电脑使用</span><span class="qp-price">¥0.39</span></div>
+              <div class="qp-row"><span class="qp-name">【共享】UC网盘超级会员 电脑端 天卡</span><span class="qp-price">¥0.6</span></div>
+              <div class="qp-row"><span class="qp-name">【共享】剪映 SVIP 1天 手机 平板使用</span><span class="qp-price">¥0.91</span></div>
+              <div class="qp-row"><span class="qp-name">【共享】WPS大会员1天卡 电脑使用</span><span class="qp-price">¥1.17</span></div>
+              <div class="qp-row"><span class="qp-name">【共享】醒图会员SVIP天卡，AI次数不限，修图功能全开</span><span class="qp-price">¥1.22</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>音乐人认证 <span class="qp-min">¥28.8 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">网易云原创音乐人(4标）-可领永久黑胶</span><span class="qp-price">¥28.8</span></div>
+              <div class="qp-row"><span class="qp-name">腾讯音乐人四标音乐人认证 男生专用 无需漏脸 无需唱歌 包过包拿标</span><span class="qp-price">¥39.0</span></div>
+              <div class="qp-row"><span class="qp-name">腾讯音乐人四标音乐人认证 女生专用 无需漏脸 无需唱歌 包过包拿标</span><span class="qp-price">¥39.0</span></div>
+              <div class="qp-row"><span class="qp-name">抖音五标音乐人黄V认证丨看商品介绍</span><span class="qp-price">¥256</span></div>
+              <div class="qp-row"><span class="qp-name">抖音单标音乐人黄V认证 无需漏脸 无需唱歌 包过包拿标</span><span class="qp-price">¥280</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>影视多平台 <span class="qp-min">¥1.86 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">芒果TV视频播放</span><span class="qp-price">¥1.86</span></div>
+              <div class="qp-row"><span class="qp-name">爱奇艺视频快速播放</span><span class="qp-price">¥2.24</span></div>
+              <div class="qp-row"><span class="qp-name">爱奇艺视频播放</span><span class="qp-price">¥2.52</span></div>
+              <div class="qp-row"><span class="qp-name">腾讯视频围绕弹幕</span><span class="qp-price">¥4.65</span></div>
+              <div class="qp-row"><span class="qp-name">爱奇艺围绕弹幕</span><span class="qp-price">¥4.65</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+      <details class="qp-theme">
+        <summary><b>冷门 / 福利 / 创业</b><span class="qp-meta">11 个分类</span></summary>
+        <div class="qp-cats">
+          <details class="qp-cat">
+            <summary>冷门业务 <span class="qp-min">¥0.09 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">百家号阅读</span><span class="qp-price">¥0.09</span></div>
+              <div class="qp-row"><span class="qp-name">百家号视频播放</span><span class="qp-price">¥0.09</span></div>
+              <div class="qp-row"><span class="qp-name">搜狐话题阅读</span><span class="qp-price">¥0.09</span></div>
+              <div class="qp-row"><span class="qp-name">易车视频播放</span><span class="qp-price">¥0.09</span></div>
+              <div class="qp-row"><span class="qp-name">易车小视频播放</span><span class="qp-price">¥0.09</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>美团大众点评 <span class="qp-min">¥4.65 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">大众点评店铺曝光（全国IP）</span><span class="qp-price">¥4.65</span></div>
+              <div class="qp-row"><span class="qp-name">大众点评店铺曝光（时间段执行）</span><span class="qp-price">¥4.65</span></div>
+              <div class="qp-row"><span class="qp-name">大众点评店铺流量（时间段执行）</span><span class="qp-price">¥4.65</span></div>
+              <div class="qp-row"><span class="qp-name">美团店铺访客（时间段执行）</span><span class="qp-price">¥4.65</span></div>
+              <div class="qp-row"><span class="qp-name">美团店铺曝光（时间段执行）</span><span class="qp-price">¥4.65</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>头条西瓜 <span class="qp-min">¥0.05 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">头条文章阅读</span><span class="qp-price">¥0.05</span></div>
+              <div class="qp-row"><span class="qp-name">头条自营文章展现</span><span class="qp-price">¥0.26</span></div>
+              <div class="qp-row"><span class="qp-name">微头条秒单展现</span><span class="qp-price">¥0.26</span></div>
+              <div class="qp-row"><span class="qp-name">微头条文章视频展现</span><span class="qp-price">¥0.26</span></div>
+              <div class="qp-row"><span class="qp-name">头条通用展现</span><span class="qp-price">¥0.31</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>红果番茄 <span class="qp-min">¥0.3 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">番茄视频赞</span><span class="qp-price">¥0.3</span></div>
+              <div class="qp-row"><span class="qp-name">番茄粉丝收藏</span><span class="qp-price">¥0.3</span></div>
+              <div class="qp-row"><span class="qp-name">红果真人预约100</span><span class="qp-price">¥0.38</span></div>
+              <div class="qp-row"><span class="qp-name">红果特价粉丝10</span><span class="qp-price">¥2.42</span></div>
+              <div class="qp-row"><span class="qp-name">番茄视频粉</span><span class="qp-price">¥3.07</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>百家号 <span class="qp-min">¥0.08 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">百家号阅读/播放/动态（百起）</span><span class="qp-price">¥0.08</span></div>
+              <div class="qp-row"><span class="qp-name">百家号阅读</span><span class="qp-price">¥0.09</span></div>
+              <div class="qp-row"><span class="qp-name">百家号视频播放</span><span class="qp-price">¥0.09</span></div>
+              <div class="qp-row"><span class="qp-name">百家评论的点赞(不是评论)</span><span class="qp-price">¥0.14</span></div>
+              <div class="qp-row"><span class="qp-name">百家号阅读/播放/动态（千起）</span><span class="qp-price">¥0.16</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>懂车帝 <span class="qp-min">¥0.12 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">汽车之家/车家号文章阅读</span><span class="qp-price">¥0.12</span></div>
+              <div class="qp-row"><span class="qp-name">汽车之家/车家号视频播放</span><span class="qp-price">¥0.12</span></div>
+              <div class="qp-row"><span class="qp-name">汽车之家/车家号视频文章阅读</span><span class="qp-price">¥0.13</span></div>
+              <div class="qp-row"><span class="qp-name">汽车之家论坛阅读/播放</span><span class="qp-price">¥0.18</span></div>
+              <div class="qp-row"><span class="qp-name">汽车之家品牌空间阅读/播放</span><span class="qp-price">¥0.18</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>海外业务 <span class="qp-min">¥0.01 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">Twitter视频/推文浏览量</span><span class="qp-price">¥0.01</span></div>
+              <div class="qp-row"><span class="qp-name">Twitter推文浏览量+曝光量</span><span class="qp-price">¥0.01</span></div>
+              <div class="qp-row"><span class="qp-name">Twitter有机真实用户 1k/天转推</span><span class="qp-price">¥0.22</span></div>
+              <div class="qp-row"><span class="qp-name">ins 帖子分享</span><span class="qp-price">¥0.25</span></div>
+              <div class="qp-row"><span class="qp-name">ins 帖子分享 [土耳其]</span><span class="qp-price">¥0.26</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>薅羊毛 <span class="qp-min">¥6.66 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">[薅羊毛]如何免费领取一部苹果手机（仅做揭秘！）</span><span class="qp-price">¥6.66</span></div>
+              <div class="qp-row"><span class="qp-name">[薅羊毛]免费领取QQ音乐会员亲测有效！试听权益包VIP歌曲试听权益包【截止8月31日】</span><span class="qp-price">¥6.66</span></div>
+              <div class="qp-row"><span class="qp-name">[薅羊毛]外面收费588的最新抖音活退项目，单号一天利润100+【仅揭秘】</span><span class="qp-price">¥8.66</span></div>
+              <div class="qp-row"><span class="qp-name">[薅羊毛]小游戏掘金项目，每日领低保，日入20-100元稳定收入，实操教程</span><span class="qp-price">¥8.66</span></div>
+              <div class="qp-row"><span class="qp-name">[薅羊毛]各大电商平台赔FU，吃货，打假最新玩法+链接（仅揭秘）</span><span class="qp-price">¥8.66</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>创业项目 <span class="qp-min">¥6.66 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">[大佬分享]全网首发！一单上万，小白也能做，价值6888的打假项目免费分享！</span><span class="qp-price">¥6.66</span></div>
+              <div class="qp-row"><span class="qp-name">[大佬分享]闲鱼无货源京东家政，一单20利润，轻松200+，免费教学，适合新手小白</span><span class="qp-price">¥6.66</span></div>
+              <div class="qp-row"><span class="qp-name">[大佬分享]2023年最火项目：通过“卖项目”年入百万！普通人逆袭翻身的唯一出路</span><span class="qp-price">¥8.66</span></div>
+              <div class="qp-row"><span class="qp-name">[大佬分享]付费进群大揭秘，零基础也轻松日入500+，学会后玩转市面上50%以上的项目</span><span class="qp-price">¥8.66</span></div>
+              <div class="qp-row"><span class="qp-name">[大佬分享]外面收费5000+的小游戏风口项目流量掘金池，不用撸包，提现秒到账，日收益500+！</span><span class="qp-price">¥8.66</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>技术分享 <span class="qp-min">¥0.78 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">微信被封不失联方法 超级管用</span><span class="qp-price">¥0.78</span></div>
+              <div class="qp-row"><span class="qp-name">QQ隐藏搜索</span><span class="qp-price">¥1.3</span></div>
+              <div class="qp-row"><span class="qp-name">封号申述地址</span><span class="qp-price">¥1.3</span></div>
+              <div class="qp-row"><span class="qp-name">QQ违规记录</span><span class="qp-price">¥1.3</span></div>
+              <div class="qp-row"><span class="qp-name">最新联系腾讯客服人工方法</span><span class="qp-price">¥1.3</span></div>
+            </div>
+          </details>
+          <details class="qp-cat">
+            <summary>省钱项目 <span class="qp-min">¥0.31 起</span></summary>
+            <div class="qp-rows">
+              <div class="qp-row"><span class="qp-name">同程打车23元打车券免费送</span><span class="qp-price">¥0.31</span></div>
+              <div class="qp-row"><span class="qp-name">抖音团购1分购</span><span class="qp-price">¥0.4</span></div>
+              <div class="qp-row"><span class="qp-name">短视频去水印月卡</span><span class="qp-price">¥0.4</span></div>
+              <div class="qp-row"><span class="qp-name">京东外卖满减券随机【1号1天1次】</span><span class="qp-price">¥0.4</span></div>
+              <div class="qp-row"><span class="qp-name">美团外卖神券，最高20无门槛</span><span class="qp-price">¥0.4</span></div>
+            </div>
+          </details>
+        </div>
+      </details>
+  </div>
+</div>
 
 
   <!-- 使用流程 -->
