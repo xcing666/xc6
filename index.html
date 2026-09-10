@@ -103,7 +103,16 @@
   <title>兴程网络 — 短视频涨粉·二维码生成·图片转换·直播人气</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>🚀</text></svg>" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css?v=20260904" />
+  <link rel="stylesheet" href="style.css?v=20260907" />
+  <style>
+    /* ===== 首页工具格：末行自动居中（9 款时不会出现「单卡左靠 + 右侧留白」） =====
+       放在 style.css 之后才能生效；每行卡片数与原来一致：桌面 4 / 平板 3 / 手机 2 */
+    .tools-intro-grid { display:flex; flex-wrap:wrap; justify-content:center; }
+    .tools-intro-grid .ti-card { flex: 0 0 calc(25% - 16px); }
+    @media (max-width:1024px) { .tools-intro-grid .ti-card { flex: 0 0 calc(33.3333% - 14px); } }
+    @media (max-width:768px)  { .tools-intro-grid .ti-card { flex: 0 0 calc(50% - 8px); } }
+    @media (max-width:480px)  { .tools-intro-grid .ti-card { flex: 0 0 calc(50% - 7px); } }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -329,6 +338,7 @@
       <a class="biz-item" href="tools/pdf-convert.html"><i class="bd2"></i>PDF 转换</a>
       <a class="biz-item" href="tools/qrcode.html"><i class="bd3"></i>二维码生成</a>
       <a class="biz-item" href="tools/perler.html"><i class="bd6"></i>拼豆图纸</a>
+      <a class="biz-item" href="tools/photo-album.html"><i class="bd1"></i>翻页画册</a>
       <a class="biz-item" href="social-media.html"><i class="bd1"></i>抖音粉丝</a>
       <a class="biz-item" href="social-media.html"><i class="bd2"></i>快手点赞</a>
       <a class="biz-item" href="social-media.html"><i class="bd3"></i>直播人气</a>
@@ -341,6 +351,7 @@
       <a class="biz-item" href="tools/pdf-convert.html"><i class="bd2"></i>PDF 转换</a>
       <a class="biz-item" href="tools/qrcode.html"><i class="bd3"></i>二维码生成</a>
       <a class="biz-item" href="tools/perler.html"><i class="bd6"></i>拼豆图纸</a>
+      <a class="biz-item" href="tools/photo-album.html"><i class="bd1"></i>翻页画册</a>
     </div>
   </div>
 
@@ -361,7 +372,7 @@
         </a>
         <a href="tools/index.html" class="qp-card reveal qp-pink">
           <span class="qp-lead">转换 / 压缩文件</span>
-          <span class="qp-desc">8 款在线工具 · 文件不出本地</span>
+          <span class="qp-desc">9 款在线工具 · 文件不出本地</span>
           <span class="qp-arrow">→</span>
         </a>
         <a href="miniprogram/index.html" class="qp-card reveal qp-blue">
@@ -929,7 +940,7 @@
       <div class="section-head reveal">
         <span class="tag">FREE TOOLS</span>
         <h2>智能<span>工具中心</span></h2>
-        <p>8 款免费在线工具，纯前端运行，文件不上传服务器</p>
+        <p>9 款免费在线工具，纯前端运行，文件不上传服务器</p>
       </div>
       <div class="tools-intro-grid">
         <a class="ti-card reveal" href="tools/image-convert.html">
@@ -971,6 +982,11 @@
           <div class="ti-icon">🔤</div>
           <h3>字体预览工具</h3>
           <p>20+ 中文字体实时预览</p>
+        </a>
+        <a class="ti-card reveal" href="tools/photo-album.html">
+          <div class="ti-icon">📖</div>
+          <h3>翻页画册</h3>
+          <p>照片变真书，封面到封底</p>
         </a>
       </div>
       <div style="text-align:center;margin-top:32px;">
@@ -1096,6 +1112,6 @@
   <!-- ======== 提示 Toast ======== -->
   <div class="toast" id="toast"></div>
 
-  <script src="script.js?v=20260904"></script>
+  <script src="script.js?v=20260907"></script>
 </body>
 </html>
