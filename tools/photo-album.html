@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a1730" />
+  <title>翻页画册 — 在线制作照片书 | 兴程网络</title>
+  <meta name="description" content="免费在线翻页画册工具：第一张自动当封面、最后一张当封底，翻开后左右双页展开，纸张绕书脊卷曲翻页，带翻书音效，支持拖拽排序、全屏放大、手机滑动翻页。" />
+  <link rel="canonical" href="https://xcing666.github.io/xc6/tools/photo-album.html" />
+  <meta property="og:title" content="翻页画册 — 在线制作照片书 | 兴程网络" />
+  <meta property="og:description" content="第一张当封面、最后一张当封底，翻开后双页展开，带翻书声，一键全屏放大，手机横屏看大图。" />
+  <meta property="og:url" content="https://xcing666.github.io/xc6/tools/photo-album.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="翻页画册 — 兴程网络" />
+  <meta name="twitter:description" content="免费在线翻页画册工具" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='56' font-size='56'>📖</text></svg>" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="stylesheet" href="../style.css?v=20260907" />
+  <script src="../no-zoom.js"></script>
+  <style>
+    /* ============ 画册工具页专属样式（仅功能组件） ============ */
+
+    /* 工具页骨架（与其他工具页一致） */
+    .tool-page { padding: 90px 0 40px; background: var(--bg-deep); min-height: calc(100vh - 60px); position:relative; z-index:1; }
+    .tool-container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; margin-bottom: 20px; transition: color .3s; }
+    .tool-back:hover { color: var(--c1); }
+    .tool-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .tool-title span { color: var(--c1); }
+    .tool-desc { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 24px; }
+    .tool-guide { background:rgba(108,92,231,.06); border:1px solid rgba(108,92,231,.15); border-radius:12px; padding:16px 20px; margin-bottom:24px; }
+    .tool-guide h4 { font-size:14px; color:var(--c1); margin-bottom:10px; }
+    .tool-guide ol { color:var(--muted); font-size:13px; line-height:2; padding-left:20px; margin:0; }
+    .tool-guide li { margin-bottom:2px; }
+
+    /* 步骤指示 */
+    .pa-steps { display:flex; gap:8px; justify-content:center; margin:26px 0 22px; flex-wrap:wrap; }
+    .step-pill { padding:6px 14px; border-radius:16px; font-size:12px; background:rgba(108,92,231,.1); color:rgba(255,255,255,.6); border:1px solid transparent; transition:.2s; }
+    .step-pill.active { background:rgba(0,184,212,.18); color:#7eb6ff; border-color:rgba(0,184,212,.4); }
+    .step-pill.done { background:rgba(0,184,212,.08); color:rgba(255,255,255,.5); }
+
+    /* 上传区（pa- 前缀避免与全局 .upload-zone 冲突） */
+    .pa-upload { border:2px dashed rgba(108,92,231,.35); border-radius:18px; padding:44px 24px; text-align:center; background:rgba(108,92,231,.05); cursor:pointer; transition:.2s; }
+    .pa-upload:hover, .pa-upload.drag { border-color:rgba(0,184,212,.6); background:rgba(0,184,212,.08); }
+    .pa-upload .icon { font-size:44px; margin-bottom:8px; }
+    .pa-upload .hint { color:rgba(255,255,255,.6); font-size:13px; line-height:1.8; }
+    .pa-upload .hint b { color:#7eb6ff; }
+
+    /* 步骤 2：缩略图+拖拽排序 */
+    .thumbs-panel { display:none; margin-top:22px; background:rgba(20,18,40,.6); border:1px solid rgba(108,92,231,.18); border-radius:16px; padding:20px; }
+    .thumbs-panel.show { display:block; }
+    .thumbs-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px; }
+    .thumbs-head h3 { margin:0; font-size:15px; color:#e8eaff; }
+    .thumbs-head .meta { font-size:12px; color:rgba(255,255,255,.5); }
+    .thumbs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:14px; }
+    .thumb { position:relative; aspect-ratio:1/1; border-radius:10px; overflow:hidden; background:#2a2745; cursor:grab; user-select:none; -webkit-user-drag:none; border:2px solid transparent; transition:.15s; box-shadow:0 2px 8px rgba(0,0,0,.3); }
+    .thumb:active { cursor:grabbing; }
+    .thumb.dragging { opacity:.4; transform:scale(.95); }
+    .thumb.over { border-color:#00b8d4; transform:scale(1.05); }
+    .thumb img { width:100%; height:100%; object-fit:cover; pointer-events:none; -webkit-user-drag:none; }
+    .thumb .idx { position:absolute; top:6px; left:6px; background:rgba(0,0,0,.65); color:#fff; font-size:11px; font-weight:700; padding:2px 7px; border-radius:8px; }
+    .thumb .del { position:absolute; top:6px; right:6px; width:22px; height:22px; border-radius:50%; background:rgba(220,38,38,.9); color:#fff; border:0; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; line-height:1; }
+    .thumb .del:hover { background:#dc2626; }
+    .thumb .orient { position:absolute; bottom:6px; right:6px; background:rgba(0,0,0,.65); color:#fff; font-size:10px; padding:2px 6px; border-radius:6px; }
+    .thumbs-actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; justify-content:flex-end; }
+    .btn-act { padding:9px 18px; border-radius:10px; border:0; font-size:13px; cursor:pointer; font-weight:600; transition:.15s; }
+    .btn-act.primary { background:linear-gradient(135deg,#6c5ce7,#00b8d4); color:#fff; box-shadow:0 2px 10px rgba(108,92,231,.4); }
+    .btn-act.primary:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(108,92,231,.6); }
+    .btn-act.ghost { background:rgba(255,255,255,.06); color:rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.1); }
+    .btn-act.ghost:hover { background:rgba(255,255,255,.12); }
+    .btn-act.danger { background:linear-gradient(135deg,#ff6b6b,#e04545); color:#fff; box-shadow:0 2px 10px rgba(224,69,69,.35); }
+    .btn-act.danger:hover { transform:translateY(-1px); }
+    /* 清空确认条（替代原生 confirm：部分手机内置浏览器会吞掉原生弹窗，按钮点了没反应） */
+    .clear-confirm {
+      display:none; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;
+      margin-top:14px; padding:12px 16px; border-radius:12px;
+      background:rgba(255,107,107,.10); border:1px solid rgba(255,107,107,.3);
+      color:rgba(255,255,255,.85); font-size:13px;
+      animation:ccIn .2s ease;
+    }
+    .clear-confirm.show { display:flex; }
+    .clear-confirm .cc-btns { display:flex; gap:8px; }
+    @keyframes ccIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+
+    /* 步骤 3：画册区 */
+    .book-stage { display:none; margin-top:26px; }
+    .book-stage.show { display:block; }
+    /* ⚠️ 顶部导航是 fixed 的：滚动定位要留出导航高度，
+       否则「开始翻页」后工具栏（翻书声/自动/放大）会被导航压住点不到 */
+    .book-stage, .thumbs-panel { scroll-margin-top:74px; }
+    .book-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+    .book-toolbar .info { color:rgba(255,255,255,.6); font-size:13px; }
+    .book-toolbar .controls { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .toggle-btn { display:inline-flex; align-items:center; gap:5px; padding:7px 13px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:rgba(255,255,255,.7); font-size:12px; cursor:pointer; user-select:none; transition:.15s; }
+    .toggle-btn.on { background:rgba(0,184,212,.18); border-color:rgba(0,184,212,.5); color:#7eb6ff; }
+    .toggle-btn:hover { background:rgba(255,255,255,.12); }
+
+    /* 翻书台 */
+    .book-frame { background:linear-gradient(135deg,#2a2745 0%,#1a1730 100%); border-radius:20px; padding:26px 16px; box-shadow:inset 0 4px 20px rgba(0,0,0,.5); position:relative; overflow:hidden; }
+    .book-wrap { perspective:2600px; position:relative; max-width:920px; margin:0 auto; display:flex; justify-content:center; }
+    .book { position:relative; transform-style:preserve-3d; user-select:none; -webkit-user-select:none; margin:0 auto; filter:drop-shadow(0 18px 30px rgba(0,0,0,.5)); }
+
+    /* 书本台面（书脊中缝阴影，模拟真实翻开的两页书） */
+    .book::before {
+      content:''; position:absolute; left:50%; top:0; bottom:0; width:3px;
+      transform:translateX(-1.5px);
+      background:linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,.15) 12%, rgba(0,0,0,.12) 50%, rgba(0,0,0,.15) 88%, rgba(0,0,0,.5));
+      z-index:5; pointer-events:none;
+      box-shadow:0 0 10px rgba(0,0,0,.5);
+    }
+    /* ⚡ 翻页进行中关掉 drop-shadow：整本书的投影每帧都要重算，是卡顿主因之一 */
+    .book.flipping { filter:none; }
+    /* 封面 / 封底：单张居中显示（书宽 = 1 页宽，由 JS 调 fitBook 决定） */
+    .book.solo .page-side.left { display:none; }
+    .book.solo .page-side.right { left:0; width:100%; border-radius:6px; box-shadow:0 10px 26px rgba(0,0,0,.45); }
+    .book.solo::before { display:none; }
+    /* 单页 ↔ 跨页切换时的淡入淡出（封面翻开瞬间，避免生硬跳变） */
+    .book.fading { opacity:0; }
+    .book { transition:opacity .18s ease; }
+
+    /* 双页展开 —— 左右各一页；翻页时右页绕书脊卷到左侧，一次换新两页 */
+    .page-side { position:absolute; top:0; height:100%; width:50%; overflow:hidden; background:#f6f5f1; }
+    .page-side.left  { left:0;  border-radius:4px 0 0 4px; box-shadow:inset -16px 0 24px -18px rgba(0,0,0,.55); }
+    .page-side.right { left:50%; border-radius:0 4px 4px 0; box-shadow:inset 16px 0 24px -18px rgba(0,0,0,.55); }
+    .page-side img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; -webkit-user-drag:none; user-select:none; }
+    .page-side.empty { background:linear-gradient(135deg,#fbfaf7,#efece6); }
+    .page-side.empty::after { content:'—'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(0,0,0,.14); font-size:26px; letter-spacing:2px; }
+
+    /* 翻页过程：canvas 重绘纸面（像素级圆柱卷曲），覆盖整本书，书脊在中央 */
+    .book .turning { position:absolute; top:0; left:0; pointer-events:none; z-index:9998; }
+
+    /* 翻页控制 */
+    .nav-row { display:flex; justify-content:center; align-items:center; gap:14px; margin-top:20px; flex-wrap:wrap; }
+    .nav-btn { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); color:#fff; padding:10px 20px; border-radius:24px; cursor:pointer; font-size:14px; transition:.15s; min-width:90px; }
+    .nav-btn:hover:not(:disabled) { background:rgba(0,184,212,.18); border-color:rgba(0,184,212,.4); }
+    .nav-btn:disabled { opacity:.3; cursor:not-allowed; }
+    .page-num { color:rgba(255,255,255,.7); font-size:13px; min-width:80px; text-align:center; font-variant-numeric:tabular-nums; }
+    .reset-row { display:flex; justify-content:center; gap:10px; margin-top:20px; flex-wrap:wrap; }
+
+    /* 移动端 */
+    @media (max-width:768px) {
+      .tool-page { padding: 70px 0 30px; }
+      .tool-title { font-size: 22px; }
+      .pa-steps { gap:6px; margin:18px 0 14px; }
+      .step-pill { padding:5px 10px; font-size:11px; }
+      .pa-upload { padding:32px 16px; }
+      .pa-upload .icon { font-size:36px; }
+      .thumbs-grid { grid-template-columns:repeat(auto-fill,minmax(88px,1fr)); gap:10px; }
+      .book-frame { padding:14px 8px; }
+      .nav-btn { padding:8px 16px; font-size:13px; min-width:72px; }
+      .thumbs-actions { justify-content:center; }
+    }
+    @media (max-width:480px) {
+      .thumbs-grid { grid-template-columns:repeat(3,1fr); }
+    }
+
+    /* 翻页中禁止页面滚动误触 */
+    body.tool-active { overflow:hidden; touch-action:none; }
+
+    /* 双击放大：全屏查看大图 */
+    .lightbox {
+      position:fixed; inset:0; z-index:2147483600;
+      background:rgba(6,4,16,.96);
+      display:none; align-items:center; justify-content:center;
+      padding:18px; cursor:zoom-out;
+      overflow:auto; overscroll-behavior:contain;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .lightbox.show { display:flex; }
+    .lightbox img {
+      max-width:100%; max-height:100%; object-fit:contain;
+      border-radius:8px; box-shadow:0 24px 70px rgba(0,0,0,.75);
+      background:#111; cursor:zoom-in;
+    }
+    /* 点图片 → 切成原始尺寸，可在全屏里拖动查看细节（比「适应屏幕」放大约 2-3 倍）
+       ⚠️ 必须带 !important：style.css 里有全局规则 `img{max-width:100% !important}`，
+          不带的话会被它压住，图片永远只有屏幕宽。带 !important 后靠选择器权重取胜。 */
+    .lightbox.zoomed { display:block; padding:0; cursor:zoom-out; }
+    .lightbox.zoomed img {
+      max-width:none !important; max-height:none !important;
+      width:auto; height:auto;
+      border-radius:0; box-shadow:none; cursor:zoom-out;
+      flex:none; display:block; margin:0;
+    }
+    /* 放大层打开时允许拖动查看：body 翻页态设了 touch-action:none，需临时放开 */
+    body.lb-open { touch-action:auto; overflow:hidden; }
+    /* ⚠️ 用 fixed 而非 absolute：放大后容器可滚动，absolute 的按钮会随内容滚出屏幕 */
+    .lightbox .lb-hint {
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      color:rgba(255,255,255,.55); font-size:12.5px; white-space:nowrap;
+      background:rgba(0,0,0,.55); padding:6px 14px; border-radius:20px;
+    }
+    .lightbox .lb-close {
+      position:fixed; top:14px; right:16px;
+      width:38px; height:38px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(255,255,255,.16); color:#fff; font-size:20px; line-height:1;
+      backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    }
+
+    /* ============ 放大模式（全屏看画册，手机横屏 = 大图） ============ */
+    .big-view {
+      display:none; position:fixed; inset:0; z-index:2147483500;
+      background:radial-gradient(circle at 50% 40%, #171430 0%, #08060f 100%);
+      flex-direction:column; align-items:center; justify-content:center;
+      padding:calc(env(safe-area-inset-top,0px) + 10px) 10px calc(env(safe-area-inset-bottom,0px) + 46px);
+      overscroll-behavior:contain; -webkit-tap-highlight-color:transparent;
+    }
+    .big-view.show { display:flex; }
+    .big-view .bv-wrap { perspective:2600px; display:flex; align-items:center; justify-content:center; flex:1 1 auto; width:100%; min-height:0; }
+    .big-view .bv-close {
+      position:absolute; top:calc(env(safe-area-inset-top,0px) + 10px); right:12px;
+      z-index:6;   /* ⚠️ 必须高于 .bv-wrap，否则被书容器盖住点不到 */
+      width:40px; height:40px; border-radius:50%; border:0; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(255,255,255,.14); color:#fff; font-size:20px; line-height:1;
+      backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    }
+    .big-view .bv-tip {
+      position:absolute; left:50%; bottom:calc(env(safe-area-inset-bottom,0px) + 14px);
+      z-index:6; pointer-events:none;
+      transform:translateX(-50%);
+      color:rgba(255,255,255,.5); font-size:12.5px; white-space:nowrap;
+      background:rgba(0,0,0,.45); padding:6px 14px; border-radius:20px;
+    }
+    body.immersive { overflow:hidden; touch-action:none; }
+
+    /* ============ 分享：导出文件 / 发布链接 ============ */
+    .share-row { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; justify-content:center; }
+    .share-row .btn-act { min-width:158px; padding:11px 20px; font-size:13.5px; }
+    .share-hint { text-align:center; color:rgba(255,255,255,.35); font-size:12px; margin-top:10px; line-height:1.75; }
+
+    /* 发布面板 */
+    body.pa-panel-open { overflow:hidden; }
+    .sp-mask { position:fixed; inset:0; z-index:2147483200; background:rgba(4,3,12,.72); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); display:none; }
+    .sp-mask.show { display:block; }
+    .share-panel {
+      position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.96);
+      width:min(560px, calc(100vw - 26px)); max-height:min(86vh, 730px); overflow:auto;
+      z-index:2147483300; display:none;
+      background:linear-gradient(160deg,#1e1b38,#151228);
+      border:1px solid rgba(108,92,231,.3); border-radius:18px;
+      box-shadow:0 30px 80px rgba(0,0,0,.7);
+      opacity:0; transition:opacity .2s ease, transform .2s ease;
+      overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
+    }
+    .share-panel.show { display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
+    .sp-head { display:flex; align-items:center; justify-content:space-between; padding:15px 18px 12px; border-bottom:1px solid rgba(255,255,255,.07); position:sticky; top:0; background:#1d1a35; z-index:2; border-radius:18px 18px 0 0; }
+    .sp-head h3 { margin:0; font-size:15.5px; color:#e8eaff; }
+    .sp-close { width:30px; height:30px; border-radius:50%; border:0; background:rgba(255,255,255,.08); color:rgba(255,255,255,.7); font-size:17px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .sp-close:hover { background:rgba(255,255,255,.16); }
+    .sp-body { padding:16px 18px 20px; }
+    .sp-field { margin-bottom:14px; }
+    .sp-field label { display:block; font-size:12.5px; color:rgba(255,255,255,.55); margin-bottom:6px; }
+    .sp-field input, .sp-token-row input {
+      width:100%; padding:10px 12px; border-radius:10px; font-size:13.5px;
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); color:#fff;
+      outline:none; transition:.15s; font-family:inherit;
+    }
+    .sp-field input:focus, .sp-token-row input:focus { border-color:rgba(0,184,212,.6); background:rgba(0,184,212,.06); }
+    .sp-token { border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:12px 14px; margin-bottom:14px; background:rgba(255,255,255,.03); }
+    .sp-token-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .sp-token-state { font-size:12.5px; color:rgba(255,255,255,.55); line-height:1.6; }
+    .sp-token-state b { color:#7eb6ff; }
+    .sp-token.ok { border-color:rgba(94,224,176,.3); background:rgba(94,224,176,.05); }
+    .sp-token.ok .sp-token-state { color:#5ee0b0; }
+    .sp-token-form { display:none; margin-top:12px; }
+    .sp-token.open .sp-token-form { display:block; }
+    .sp-mini { padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); color:rgba(255,255,255,.75); white-space:nowrap; font-family:inherit; }
+    .sp-mini:hover { background:rgba(255,255,255,.13); }
+    .sp-mini:disabled { opacity:.5; cursor:not-allowed; }
+    #spTokenChange { display:none; }
+    .sp-token.ok #spTokenChange { display:inline-block; }
+    .sp-token-row { display:flex; gap:8px; margin-bottom:10px; align-items:stretch; }
+    .sp-token-row input { flex:1 1 auto; min-width:0; }
+    .sp-note { font-size:11.5px; color:rgba(255,255,255,.4); line-height:1.8; margin:0 0 10px; }
+    .sp-note a { color:#7eb6ff; text-decoration:none; }
+    .sp-note a:hover { text-decoration:underline; }
+    .sp-warn { color:#ffb95e; }
+    .sp-actions { display:flex; gap:10px; flex-wrap:wrap; }
+    .sp-actions .btn-act { flex:1 1 auto; min-width:126px; }
+    .sp-progress { display:none; margin-top:16px; }
+    .sp-progress.show { display:block; }
+    .sp-bar { display:block; height:6px; border-radius:4px; background:rgba(255,255,255,.08); overflow:hidden; margin-bottom:8px; }
+    .sp-bar i { display:block; height:100%; width:0; border-radius:4px; background:linear-gradient(90deg,#6c5ce7,#00b8d4); transition:width .25s ease; }
+    #spProgText { font-size:12px; color:rgba(255,255,255,.5); }
+    .sp-result { display:none; margin-top:16px; padding-top:16px; border-top:1px dashed rgba(255,255,255,.12); }
+    .sp-result.show { display:block; }
+    .sp-link-row { display:flex; gap:8px; margin-bottom:10px; }
+    .sp-link-row input { flex:1 1 auto; min-width:0; padding:10px 12px; border-radius:10px; font-size:12.5px; background:rgba(255,255,255,.05); border:1px solid rgba(0,184,212,.35); color:#9fe8ff; outline:none; font-family:inherit; }
+    .sp-result.err .sp-note { color:#ff8a8a; }
+    @media (max-width:480px) {
+      .share-row .btn-act { min-width:100%; }
+      .sp-actions .btn-act { min-width:100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== 导航 ===== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">兴程<span>网络</span></a>
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="../index.html">首页</a></li>
+      <li><a href="../design/index.html">广告设计</a></li>
+      <li><a href="../miniprogram/index.html">小程序开发</a></li>
+      <li><a href="../social-media.html">社交媒体运营</a></li>
+      <li><a href="../pdd-assist.html">拼多多助力</a></li>
+      <li><a href="index.html" class="active">智能工具中心</a></li>
+      <li><a href="../design/ai-culling.html">AI智能选图</a></li>
+      <li class="nav-group">更多</li>
+      <li><a href="../blog/index.html">博客文章</a></li>
+      <li><a href="../faq.html">常见问题</a></li>
+    </ul>
+    <button class="nav-ham" id="navHam" aria-label="菜单"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ===== 主体 ===== -->
+<section class="tool-page">
+  <div class="tool-container">
+    <a class="tool-back" href="index.html">← 返回工具中心</a>
+    <h1 class="tool-title">翻页<span>画册</span></h1>
+    <p class="tool-desc">上传多张照片 → 自动排成一本<strong>真的书</strong>：第 1 张是封面、最后 1 张是封底，翻开封面才是封面背面（目录页）和第一页，纸张绕书脊卷曲翻页，带翻书音效。纯前端本地处理，图片不上传服务器。</p>
+
+    <div class="tool-guide"><h4>📖 使用步骤</h4><ol><li>点击或拖拽<strong>图片</strong>到上传区域（支持多选，自动识别横版/竖版）</li><li>长按缩略图拖动调整顺序，点 × 删除</li><li><strong>第 1 张 = 封面、最后 1 张 = 封底</strong>（单张居中），中间各张两两成对，翻开后左右各一页</li><li>点「开始翻页」→ 左右滑动 / 点击右半边 / 下方按钮翻页</li><li>右上角可开关：翻书声 / 自动翻页 / <strong>放大</strong>（全屏看画册，手机横过来就是大图）</li><li>满意后点底部「<strong>导出画册文件</strong>」（得到一个能独立打开的 .html）或「<strong>发布分享链接</strong>」（得到一个能直接转发给客户的网址）</li></ol></div>
+
+    <!-- 步骤指示 -->
+    <div class="pa-steps">
+      <span class="step-pill active" data-step="1">① 上传图片</span>
+      <span class="step-pill" data-step="2">② 调整顺序</span>
+      <span class="step-pill" data-step="3">③ 开始翻页</span>
+    </div>
+
+    <!-- 步骤 1：上传 -->
+    <div class="pa-upload" id="uploadZone">
+      <div class="icon">📁</div>
+      <div class="hint">
+        <b>点击或拖拽图片到此处</b><br>
+        支持多选 · 单张最大 10 MB · 建议 4-30 张<br>
+        <span style="opacity:.6">支持格式：jpg / png / webp / gif（gif 仅取首帧）</span>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" multiple style="display:none" />
+    </div>
+
+    <!-- 步骤 2：缩略图排序 -->
+    <div class="thumbs-panel" id="thumbsPanel">
+      <div class="thumbs-head">
+        <h3>🗂 调整顺序（长按拖动）</h3>
+        <span class="meta" id="thumbsMeta">0 张</span>
+      </div>
+      <div class="thumbs-grid" id="thumbsGrid"></div>
+      <div class="thumbs-actions" id="thumbsActions">
+        <button class="btn-act ghost" id="btnAddMore">➕ 继续添加</button>
+        <button class="btn-act ghost" id="btnClearAll">🗑 清空</button>
+        <button class="btn-act primary" id="btnStartBook">▶ 开始翻页</button>
+      </div>
+      <!-- 清空确认（站内样式，不用原生 confirm） -->
+      <div class="clear-confirm" id="clearConfirm">
+        <span>确定清空全部 <b id="clearCount">0</b> 张图片？清空后需要重新上传</span>
+        <span class="cc-btns">
+          <button class="btn-act ghost" id="ccCancel">取消</button>
+          <button class="btn-act danger" id="ccOk">确定清空</button>
+        </span>
+      </div>
+    </div>
+
+    <!-- 步骤 3：画册区 -->
+    <div class="book-stage" id="bookStage">
+      <div class="book-toolbar">
+        <div class="info" id="bookInfo">— / —</div>
+        <div class="controls">
+          <span class="toggle-btn on" id="toggleSound">🔊 翻书声</span>
+          <span class="toggle-btn" id="toggleAuto">🔁 自动</span>
+          <span class="toggle-btn" id="toggleBig" title="全屏放大看画册">🔍 放大</span>
+        </div>
+      </div>
+      <div class="book-frame">
+        <div class="book-wrap" id="bookWrap">
+          <div class="book" id="book">
+            <div class="page-side left" id="pageLeft"><img id="imgLeft" alt="" /></div>
+            <div class="page-side right" id="pageRight"><img id="imgRight" alt="" /></div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" id="btnPrev">← 上一屏</button>
+        <span class="page-num" id="pageNum">1-2 / 2</span>
+        <button class="nav-btn" id="btnNext">下一屏 →</button>
+      </div>
+      <div class="reset-row">
+        <button class="btn-act ghost" id="btnEditAgain">✏️ 返回调整</button>
+        <button class="btn-act primary" id="btnDownload">⬇️ 下载当前页</button>
+      </div>
+      <div class="share-row">
+        <button class="btn-act ghost" id="btnExport">📤 导出画册文件</button>
+        <button class="btn-act primary" id="btnPublish">🚀 发布分享链接</button>
+      </div>
+      <p class="share-hint">导出 = 得到一个能独立打开的 .html（用微信发文件给客户也行）<br>发布 = 自动传到你自己的站点，得到一个可以直接转发、客户手机上就能翻阅的链接</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== 放大模式（全屏看画册；手机横屏即大图） ===== -->
+<div class="big-view" id="bigView">
+  <button class="bv-close" id="bvClose" aria-label="退出放大">✕</button>
+  <div class="bv-wrap" id="bvWrap"></div>
+  <div class="bv-tip">左右滑动 / 点击右半边翻页 · 按 Esc 退出</div>
+</div>
+
+<!-- ===== 双击放大查看（全屏） ===== -->
+<div class="lightbox" id="lightbox">
+  <span class="lb-close">✕</span>
+  <img id="lightboxImg" alt="" />
+  <span class="lb-hint">点图片可放大细看 · 点空白处关闭</span>
+</div>
+
+<!-- ===== 发布分享链接面板 ===== -->
+<div class="sp-mask" id="spMask"></div>
+<div class="share-panel" id="sharePanel">
+  <div class="sp-head">
+    <h3>🚀 发布分享链接</h3>
+    <button class="sp-close" id="spClose" aria-label="关闭">✕</button>
+  </div>
+  <div class="sp-body">
+    <div class="sp-token" id="spTokenBox">
+      <div class="sp-token-head">
+        <span class="sp-token-state" id="spTokenState">未配置：发布前需要填一次 GitHub 令牌</span>
+        <button class="sp-mini" id="spTokenChange">更换令牌</button>
+      </div>
+      <div class="sp-token-form">
+        <div class="sp-token-row">
+          <input type="password" id="spTokenInput" placeholder="github_pat_…" autocomplete="off" spellcheck="false" />
+          <button class="sp-mini" id="spTokenToggle">显示</button>
+        </div>
+        <button class="btn-act primary" id="spTokenSave" style="width:100%">保存并验证</button>
+        <p class="sp-note" style="margin-top:10px">去 GitHub 生成一个「细粒度令牌」，只勾选 <b>xc6</b> 这一个仓库的 <b>Contents: Read and write</b> 权限就够了，令牌只存在你这台电脑的浏览器里。
+          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">点这里打开生成页面 ↗</a></p>
+      </div>
+    </div>
+
+    <div class="sp-field">
+      <label>画册标题（客户打开时显示在顶部）</label>
+      <input type="text" id="spTitle" maxlength="40" placeholder="我的画册" />
+    </div>
+
+    <div class="sp-actions">
+      <button class="btn-act primary" id="spGo">🚀 开始发布</button>
+      <button class="btn-act ghost" id="spExport">📤 只导出文件</button>
+    </div>
+
+    <div class="sp-progress" id="spProgress">
+      <span class="sp-bar"><i id="spBar"></i></span>
+      <span id="spProgText">准备中…</span>
+    </div>
+
+    <div class="sp-result" id="spResult">
+      <div class="sp-link-row">
+        <input type="text" id="spLink" readonly />
+        <button class="btn-act primary" id="spCopy">复制</button>
+      </div>
+      <p class="sp-note" id="spNote"></p>
+      <div class="sp-actions">
+        <a class="btn-act ghost" id="spOpen" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">打开看看</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 底部 ===== -->
+<footer class="footer" id="contact">
+  <div class="container">
+    <div class="footer-brand">
+      <h3>兴程<span>网络</span></h3>
+      <p>技术驱动创意 · 专注数字服务<br>为您的品牌提供一站式数字化解决方案</p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-group">
+        <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+          <span>服务项目</span>
+          <span class="footer-arrow">▸</span>
+        </div>
+        <div class="footer-group-content">
+          <a href="../design/index.html">广告平面图设计</a>
+          <a href="../miniprogram/index.html">微信小程序开发</a>
+          <a href="../social-media.html">社交媒体运营</a>
+          <a href="../pdd-assist.html">拼多多助力</a>
+          <a href="../design/ai-culling.html">AI智能选图</a>
+          <a href="index.html" class="active">智能工具中心</a>
+        </div>
+      </div>
+
+      <div class="footer-group">
+        <div class="footer-group-title" onclick="toggleFooterGroup(this)">
+          <span>常见问题</span>
+          <span class="footer-arrow">▸</span>
+        </div>
+        <div class="footer-group-content">
+          <a href="../faq.html#design">设计服务FAQ</a>
+          <a href="../faq.html#miniprogram">小程序开发FAQ</a>
+          <a href="../faq.html#social">社媒运营FAQ</a>
+          <a href="../faq.html#pdd">拼多多助力FAQ</a>
+        </div>
+      </div>
+
+      <div class="footer-group">
+        <div class="footer-group-title">
+          <span>联系方式</span>
+        </div>
+        <div class="footer-group-content" style="max-height:none; padding:12px 0; overflow:visible;">
+          <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">QQ：738874448</p>
+          <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">微信：xcing888</p>
+          <p style="color:var(--text-dim); font-size:12px; padding:4px 0; line-height:1.6;">邮箱：738874448@qq.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-social-icons">
+      <button type="button" class="social-icon" onclick="showQRCode('wechat')" data-tooltip="点击扫码添加微信" aria-label="显示微信二维码">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9 4C5.1 4 2 6.6 2 9.8c0 1.9.9 3.6 2.5 4.8l-.6 2 2.4-1.3c.8.2 1.6.3 2.5.3.2 0 .4 0 .6-.1-.3-.7-.5-1.5-.5-2.3 0-3 2.9-5.4 6.5-5.4.3 0 .5 0 .8.1C15.2 5.9 12.3 4 9 4zM6.6 8.4a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9z"/><path d="M22 14.2c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.8 0 1.5-.1 2.2-.3l1.9 1-.5-1.7c1.5-.8 2.4-2 2.4-3.9zm-8-.9a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8zm4 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8z"/></svg>
+      </button>
+      <a href="https://qm.qq.com/q/ARPMUBOd5m" class="social-icon" target="_blank" rel="noopener" aria-label="通过 QQ 联系我们" data-tooltip="点击跳转添加QQ">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+      </a>
+      <a href="mailto:738874448@qq.com?subject=咨询合作&body=您好，我对贵公司的服务感兴趣，请与我联系。" class="social-icon" aria-label="发送邮件联系我们" data-tooltip="点击发送邮件">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.2 7h15.6L12 12.2z"/></svg>
+      </a>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <p>Copyright © 2020-2026 <span>兴程网络</span> · 保留所有权利</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../script.js?v=20260907"></script>
+
+<!-- 浮动快捷联系按钮组 -->
+<!-- 二维码弹窗 -->
+<div class="qr-modal" id="qrModal">
+  <div class="qr-modal-content">
+    <span class="qr-modal-close" onclick="closeQRModal()">&times;</span>
+    <h3 id="qrTitle">联系方式</h3>
+    <div id="qrContent"></div>
+  </div>
+</div>
+
+<!-- 提示 Toast -->
+<div class="toast" id="toast"></div>
+
+<div class="float-contact visible" id="floatContact">
+  <button class="fc-btn fc-wechat" onclick="showQRCode('wechat')" aria-label="微信" data-tooltip="微信：xcing888">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 4C5.1 4 2 6.6 2 9.8c0 1.9.9 3.6 2.5 4.8l-.6 2 2.4-1.3c.8.2 1.6.3 2.5.3.2 0 .4 0 .6-.1-.3-.7-.5-1.5-.5-2.3 0-3 2.9-5.4 6.5-5.4.3 0 .5 0 .8.1C15.2 5.9 12.3 4 9 4zM6.6 8.4a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9z"/><path d="M22 14.2c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.8 0 1.5-.1 2.2-.3l1.9 1-.5-1.7c1.5-.8 2.4-2 2.4-3.9zm-8-.9a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8zm4 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8z"/></svg>
+  </button>
+  <button class="fc-btn fc-qq" onclick="showQRCode('qq')" aria-label="QQ" data-tooltip="QQ：738874448">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+  </button>
+  <button class="fc-btn fc-top" id="backToTop" title="回到顶部" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+</div>
+
+<!-- 画册：纯图片上传（不依赖任何外部库） -->
+  <script src="album.js?v=20260911_1"></script>
+  <script src="album-share.js?v=20260910_1"></script>
+</body>
+</html>

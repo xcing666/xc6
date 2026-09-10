@@ -316,6 +316,20 @@
     function ensureWorker() {
       if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = './lib/pdf.worker.min.js';
     }
+    // ⚠️ 中文 PDF 大量使用「字体未内嵌 + 预定义 CMap」（如 UniGB-UCS2-H / GBK-EUC-H）。
+    // 不配 cMapUrl，pdf.js 拿不到 CMap 映射表 → 渲染出来是空白页、getTextContent 返回空字符串，
+    // 转成 Word/Excel 就是空文档。所有打开 PDF 的地方一律走这个封装。
+    // ⚠️ 必须用绝对地址：pdf.js 在 worker 里会按 worker 所在目录解析相对路径，
+    //    写成 './lib/cmaps/' 会被拼成 'tools/lib/lib/cmaps/' 而 404。
+    var LIB_BASE = new URL('./lib/', document.baseURI).href;
+    function pdfOpen(data) {
+      return pdfjsLib.getDocument({
+        data: data,
+        cMapUrl: LIB_BASE + 'cmaps/',
+        cMapPacked: true,
+        standardFontDataUrl: LIB_BASE + 'standard_fonts/',
+      }).promise;
+    }
     if (!libsReady()) {
       statusEl.className = 'pdf-status error';
       statusEl.textContent = '⚠ 转换功能库加载失败，请刷新页面重试。';
@@ -421,7 +435,7 @@
     async function convertToWordFaithful(data, name) {
       setBusy(true, '正在逐页渲染 PDF（保留完整版式与图片）…');
       try {
-        var pdf = await pdfjsLib.getDocument({ data: data }).promise;
+        var pdf = await pdfOpen(data);
         var scale = parseFloat(scaleSel.value) || 1.3;
         var withText = textLayerChk.checked;
         var sections = [];
@@ -527,7 +541,7 @@
     async function convertToWordText(data, name) {
       setBusy(true, '正在解析 PDF（提取文字）…');
       try {
-        var pdf = await pdfjsLib.getDocument({ data: data }).promise;
+        var pdf = await pdfOpen(data);
         var children = [];
         var avgSize = 0, sizes = [];
         for (var p = 1; p <= pdf.numPages; p++) {
@@ -582,7 +596,7 @@
     async function convertToExcel(data, name) {
       setBusy(true, '正在解析 PDF（重建表格）…');
       try {
-        var pdf = await pdfjsLib.getDocument({ data: data }).promise;
+        var pdf = await pdfOpen(data);
         var aoa = [];
         for (var i = 1; i <= pdf.numPages; i++) {
           var pg = await pdf.getPage(i);
